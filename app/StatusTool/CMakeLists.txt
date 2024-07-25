@@ -32,13 +32,19 @@ set_target_properties(NVLib PROPERTIES
 # Include Crow
 find_package(Crow)
 
+# Add the MariaDB connector
+include_directories("/usr/include/mariadb")
+add_library(mariadbcpp STATIC IMPORTED)
+set_property(TARGET mariadbcpp PROPERTY IMPORTED_LOCATION "/usr/lib/libmariadbcpp.so")
+
 # Create the executable
 add_executable(StatusTool
     Source.cpp
+    Repository.cpp
 )
 
 # Add link libraries                               
-target_link_libraries(StatusTool NVLib ${OpenCV_LIBS} Crow::Crow OpenSSL::SSL uuid)
+target_link_libraries(StatusTool NVLib ${OpenCV_LIBS} mariadbcpp Crow::Crow OpenSSL::SSL uuid)
 
 # Copy Resources across
 add_custom_target(resource_copy ALL

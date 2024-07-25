@@ -11,6 +11,8 @@ using namespace std;
 
 #include <crow.h>
 
+#include "Repository.h"
+
 //--------------------------------------------------
 // Function Prototypes
 //--------------------------------------------------
@@ -40,6 +42,62 @@ void Run()
         auto stylesheet = crow::mustache::load_text("styles.css");
         return stylesheet;
     });
+
+   // Get a status update
+    CROW_ROUTE(app, "/status")([]()
+    {
+        auto repo = NVL_App::Repository("BlueROV");
+        auto status = repo.GetLastStatus();
+
+        auto response = stringstream();
+        response << "<table>";
+
+        response << "<tr>";
+        response << "<td><b>Created<b></td><td>" << status->GetTimeStamp() << "</td>";
+        response << "</tr>";
+
+        response << "<tr>";
+        response << "<td><b>Heading<b></td><td>" << status->GetHeading() << " degrees</td>";
+        response << "</tr>";
+
+        response << "<tr>";
+        response << "<td><b>Depth<b></td><td>" << status->GetDepth() << " meters</td>";
+        response << "</tr>";
+
+        response << "<tr>";
+        response << "<td><b>Altitude<b></td><td>" << status->GetAltitude() << " meters</td>";
+        response << "</tr>";
+
+        response << "<tr>";
+        response << "<td><b>Temperature<b></td><td>" << status->GetTemperature() << " degrees</td>";
+        response << "</tr>";
+
+        response << "<tr>";
+        response << "<td><b>Mode<b></td><td>" << status->GetMode() << "</td>";
+        response << "</tr>";
+
+        response << "<tr>";
+        response << "<td><b>Satellite Count<b></td><td>" << status->GetSatelliteCount() << "</td>";
+        response << "</tr>";
+
+        response << "<tr>";
+        response << "<td><b>Pose Certainty<b></td><td>" << status->GetPosCertainity() << "</td>";
+        response << "</tr>";
+
+        response << "<tr>";
+        response << "<td><b>Valid Velocity<b></td><td>" << (status->GetVelocityValid() ? "true" : "false") << "</td>";
+        response << "</tr>";
+
+        response << "<tr>";
+        response << "<td><b>FOM<b></td><td>" << status->GetFOM() << "</td>";
+        response << "</tr>";
+
+        response << "</table>";
+
+        return response.str();
+    });
+
+
 
     //set the port, set the app to run on multiple threads, and run the app
     app.port(18080).multithreaded().run();
