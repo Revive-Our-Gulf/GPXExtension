@@ -39,3 +39,9 @@ add_executable(StatusTool
 
 # Add link libraries                               
 target_link_libraries(StatusTool NVLib ${OpenCV_LIBS} Crow::Crow OpenSSL::SSL uuid)
+
+# Copy Resources across
+add_custom_target(resource_copy ALL
+	COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/templates ${CMAKE_BINARY_DIR}/templates
+    DEPENDS ${MY_TARGET}
+)

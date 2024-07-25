@@ -4,12 +4,34 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>HTML5 Boilerplate</title>
+  <title>GPX Logger</title>
   <link rel="stylesheet" href="styles.css">
+
+  <script>
+
+    function load() 
+    {
+      setTimeout(updateStatus, 1000);
+    }
+
+    function updateStatus() 
+    {
+      const date = new Date();
+      document.getElementById("status").innerHTML = "<p>Current Date: " + date + "</p>";
+      setTimeout(updateStatus, 1000);
+    }
+
+  </script>
+
 </head>
 
-<body>
-  <h1>Page Title</h1>
+<body onload="load()">
+  <h1>GPX Logger</h1>
+
+  <div id="status">
+
+  </div>
+
 </body>
 
 </html>
