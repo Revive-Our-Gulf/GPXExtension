@@ -1,6 +1,7 @@
 FROM alpine:3.18.3
 
-RUN apk update && apk add nginx
+RUN apk update 
+RUN apk add nginx
 
 # Move our nginx configuration to the standard nginx path
 COPY files/nginx.conf /etc/nginx/nginx.conf

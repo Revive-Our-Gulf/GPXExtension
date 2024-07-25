@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+
+<class>
+
+<namespace>NVL_App</namespace>
+<solution>LoggerLib</solution>
+<name>Status</name>
+<description>An entity containing the status that we dealing with</description>
+
+<includes>
+    <include name="iostream" namespace="std" local="false" />
+</includes>
+
+<variables>
+    <variable type="string" name="timeStamp" code="10" />
+    <variable type="double" name="heading" code="10" />
+    <variable type="double" name="depth" code="10" />
+    <variable type="double" name="altitude" code="10" />
+    <variable type="double" name="temperature" code="10" />
+    <variable type="string" name="mode" code="10" />
+    <variable type="int" name="satelliteCount" code="10" />
+    <variable type="double" name="posCertainity" code="10" />
+    <variable type="bool" name="velocityValid" code="10" />
+    <variable type="double" name="FOM" code="10" />
+</variables>
+
+<constructors>
+    <constructor type="auto" inline="true" />
+</constructors>
+
+</class>
