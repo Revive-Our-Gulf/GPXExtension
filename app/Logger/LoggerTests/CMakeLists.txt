@@ -16,10 +16,12 @@ include_directories("../")
 add_executable (LoggerTests
 	Tests/Example_Tests.cpp
 	Tests/RovComms_Tests.cpp
+	Tests/Repository_Tests.cpp
 )
 
+
 # Add link libraries
-target_link_libraries(LoggerTests LoggerLib NVLib ${OpenCV_LIBS} OpenSSL::SSL uuid GTest::Main)
+target_link_libraries(LoggerTests LoggerLib NVLib ${OpenCV_LIBS} mariadbcpp OpenSSL::SSL uuid GTest::Main)
 
 # Find the associated unit tests
 gtest_discover_tests(LoggerTests)

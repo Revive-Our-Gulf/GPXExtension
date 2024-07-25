@@ -1,0 +1,37 @@
+//--------------------------------------------------
+// The repository for updating the storage
+//
+// @author: Wild Boar
+//
+// @date: 2024-07-25
+//--------------------------------------------------
+
+#pragma once
+
+#include <iostream>
+using namespace std;
+
+#include <mariadb/conncpp.hpp>
+#include "Status.h"
+
+namespace NVL_App
+{
+	class Repository
+	{
+	private:
+		sql::Connection * _connection;
+		string _database;
+
+	public:
+		Repository(const string& database);
+		~Repository();
+
+		void AddStatus(Status * status);
+
+		unique_ptr<Status> GetLastStatus();
+		unique_ptr<Status> GetClosestStatus(const string& time);
+
+		inline sql::Connection * GetConnection() { return _connection; }
+		inline string& GetDatabase() { return _database; }
+	};
+}

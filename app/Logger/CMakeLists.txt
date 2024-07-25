@@ -33,6 +33,11 @@ set_target_properties(NVLib PROPERTIES
 find_package( OpenCV REQUIRED)
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 
+# Add the MariaDB connector
+include_directories("/usr/include/mariadb")
+add_library(mariadbcpp STATIC IMPORTED)
+set_property(TARGET mariadbcpp PROPERTY IMPORTED_LOCATION "/usr/lib/libmariadbcpp.so")
+
 # Include OpenSSL
 find_package(OpenSSL REQUIRED)
 

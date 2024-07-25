@@ -13,4 +13,5 @@ include_directories("../" "${LIBRARY_BASE}/NVLib")
 add_library (LoggerLib STATIC
 	ArgUtils.cpp
 	RovComms.cpp
+	Repository.cpp
 )
