@@ -22,10 +22,8 @@ Engine::Engine(NVLib::Logger* logger, NVLib::Parameters* parameters)
 {
     _logger = logger; _parameters = parameters;
 
-    _logger->Log(1, "Creating a path helper");
-    auto database = ArgUtils::GetString(parameters, "database");
-    auto dataset = ArgUtils::GetString(parameters, "dataset");
-    _pathHelper = new NVLib::PathHelper(database, dataset);
+    _interval = ArgUtils::GetInteger(parameters, "interval");
+    _logger->Log(1, "Recording at interval: %i", _interval);
 }
 
 /**
@@ -33,7 +31,7 @@ Engine::Engine(NVLib::Logger* logger, NVLib::Parameters* parameters)
  */
 Engine::~Engine() 
 {
-    delete _parameters; delete _pathHelper;
+    delete _parameters; 
 }
 
 //--------------------------------------------------
@@ -45,5 +43,17 @@ Engine::~Engine()
  */
 void Engine::Run()
 {
-    // TODO: Execution Logic
+    _logger->Log(1, "Connecting to the database");
+    auto repository = Repository("BlueROV");
+
+    _logger->Log(1, "Setting up ROV communicator");
+    auto communicator = RovComms();
+
+    _logger->Log(1, "Starting control loop, Ctrl+c to stop");
+    while(true) 
+    {
+        auto status = communicator.GetCurrentStatus();
+        repository.AddStatus(status.get());
+        this_thread::sleep_for(std::chrono::milliseconds(_interval));
+    }
 }

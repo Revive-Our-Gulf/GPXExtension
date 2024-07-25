@@ -8,12 +8,16 @@
 
 #pragma once
 
+#include <chrono>
+#include <thread>
 #include <iostream>
 using namespace std;
 
 #include <NVLib/Logger.h>
-#include <NVLib/Path/PathHelper.h>
+
 #include <LoggerLib/ArgUtils.h>
+#include <LoggerLib/RovComms.h>
+#include <LoggerLib/Repository.h>
 
 namespace NVL_App
 {
@@ -22,7 +26,7 @@ namespace NVL_App
 	private:
 		NVLib::Parameters * _parameters;
 		NVLib::Logger* _logger;
-		NVLib::PathHelper * _pathHelper;
+		int _interval;
 	public:
 		Engine(NVLib::Logger* logger, NVLib::Parameters * parameters);
 		~Engine();
