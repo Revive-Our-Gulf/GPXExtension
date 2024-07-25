@@ -21,15 +21,14 @@ namespace NVL_App
 	private:
 		sql::Connection * _connection;
 		string _database;
-
 	public:
 		Repository(const string& database);
 		~Repository();
 
 		void AddStatus(Status * status);
-
 		unique_ptr<Status> GetLastStatus();
 		unique_ptr<Status> GetClosestStatus(const string& time);
+		void ClearTable();
 
 		inline sql::Connection * GetConnection() { return _connection; }
 		inline string& GetDatabase() { return _database; }

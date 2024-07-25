@@ -65,3 +65,15 @@ unique_ptr<Status> Repository::GetClosestStatus(const string& time)
 {
 	throw runtime_error("Not implemented");
 }
+
+//--------------------------------------------------
+// Retrieve
+//--------------------------------------------------
+
+/**
+ * The table that we dealing with
+ */
+void Repository::ClearTable() 
+{
+	throw runtime_error("Not implemented");
+}
