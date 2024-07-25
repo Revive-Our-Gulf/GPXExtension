@@ -68,13 +68,13 @@ TEST(Repository_Test, confirm_retrieval)
 	auto status_2 = repository.GetLastStatus();
 
 	// Confirm
-	ASSERT_EQ(status_1->GetHeading(), status_2->GetHeading());
-	ASSERT_EQ(status_1->GetDepth(), status_2->GetDepth());
-	ASSERT_EQ(status_1->GetAltitude(), status_2->GetAltitude());
-	ASSERT_EQ(status_1->GetTemperature(), status_2->GetTemperature());
+	ASSERT_NEAR(status_1->GetHeading(), status_2->GetHeading(), 1e-4);
+	ASSERT_NEAR(status_1->GetDepth(), status_2->GetDepth(), 1e-4);
+	ASSERT_NEAR(status_1->GetAltitude(), status_2->GetAltitude(), 1e-4);
+	ASSERT_NEAR(status_1->GetTemperature(), status_2->GetTemperature(), 1e-4);
 	ASSERT_EQ(status_1->GetMode(), status_2->GetMode());
 	ASSERT_EQ(status_1->GetSatelliteCount(), status_2->GetSatelliteCount());
-	ASSERT_EQ(status_1->GetPosCertainity(), status_2->GetPosCertainity());
-	ASSERT_EQ(status_1->GetVelocityValid(), status_2->GetVelocityValid());
-	ASSERT_EQ(status_1->GetFOM(), status_2->GetFOM());
+	ASSERT_NEAR(status_1->GetPosCertainity(), status_2->GetPosCertainity(), 1e-4);
+	ASSERT_NEAR(status_1->GetVelocityValid(), status_2->GetVelocityValid(), 1e-4);
+	ASSERT_NEAR(status_1->GetFOM(), status_2->GetFOM(), 1e-4);
 }

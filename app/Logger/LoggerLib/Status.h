@@ -30,6 +30,9 @@ namespace NVL_App
 		Status(double heading, double depth, double altitude, double temperature, const string& mode, int satelliteCount, double posCertainity, bool velocityValid, double FOM) :
 			_timeStamp(string()), _heading(heading), _depth(depth), _altitude(altitude), _temperature(temperature), _mode(mode), _satelliteCount(satelliteCount), _posCertainity(posCertainity), _velocityValid(velocityValid), _FOM(FOM) {}
 
+		Status(const string& timeStamp, double heading, double depth, double altitude, double temperature, const string& mode, int satelliteCount, double posCertainity, bool velocityValid, double FOM) :
+			_timeStamp(timeStamp), _heading(heading), _depth(depth), _altitude(altitude), _temperature(temperature), _mode(mode), _satelliteCount(satelliteCount), _posCertainity(posCertainity), _velocityValid(velocityValid), _FOM(FOM) {}
+
 		inline string& GetTimeStamp() { return _timeStamp; }
 		inline double& GetHeading() { return _heading; }
 		inline double& GetDepth() { return _depth; }
