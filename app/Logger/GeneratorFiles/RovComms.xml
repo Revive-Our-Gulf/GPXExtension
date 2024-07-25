@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+
+<class>
+
+<namespace>NVL_App</namespace>
+<solution>LoggerLib</solution>
+<name>RovComms</name>
+<description>A communicator for getting information from the ROV</description>
+
+<includes>
+    <include name="iostream" namespace="std" local="false" />
+    <include name="Status.h" local="true" />
+</includes>
+
+<constructors>
+    <constructor type="empty" inline="false" />
+</constructors>
+
+<methods>
+
+    <!-- Perform a read -->
+    <method section="Read" access="public" return="unique_ptr<Status>" name="GetCurrentStatus" description="Retrieve the current state from the ROV" inline="false" />
+
+</methods>
+
+<tests>
+    <test name="read_test" description="Confirm that reading that we are dealing with" exception="false" />
+</tests> 
+
+</class>

@@ -13,8 +13,9 @@ find_package(GTest REQUIRED)
 include_directories("../")
 
 # Create the executable
-add_executable(LoggerTests
-    Tests/Example_Tests.cpp
+add_executable (LoggerTests
+	Tests/Example_Tests.cpp
+	Tests/RovComms_Tests.cpp
 )
 
 # Add link libraries
