@@ -1,46 +1,22 @@
-# BlueOS Extension Template
+# GPX Extension #
 
-This template provides you a foundation to kickstart your journey as a BlueOS extensions developer!
-Please follow the instructions to launch your first BlueOS application.
+## What is it? ##
 
+This is an extension of BlueOS designed for the operation of the BlueROV. The extension has the following functionality:
 
-## Instructions
+* It logs position and status information to a database.
+* It takes video sequences as queries, and outputs corresponding [GPX](https://wiki.openstreetmap.org/wiki/GPX#:~:text=GPX%2C%20or%20GPS%20exchange%20format,and%20convert%20to%20other%20forms). files according to data that has been logged.
 
-### Creating Your Extension
-Start by creating your extension using this template as a base. Simply navigate to the upper menu and select "Use this template."
+## Technical Details ##
 
-### Building the Extension
+* This project was spawned from the recommended BlueOS extension [template](https://github.com/BlueOS-community/blueos-extension-template).
+* It is expected to run in a docker image, as is standard practice with BlueOS extensions. 
+* Data is recorded to the [MariaDB](https://mariadb.org/) database, which is supposed to be lightweight (it runs on a Raspberry Pi 4).
+The NGINX web server was replaced using [CrowCpp](https://crowcpp.org/master/) for web support (similar to Flask in Python). The main design choices here were speed and lightweight code.
 
-To build your BlueOS extension, follow the steps below:
+## Project Setup ##
 
-#### For Direct Raspberry Use
+The project is made up of two main files:
 
-1. Navigate to your extension's source code.
-
-2. Execute the following command to build your extension:
-
-   ```shell
-   docker build .
-    ```
-
-#### For build it from your computer or CI, use docker buildx:
-1. Execute the following command to build your extension:
-
-   ```shell
-   docker buildx build --platform linux/arm/v7 . -t my_docker_user/my_blueos_extension:latest --output type=registry
-    ```
-
-
-### Running your extension:
-
-To run your BlueOS extension, follow these steps:
-
-#### Within BlueOS
-1. Navigate to Extensions > Installed and click the Add button to create and launch your extension from BlueOS.
-
-#### Manual use
-
-2. For Raspberry Pi users, you can also manually run your extension by executing the following command:
-   ```shell
-   docker run --detach --publish 9999:80 my_docker_user/my_blueos_extension:latest
-    ```
+* _Logger_: Reads information from the BlueROV and logs it to a database.
+* _StatusTool: Provides the Extension GUI, contains the GPX generation logic and handles the queries.
