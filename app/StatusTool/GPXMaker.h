@@ -26,5 +26,10 @@ namespace NVL_App
 		~GPXMaker();
 
 		string RenderXML();
+	private:
+		void RenderStartTag(ostream& writer);
+		void RenderMeta(ostream& writer);
+		void RenderJourney(ostream& writer);
+		void RenderStep(ostream& writer, Status * status);
 	};
 }
