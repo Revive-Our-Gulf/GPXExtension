@@ -11,6 +11,7 @@ using namespace std;
 
 #include <crow.h>
 
+#include "GPXMaker.h"
 #include "Repository.h"
 
 //--------------------------------------------------
@@ -97,10 +98,18 @@ void Run()
         return response.str();
     });
 
-
+    // Generate the GPX file
+    CROW_ROUTE(app, "/gpx")([]()
+    {
+       auto repo = NVL_App::Repository("BlueROV");
+       auto statusList = vector<NVL_App::Status *>(); repo.GetStatuses(10, statusList);
+       auto gpx = NVL_App::GPXMaker(statusList);
+       return gpx.RenderXML();
+    });
 
     //set the port, set the app to run on multiple threads, and run the app
     app.port(18080).multithreaded().run();
+
 }
 
 //--------------------------------------------------

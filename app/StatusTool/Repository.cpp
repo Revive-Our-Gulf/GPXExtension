@@ -113,10 +113,8 @@ unique_ptr<Status> Repository::GetClosestStatus(const string& time)
 	             "TIME_TO_SEC(ABS(TIMEDIFF(?,created_at))) as time_diff "
 				 "FROM status ORDER BY time_diff LIMIT 1;";
 
-	auto statement = unique_ptr<sql::PreparedStatement>(_connection->prepareStatement(query));
-	statement->setString(1, time);
-
-	auto result = statement->executeQuery();
+	auto statement = unique_ptr<sql::Statement>(_connection->createStatement());
+	auto result = statement->executeQuery(query);
 
 	if (result->next()) 
 	{
@@ -131,17 +129,45 @@ unique_ptr<Status> Repository::GetClosestStatus(const string& time)
 		auto fom = result->getFloat(10);
 		auto created = string(result->getString(11));
 		auto timeDiff = result->getFloat(12);
-
-		cout << "Time difference: " << timeDiff << endl;
-
-		return unique_ptr<Status>(new Status(created, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom));
 	}
 
 	return unique_ptr<Status>(nullptr);
 }
 
+/**
+ * Generate the status list for the application
+ * @param limit The limited list of entries expected to be in the repo
+ * @param output The output set of statuses
+ */
+void Repository::GetStatuses(int limit, vector<Status *>& output) 
+{
+	auto query = stringstream();
+	query << "SELECT id, heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom, created_at ";
+	query << "FROM status ORDER BY created_at DESC LIMIT " << limit;
+
+	auto statement = unique_ptr<sql::Statement>(_connection->createStatement());
+	auto result = statement->executeQuery(query.str());
+
+	while (result->next()) 
+	{
+		auto heading = result->getFloat(2);
+		auto depth = result->getFloat(3);
+		auto altitude = result->getFloat(4);
+		auto temperature = result->getFloat(5);
+		auto mode = string(result->getString(6).c_str());
+		auto satCount = result->getInt(7);
+		auto posCertainty = result->getFloat(8);
+		auto velocityValid = result->getBoolean(9);
+		auto fom = result->getFloat(10);
+		auto created = string(result->getString(11));
+
+		auto status = new Status(created, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom);
+		output.push_back(status);
+	}
+}
+
 //--------------------------------------------------
-// Retrieve
+// Delete
 //--------------------------------------------------
 
 /**

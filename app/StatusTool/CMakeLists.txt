@@ -41,6 +41,7 @@ set_property(TARGET mariadbcpp PROPERTY IMPORTED_LOCATION "/usr/lib/libmariadbcp
 add_executable(StatusTool
     Source.cpp
     Repository.cpp
+    GPXMaker.cpp
 )
 
 # Add link libraries                               
