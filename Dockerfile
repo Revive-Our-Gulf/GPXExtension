@@ -1,18 +1,20 @@
 FROM alpine:3.18.3
 
-RUN apk update 
-RUN apk add nginx
+# MariaDB server and client
+RUN apk update && apk add mariadb mariadb-client
 
-# Move our nginx configuration to the standard nginx path
-COPY files/nginx.conf /etc/nginx/nginx.conf
+# this is not executed by mariadb package
+RUN mysql_install_db --user=trevor
 
-# Add our static files to a common folder to be provided by nginx
-RUN mkdir -p /site
-COPY files/register_service /site/register_service
-COPY site/ /site/
+# make life easier
+ENV TERM xterm
+
+# RUN mkdir -p /site
+# COPY files/register_service /site/register_service
+# COPY site/ /site/
 
 # Copy everything for your application
-COPY files/entrypoint.sh /entrypoint.sh
+# COPY files/entrypoint.sh /entrypoint.sh
 
 # Add docker configuration
 LABEL permissions='{\
@@ -31,19 +33,19 @@ LABEL permissions='{\
 }'
 LABEL authors='[\
     {\
-        "name": "John Doe",\
-        "email": "john.doe@gmail.com"\
+        "name": "Peter Miles",\
+        "email": "peter.miles@reviveourgulf.org.nz"\
     }\
 ]'
 LABEL company='{\
-    "about": "This is just an example",\
-    "name": "ACME Corporation",\
-    "email": "acme@corporation.com"\
+    "about": "Restoring the health of te taiao and giving our wai a fighting chance to ensure it is stable enough to support us now and into the future",\
+    "name": "Revive Our Gulf",\
+    "email": "info@reviveourgulf.org.nz"\
 }'
-LABEL readme="https://raw.githubusercontent.com/patrickelectric/blueos-extension-template/master/README.md"
-LABEL type="example"
+LABEL readme="https://github.com/Revive-Our-Gulf/GPXExtension/blob/main/README.md"
+LABEL type="GPX"
 LABEL tags='[\
-  "example"\
+  "GPX"\
 ]'
 
-ENTRYPOINT ["/entrypoint.sh"]
+# ENTRYPOINT ["/entrypoint.sh"]
