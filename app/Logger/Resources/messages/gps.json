@@ -1,9 +1,9 @@
 {
   "message": {
-    "alt": 0,
+    "alt": 5,
     "hdg": 18594,
-    "lat": 0,
-    "lon": 0,
+    "lat": 6,
+    "lon": 7,
     "relative_alt": -5,
     "time_boot_ms": 1744187,
     "type": "GLOBAL_POSITION_INT",

@@ -12,7 +12,7 @@
     "hdg_acc": 0,
     "lat": 0,
     "lon": 0,
-    "satellites_visible": 0,
+    "satellites_visible": 3,
     "time_usec": 0,
     "type": "GPS_RAW_INT",
     "v_acc": 4294967295,

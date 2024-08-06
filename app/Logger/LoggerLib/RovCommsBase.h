@@ -18,10 +18,9 @@ using namespace std;
 
 namespace NVL_App
 {
-	class RovComms
+	class RovCommsBase
 	{
 	public:
-		RovComms();
-		unique_ptr<Status> GetCurrentStatus();
+		virtual unique_ptr<Status> GetCurrentStatus() = 0;
 	};
 }

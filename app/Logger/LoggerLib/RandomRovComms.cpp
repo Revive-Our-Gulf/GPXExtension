@@ -6,7 +6,7 @@
 // @date: 2024-07-25
 //--------------------------------------------------
 
-#include "RovComms.h"
+#include "RandomRovComms.h"
 using namespace NVL_App;
 
 //--------------------------------------------------
@@ -16,7 +16,7 @@ using namespace NVL_App;
 /**
  * @brief Default Constructor
  */
-RovComms::RovComms()
+RandomRovComms::RandomRovComms()
 {
 	NVLib::RandomUtils::TimeSeedRandomNumbers();
 }
@@ -29,7 +29,7 @@ RovComms::RovComms()
  * @brief Retrieve the current state from the ROV
  * @return unique_ptr<Status> Returns a unique_ptr<Status>
  */
-unique_ptr<Status> RovComms::GetCurrentStatus()
+unique_ptr<Status> RandomRovComms::GetCurrentStatus()
 {
 	auto heading = 90 + NVLib::RandomUtils::GetInteger(-10,10);
 	auto depth = 500 + NVLib::RandomUtils::GetInteger(-20, 20);
