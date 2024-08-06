@@ -22,15 +22,16 @@ int main(int, char**)
 {
     auto distance_url = string("http://192.168.2.2/mavlink2rest/mavlink/vehicles/1/components/194/messages/DISTANCE_SENSOR");
     auto gps_url = string("http://192.168.2.2/mavlink2rest/mavlink/vehicles/1/components/1/messages/GLOBAL_POSITION_INT");
+    auto gps_raw_url = string("http://192.168.2.2/mavlink2rest/mavlink/vehicles/1/components/1/messages/GPS_RAW_INT");
     auto imu_url = string("http://192.168.2.2/mavlink2rest/mavlink/vehicles/1/components/1/messages/RAW_IMU");
     auto yaw_url= string("http://192.168.2.2/mavlink2rest/mavlink/vehicles/1/components/1/messages/ATTITUDE");
     auto heart_url = string("http://192.168.2.2/mavlink2rest/mavlink/vehicles/1/components/1/messages/HEARTBEAT");
     auto altitude_url = string("http://192.168.2.2/mavlink2rest/mavlink/vehicles/1/components/1/messages/ALTITUDE");
     auto controls_url = string("http://192.168.2.2/mavlink2rest/mavlink/vehicles/1/components/1/messages/HIL_CONTROLS");
 
-    auto url = string(controls_url);
+    auto url = string(gps_raw_url);
 
-    auto writer = ofstream("controls.json");
+    auto writer = ofstream("gps_raw.json");
 
     writer << curlpp::options::Url(url);
     
