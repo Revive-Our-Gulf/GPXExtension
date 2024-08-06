@@ -1,0 +1,25 @@
+{
+  "message": {
+    "id": 0,
+    "temperature": 3763,
+    "time_usec": 815170366,
+    "type": "RAW_IMU",
+    "xacc": -3,
+    "xgyro": -5,
+    "xmag": -247,
+    "yacc": -1,
+    "ygyro": 2,
+    "ymag": -68,
+    "zacc": -999,
+    "zgyro": 3,
+    "zmag": -707
+  },
+  "status": {
+    "time": {
+      "counter": 1628,
+      "first_update": "2024-08-06T01:22:35.267150724Z",
+      "frequency": 2.00246000289917,
+      "last_update": "2024-08-06T01:36:08.267395516Z"
+    }
+  }
+}
