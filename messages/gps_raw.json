@@ -1,0 +1,31 @@
+{
+  "message": {
+    "alt": -17000,
+    "alt_ellipsoid": 0,
+    "cog": 0,
+    "eph": 9999,
+    "epv": 9999,
+    "fix_type": {
+      "type": "GPS_FIX_TYPE_NO_FIX"
+    },
+    "h_acc": 4294967295,
+    "hdg_acc": 0,
+    "lat": 0,
+    "lon": 0,
+    "satellites_visible": 0,
+    "time_usec": 0,
+    "type": "GPS_RAW_INT",
+    "v_acc": 4294967295,
+    "vel": 0,
+    "vel_acc": 999000,
+    "yaw": 0
+  },
+  "status": {
+    "time": {
+      "counter": 9799,
+      "first_update": "2024-08-06T01:22:35.276715539Z",
+      "frequency": 2.000612497329712,
+      "last_update": "2024-08-06T02:44:13.775431256Z"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "message": {
+    "autopilot": {
+      "type": "MAV_AUTOPILOT_ARDUPILOTMEGA"
+    },
+    "base_mode": {
+      "bits": 81
+    },
+    "custom_mode": 19,
+    "mavlink_version": 3,
+    "mavtype": {
+      "type": "MAV_TYPE_SUBMARINE"
+    },
+    "system_status": {
+      "type": "MAV_STATE_CRITICAL"
+    },
+    "type": "HEARTBEAT"
+  },
+  "status": {
+    "time": {
+      "counter": 1284,
+      "first_update": "2024-08-06T01:22:35.266382002Z",
+      "frequency": 1.002341866493225,
+      "last_update": "2024-08-06T01:43:57.266165553Z"
+    }
+  }
+}
