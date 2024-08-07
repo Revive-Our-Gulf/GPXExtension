@@ -15,4 +15,5 @@ add_library (LoggerLib STATIC
 	RandomRovComms.cpp
 	Repository.cpp
 	RovCommsFactory.cpp
+	FileRovComms.cpp
 )
