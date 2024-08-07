@@ -35,23 +35,23 @@ unique_ptr<Status> FileRovComms::GetCurrentStatus()
 	auto jsonGPS = ReadMessage("GPS");
 	auto readerGPS = Json::Reader(); auto valueGPS = Json::Value();
 	readerGPS.parse(jsonGPS, valueGPS);
-	auto latitude = valueGPS["lat"].asDouble();
-	auto longitude = valueGPS["lon"].asDouble();
-	auto header = valueGPS["hdg"].asDouble();
-	auto depth = valueGPS["relative_alt"].asDouble();
-	auto altitude = valueGPS["alt"].asDouble(); 
+	auto latitude = valueGPS["message"]["lat"].asDouble();
+	auto longitude = valueGPS["message"]["lon"].asDouble();
+	auto header = valueGPS["message"]["hdg"].asDouble();
+	auto depth = valueGPS["message"]["relative_alt"].asDouble();
+	auto altitude = valueGPS["message"]["alt"].asDouble(); 
 
 	// Connect fields from IMU query (temperature)
 	auto jsonIMU = ReadMessage("IMU");
 	auto readerIMU = Json::Reader(); auto valueIMU = Json::Value();
 	readerIMU.parse(jsonIMU, valueIMU);
-	auto temperature = valueIMU["temperature"].asDouble(); 
+	auto temperature = valueIMU["message"]["temperature"].asDouble(); 
 
 	// Connect fields from GPS_RAW (satellite Count)
 	auto jsonGPS_RAW = ReadMessage("GPS_RAW");
 	auto readerGPS_RAW = Json::Reader(); auto valueGPS_RAW = Json::Value();
 	readerGPS_RAW.parse(jsonGPS_RAW, valueGPS_RAW);
-	auto satellite_count = valueGPS_RAW["satellites_visible"].asInt();
+	auto satellite_count = valueGPS_RAW["message"]["satellites_visible"].asDouble();
 
 	// Return the result
 	return unique_ptr<Status>(new Status(latitude, longitude, header, depth, altitude, temperature, string(), satellite_count, 0, false, 0));
