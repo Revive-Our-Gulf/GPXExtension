@@ -8,7 +8,7 @@
 
 #include <gtest/gtest.h>
 
-#include <LoggerLib/RovComms.h>
+#include <LoggerLib/RovCommsFactory.h>
 #include <LoggerLib/Repository.h>
 using namespace NVL_App;
 
@@ -28,9 +28,9 @@ TEST(Repository_Test, status_update)
 	repository.ClearTable();
 
 	// Create insert statuses
-	auto insert_1 = Status(1, 1, 1, 1, "TEST", 1, 1, true, 1);
-	auto insert_2 = Status(2, 2, 2, 2, "TEST", 2, 2, true, 2);
-	auto insert_3 = Status(3, 3, 3, 3, "TEST", 3, 3, true, 3);
+	auto insert_1 = Status(1,1,1, 1, 1, 1, "TEST", 1, 1, true, 1);
+	auto insert_2 = Status(2,2,2, 2, 2, 2, "TEST", 2, 2, true, 2);
+	auto insert_3 = Status(3,3,3, 3, 3, 3, "TEST", 3, 3, true, 3);
 
 	// Add elements and get the times back
 	repository.AddStatus(&insert_1); auto added_1 = repository.GetLastStatus();
@@ -58,8 +58,8 @@ TEST(Repository_Test, confirm_retrieval)
 	repository.ClearTable();
 
 	// Create a new status
-	auto comms = NVL_App::RovComms();
-	auto status_1 = comms.GetCurrentStatus();
+	auto comms = NVL_App::RovCommsFactory::GetCommunicator("random");
+	auto status_1 = comms->GetCurrentStatus();
 
 	// Add the status to the repository
 	repository.AddStatus(status_1.get());
@@ -68,6 +68,8 @@ TEST(Repository_Test, confirm_retrieval)
 	auto status_2 = repository.GetLastStatus();
 
 	// Confirm
+	ASSERT_NEAR(status_1->GetLatitude(), status_2->GetLatitude(), 1e-4);
+	ASSERT_NEAR(status_1->GetLongitude(), status_2->GetLongitude(), 1e-4);
 	ASSERT_NEAR(status_1->GetHeading(), status_2->GetHeading(), 1e-4);
 	ASSERT_NEAR(status_1->GetDepth(), status_2->GetDepth(), 1e-4);
 	ASSERT_NEAR(status_1->GetAltitude(), status_2->GetAltitude(), 1e-4);

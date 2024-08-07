@@ -47,12 +47,12 @@ void Engine::Run()
     auto repository = Repository("BlueROV");
 
     _logger->Log(1, "Setting up ROV communicator");
-    auto communicator = RovComms();
+    auto communicator = RovCommsFactory::GetCommunicator("random");
 
     _logger->Log(1, "Starting control loop, Ctrl+c to stop");
     while(true) 
     {
-        auto status = communicator.GetCurrentStatus();
+        auto status = communicator->GetCurrentStatus();
         repository.AddStatus(status.get());
         this_thread::sleep_for(std::chrono::milliseconds(_interval));
     }

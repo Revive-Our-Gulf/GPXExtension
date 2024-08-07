@@ -31,6 +31,8 @@ RandomRovComms::RandomRovComms()
  */
 unique_ptr<Status> RandomRovComms::GetCurrentStatus()
 {
+	auto latitude = NVLib::RandomUtils::GetInteger(-10,10);
+	auto longitude = NVLib::RandomUtils::GetInteger(-10,10);
 	auto heading = 90 + NVLib::RandomUtils::GetInteger(-10,10);
 	auto depth = 500 + NVLib::RandomUtils::GetInteger(-20, 20);
 	auto altitude = 8 + NVLib::RandomUtils::GetInteger(-3, 3);
@@ -41,5 +43,5 @@ unique_ptr<Status> RandomRovComms::GetCurrentStatus()
 	auto velocity = true;
 	auto fom =  0.8 + (NVLib::RandomUtils::GetInteger(-200,200) / 1000.0);
 
-	return unique_ptr<Status>(new Status(heading, depth, altitude, temperature, mode, satCount, posCert, velocity, fom));
+	return unique_ptr<Status>(new Status(latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCert, velocity, fom));
 }

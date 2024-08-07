@@ -15,6 +15,8 @@ CREATE DATABASE BlueROV;
 
 create table status (
   id INT auto_increment,
+  latitude FLOAT not null,
+  longitude FLOAT not null,
   heading FLOAT not null,
   depth FLOAT not null,
   altitude FLOAT not null,
@@ -32,5 +34,5 @@ create table status (
 /*----------------------------
 * Update Example
 ------------------------------*/
-INSERT INTO status (heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom) 
-VALUES (90, 1000, 1, 13, 'DEPTH HOLD', 5, 0.9, 1, 0.8); 
+INSERT INTO status (latitude, longitude, heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom) 
+VALUES (5,6,90, 1000, 1, 13, 'DEPTH HOLD', 5, 0.9, 1, 0.8); 

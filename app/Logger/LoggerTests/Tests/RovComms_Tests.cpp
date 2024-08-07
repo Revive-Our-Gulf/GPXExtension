@@ -8,7 +8,7 @@
 
 #include <gtest/gtest.h>
 
-#include <LoggerLib/RovComms.h>
+#include <LoggerLib/RovCommsFactory.h>
 using namespace NVL_App;
 
 //--------------------------------------------------
@@ -21,10 +21,10 @@ using namespace NVL_App;
 TEST(RovComms_Test, read_test)
 {
 	// Create a communicator
-	auto comms = RovComms();
+	auto comms = RovCommsFactory::GetCommunicator("random");
 
 	// Get the next status
-	auto status = comms.GetCurrentStatus();
+	auto status = comms->GetCurrentStatus();
 
 	// Check the values
 	ASSERT_GE(status->GetHeading(), 80);

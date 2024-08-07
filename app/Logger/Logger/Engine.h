@@ -16,7 +16,7 @@ using namespace std;
 #include <NVLib/Logger.h>
 
 #include <LoggerLib/ArgUtils.h>
-#include <LoggerLib/RovComms.h>
+#include <LoggerLib/RovCommsFactory.h>
 #include <LoggerLib/Repository.h>
 
 namespace NVL_App
