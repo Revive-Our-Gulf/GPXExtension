@@ -20,7 +20,7 @@ using namespace NVL_App;
 Repository::Repository(const string& database) : _database(database)
 {
 	// Build connection string
-	auto connStr = stringstream(); connStr << "jdbc:mariadb://localhost:3306/" << database;
+	auto connStr = stringstream(); connStr << "jdbc:mariadb://172.17.0.2:3306/" << database;
 
 	// Setup connection
 	auto driver = sql::mariadb::get_driver_instance();
