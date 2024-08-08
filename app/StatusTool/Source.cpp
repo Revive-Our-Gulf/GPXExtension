@@ -58,6 +58,14 @@ void Run()
         response << "</tr>";
 
         response << "<tr>";
+        response << "<td><b>Latitude<b></td><td>" << status->GetLatitude() << "</td>";
+        response << "</tr>";
+
+        response << "<tr>";
+        response << "<td><b>Longitude<b></td><td>" << status->GetLongitude() << "</td>";
+        response << "</tr>";
+
+        response << "<tr>";
         response << "<td><b>Heading<b></td><td>" << status->GetHeading() << " degrees</td>";
         response << "</tr>";
 

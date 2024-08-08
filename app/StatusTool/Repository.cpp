@@ -49,20 +49,22 @@ Repository::~Repository()
  */
 void Repository::AddStatus(Status * status)
 {
-	auto query = "INSERT INTO status (heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom) "
-				 "VALUES (?,?,?,?,?,?,?,?,?)";
+	auto query = "INSERT INTO status (latitude, longitude, heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom) "
+				 "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
 	auto statement = unique_ptr<sql::PreparedStatement>(_connection->prepareStatement(query));
 
-	statement->setFloat(1, status->GetHeading());
-	statement->setFloat(2, status->GetDepth());
-	statement->setFloat(3, status->GetAltitude());
-	statement->setFloat(4, status->GetTemperature());
-	statement->setString(5, status->GetMode());
-	statement->setInt(6, status->GetSatelliteCount());
-	statement->setFloat(7, status->GetPosCertainity());
-	statement->setBoolean(8, status->GetVelocityValid());
-	statement->setFloat(9, status->GetFOM());
+	statement->setFloat(1, status->GetLatitude());
+	statement->setFloat(2, status->GetLongitude());
+	statement->setFloat(3, status->GetHeading());
+	statement->setFloat(4, status->GetDepth());
+	statement->setFloat(5, status->GetAltitude());
+	statement->setFloat(6, status->GetTemperature());
+	statement->setString(7, status->GetMode());
+	statement->setInt(8, status->GetSatelliteCount());
+	statement->setFloat(9, status->GetPosCertainity());
+	statement->setBoolean(10, status->GetVelocityValid());
+	statement->setFloat(11, status->GetFOM());
 
 	statement->executeQuery();
 }
@@ -77,7 +79,7 @@ void Repository::AddStatus(Status * status)
  */
 unique_ptr<Status> Repository::GetLastStatus()
 {
-	auto query = "SELECT id, heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom, created_at "
+	auto query = "SELECT id, latitude, longitude, heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom, created_at "
 				 "FROM status ORDER BY created_at DESC LIMIT 1;";
 
 	auto statement = unique_ptr<sql::Statement>(_connection->createStatement());
@@ -85,18 +87,20 @@ unique_ptr<Status> Repository::GetLastStatus()
 
 	if (result->next()) 
 	{
-		auto heading = result->getFloat(2);
-		auto depth = result->getFloat(3);
-		auto altitude = result->getFloat(4);
-		auto temperature = result->getFloat(5);
-		auto mode = string(result->getString(6).c_str());
-		auto satCount = result->getInt(7);
-		auto posCertainty = result->getFloat(8);
-		auto velocityValid = result->getBoolean(9);
-		auto fom = result->getFloat(10);
-		auto created = string(result->getString(11));
+		auto latitude = result->getFloat(2);
+		auto longitude = result->getFloat(3);
+		auto heading = result->getFloat(4);
+		auto depth = result->getFloat(5);
+		auto altitude = result->getFloat(6);
+		auto temperature = result->getFloat(7);
+		auto mode = string(result->getString(8).c_str());
+		auto satCount = result->getInt(9);
+		auto posCertainty = result->getFloat(10);
+		auto velocityValid = result->getBoolean(11);
+		auto fom = result->getFloat(12);
+		auto created = string(result->getString(13));
 
-		return unique_ptr<Status>(new Status(created, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom));
+		return unique_ptr<Status>(new Status(created, latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom));
 	}
 
 	return unique_ptr<Status>(nullptr);
@@ -109,65 +113,41 @@ unique_ptr<Status> Repository::GetLastStatus()
  */
 unique_ptr<Status> Repository::GetClosestStatus(const string& time)
 {
-	auto query = "SELECT id, heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom, created_at, "
+	auto query = "SELECT id, latitude, longitude, heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom, created_at, "
 	             "TIME_TO_SEC(ABS(TIMEDIFF(?,created_at))) as time_diff "
 				 "FROM status ORDER BY time_diff LIMIT 1;";
 
-	auto statement = unique_ptr<sql::Statement>(_connection->createStatement());
-	auto result = statement->executeQuery(query);
+	auto statement = unique_ptr<sql::PreparedStatement>(_connection->prepareStatement(query));
+	statement->setString(1, time);
+
+	auto result = statement->executeQuery();
 
 	if (result->next()) 
 	{
-		auto heading = result->getFloat(2);
-		auto depth = result->getFloat(3);
-		auto altitude = result->getFloat(4);
-		auto temperature = result->getFloat(5);
-		auto mode = string(result->getString(6).c_str());
-		auto satCount = result->getInt(7);
-		auto posCertainty = result->getFloat(8);
-		auto velocityValid = result->getBoolean(9);
-		auto fom = result->getFloat(10);
-		auto created = string(result->getString(11));
-		auto timeDiff = result->getFloat(12);
+		auto latitude = result->getFloat(2);
+		auto longitude = result->getFloat(3);
+		auto heading = result->getFloat(4);
+		auto depth = result->getFloat(5);
+		auto altitude = result->getFloat(6);
+		auto temperature = result->getFloat(7);
+		auto mode = string(result->getString(8).c_str());
+		auto satCount = result->getInt(9);
+		auto posCertainty = result->getFloat(10);
+		auto velocityValid = result->getBoolean(11);
+		auto fom = result->getFloat(12);
+		auto created = string(result->getString(13));
+		auto timeDiff = result->getFloat(14);
+
+		cout << "Time difference: " << timeDiff << endl;
+
+		return unique_ptr<Status>(new Status(created, latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom));
 	}
 
 	return unique_ptr<Status>(nullptr);
 }
 
-/**
- * Generate the status list for the application
- * @param limit The limited list of entries expected to be in the repo
- * @param output The output set of statuses
- */
-void Repository::GetStatuses(int limit, vector<Status *>& output) 
-{
-	auto query = stringstream();
-	query << "SELECT id, heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom, created_at ";
-	query << "FROM status ORDER BY created_at DESC LIMIT " << limit;
-
-	auto statement = unique_ptr<sql::Statement>(_connection->createStatement());
-	auto result = statement->executeQuery(query.str());
-
-	while (result->next()) 
-	{
-		auto heading = result->getFloat(2);
-		auto depth = result->getFloat(3);
-		auto altitude = result->getFloat(4);
-		auto temperature = result->getFloat(5);
-		auto mode = string(result->getString(6).c_str());
-		auto satCount = result->getInt(7);
-		auto posCertainty = result->getFloat(8);
-		auto velocityValid = result->getBoolean(9);
-		auto fom = result->getFloat(10);
-		auto created = string(result->getString(11));
-
-		auto status = new Status(created, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom);
-		output.push_back(status);
-	}
-}
-
 //--------------------------------------------------
-// Delete
+// Retrieve
 //--------------------------------------------------
 
 /**
@@ -178,4 +158,38 @@ void Repository::ClearTable()
 	auto query = "delete from status";
 	auto statement = unique_ptr<sql::PreparedStatement>(_connection->prepareStatement(query));
 	statement->executeQuery();
+}
+
+/**
+ * Generate the status list for the application
+ * @param limit The limited list of entries expected to be in the repo
+ * @param output The output set of statuses
+ */
+void Repository::GetStatuses(int limit, vector<Status *>& output) 
+{
+	auto query = stringstream();
+	query << "SELECT id, latitude, longitude, heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom, created_at ";
+	query << "FROM status ORDER BY created_at DESC LIMIT " << limit;
+
+	auto statement = unique_ptr<sql::Statement>(_connection->createStatement());
+	auto result = statement->executeQuery(query.str());
+
+	while (result->next()) 
+	{
+		auto latitude = result->getFloat(2);
+		auto longitude = result->getFloat(3);
+		auto heading = result->getFloat(4);
+		auto depth = result->getFloat(5);
+		auto altitude = result->getFloat(6);
+		auto temperature = result->getFloat(7);
+		auto mode = string(result->getString(8).c_str());
+		auto satCount = result->getInt(9);
+		auto posCertainty = result->getFloat(10);
+		auto velocityValid = result->getBoolean(11);
+		auto fom = result->getFloat(12);
+		auto created = string(result->getString(13));
+
+		auto status = new Status(created, latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom);
+		output.push_back(status);
+	}
 }
