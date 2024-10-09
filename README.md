@@ -20,3 +20,7 @@ The project is made up of two main files:
 
 * _Logger_: Reads information from the BlueROV and logs it to a database.
 * _StatusTool: Provides the Extension GUI, contains the GPX generation logic and handles the queries.
+
+## Starting Docker Sessions ##
+
+docker run -d --name status_tool -p 9000:9000 status_tool:v1
