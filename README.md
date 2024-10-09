@@ -23,4 +23,6 @@ The project is made up of two main files:
 
 ## Starting Docker Sessions ##
 
-docker run -d --name status_tool -p 9000:9000 status_tool:v1
+docker run -d --restart unless-stopped --name mariadb -e MARIADB_ROOT_PASSWORD=mypass -p 3306:3306 -d mariadb:latest
+
+docker run -d --restart unless-stopped --name status_tool -p 9000:9000 status_tool:v1
