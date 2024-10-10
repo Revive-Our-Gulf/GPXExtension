@@ -9,6 +9,20 @@
 #include "Engine.h"
 
 //--------------------------------------------------
+// Add a signal handler
+//--------------------------------------------------
+
+/**
+ * Add signal handler logic
+ * @param signum The signal code
+ */
+void SignalHandler( int signum ) 
+{
+   cout << "Interrupt signal (" << signum << ") received" << endl;
+   exit(signum);  
+}
+
+//--------------------------------------------------
 // Execution entry point
 //--------------------------------------------------
 
@@ -21,6 +35,9 @@ int main(int argc, char ** argv)
 {
     auto logger = NVLib::Logger(2);
     logger.StartApplication();
+
+    logger.Log(1, "Registering a signal handler");
+    signal(SIGINT, SignalHandler);  
 
     try
     {

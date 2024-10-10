@@ -49,7 +49,7 @@ void Engine::Run()
     _logger->Log(1, "Setting up ROV communicator");
     auto communicator = RovCommsFactory::GetCommunicator("random");
 
-    _logger->Log(1, "Starting control loop, Ctrl+c to stop");
+    _logger->Log(1, "Starting control");
     while(true) 
     {
         auto status = communicator->GetCurrentStatus();

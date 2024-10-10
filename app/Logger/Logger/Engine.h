@@ -11,6 +11,7 @@
 #include <chrono>
 #include <thread>
 #include <iostream>
+#include <csignal>
 using namespace std;
 
 #include <NVLib/Logger.h>
