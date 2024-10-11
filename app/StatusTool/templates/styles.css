@@ -29,3 +29,61 @@ tr:nth-child(even)
 {
 	background-color: #dddddd;
 }
+
+ /*--------------------------------------------------*
+  * Menu Box                                                 
+  *--------------------------------------------------*/
+
+  .menu_box 
+  {
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    width: 15vmax;
+    min-width: 200px;
+    border: 5px solid black;
+    border-radius: 10px;
+    background-color: white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: large;
+  }
+
+  .menu_header 
+  {
+    font-weight: bold;
+    width: 100%;
+  }
+
+  .menu_box a 
+  {
+    padding-left: 10px;
+  }
+
+  .menu_box a:link 
+  {
+    color:black;
+    text-decoration: none;
+  }
+
+  .menu_box a:hover 
+  {
+    color: red;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .menu_box ul 
+  {
+    list-style: none;
+  }
+
+  .menu_box li 
+  {
+    margin: 10px 0px;
+  }
+
+  .menu_box ul li::marker 
+  {
+      content: "📌"
+  }

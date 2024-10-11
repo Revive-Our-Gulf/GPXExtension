@@ -33,9 +33,17 @@ void Run()
     // Index page
     CROW_ROUTE(app, "/")([]()
     {
-        auto page = crow::mustache::load_text("main.html");
+        auto page = crow::mustache::load_text("menu.html");
         return page;
     });
+
+   // Status page
+    CROW_ROUTE(app, "/status")([]()
+    {
+        auto page = crow::mustache::load_text("status.html");
+        return page;
+    });
+
 
     // CSS
     CROW_ROUTE(app, "/styles.css")([]()
@@ -45,7 +53,7 @@ void Run()
     });
 
    // Get a status update
-    CROW_ROUTE(app, "/status")([]()
+    CROW_ROUTE(app, "/current")([]()
     {
         auto repo = NVL_App::Repository("BlueROV");
         auto status = repo.GetLastStatus();
