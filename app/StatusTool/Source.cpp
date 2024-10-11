@@ -9,6 +9,8 @@
 #include <iostream>
 using namespace std;
 
+#include <opencv2/opencv.hpp>
+
 #include <crow.h>
 
 #include "GPXMaker.h"
@@ -28,8 +30,13 @@ void Run();
  */
 void Run() 
 {
-     crow::SimpleApp app;
-    
+    crow::SimpleApp app;
+
+    // Load configuration parameters
+    auto reader = cv::FileStorage("config.xml", cv::FileStorage::FORMAT_XML | cv::FileStorage::READ);
+    auto IP_DB = string(); reader["db"] >> IP_DB;
+    reader.release();
+
     // Index page
     CROW_ROUTE(app, "/")([]()
     {
@@ -53,9 +60,9 @@ void Run()
     });
 
    // Get a status update
-    CROW_ROUTE(app, "/current")([]()
+    CROW_ROUTE(app, "/current")([&IP_DB]()
     {
-        auto repo = NVL_App::Repository("BlueROV");
+        auto repo = NVL_App::Repository(IP_DB, "BlueROV");
         auto status = repo.GetLastStatus();
 
         auto response = stringstream();
@@ -115,9 +122,9 @@ void Run()
     });
 
     // Generate the GPX file
-    CROW_ROUTE(app, "/gpx")([]()
+    CROW_ROUTE(app, "/gpx")([&IP_DB]()
     {
-       auto repo = NVL_App::Repository("BlueROV");
+       auto repo = NVL_App::Repository(IP_DB, "BlueROV");
        auto statusList = vector<NVL_App::Status *>(); repo.GetStatuses(10, statusList);
        auto gpx = NVL_App::GPXMaker(statusList);
        return gpx.RenderXML();

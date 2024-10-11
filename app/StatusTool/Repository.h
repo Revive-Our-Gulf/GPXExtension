@@ -23,7 +23,7 @@ namespace NVL_App
 		sql::Connection * _connection;
 		string _database;
 	public:
-		Repository(const string& database);
+		Repository(const string& ipaddress, const string& database);
 		~Repository();
 
 		void AddStatus(Status * status);

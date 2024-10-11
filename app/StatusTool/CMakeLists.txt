@@ -52,3 +52,9 @@ add_custom_target(resource_copy ALL
 	COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/templates ${CMAKE_BINARY_DIR}/templates
     DEPENDS ${MY_TARGET}
 )
+
+# Copy Config across
+add_custom_target(config_copy ALL
+	COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/config ${CMAKE_BINARY_DIR}
+    DEPENDS ${MY_TARGET}
+)

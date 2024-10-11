@@ -15,12 +15,13 @@ using namespace NVL_App;
 
 /**
  * @brief Initializer Constructor
+ * @param ipAddress The ip address of the database
  * @param database Initialize variable <database>
  */
-Repository::Repository(const string& database) : _database(database)
+Repository::Repository(const string& ipAddress, const string& database) : _database(database)
 {
 	// Build connection string
-	auto connStr = stringstream(); connStr << "jdbc:mariadb://172.17.0.2:3306/" << database;
+	auto connStr = stringstream(); connStr << "jdbc:mariadb://" << ipAddress << ":3306/" << database;
 
 	// Setup connection
 	auto driver = sql::mariadb::get_driver_instance();
