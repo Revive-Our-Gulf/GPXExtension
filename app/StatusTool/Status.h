@@ -17,6 +17,8 @@ namespace NVL_App
 	{
 	private:
 		string _timeStamp;
+		double _latitude;
+		double _longitude;
 		double _heading;
 		double _depth;
 		double _altitude;
@@ -27,13 +29,15 @@ namespace NVL_App
 		bool _velocityValid;
 		double _FOM;
 	public:
-		Status(double heading, double depth, double altitude, double temperature, const string& mode, int satelliteCount, double posCertainity, bool velocityValid, double FOM) :
-			_timeStamp(string()), _heading(heading), _depth(depth), _altitude(altitude), _temperature(temperature), _mode(mode), _satelliteCount(satelliteCount), _posCertainity(posCertainity), _velocityValid(velocityValid), _FOM(FOM) {}
+		Status(double latitude, double longitude, double heading, double depth, double altitude, double temperature, const string& mode, int satelliteCount, double posCertainity, bool velocityValid, double FOM) :
+			_timeStamp(string()), _latitude(latitude), _longitude(longitude), _heading(heading), _depth(depth), _altitude(altitude), _temperature(temperature), _mode(mode), _satelliteCount(satelliteCount), _posCertainity(posCertainity), _velocityValid(velocityValid), _FOM(FOM) {}
 
-		Status(const string& timeStamp, double heading, double depth, double altitude, double temperature, const string& mode, int satelliteCount, double posCertainity, bool velocityValid, double FOM) :
-			_timeStamp(timeStamp), _heading(heading), _depth(depth), _altitude(altitude), _temperature(temperature), _mode(mode), _satelliteCount(satelliteCount), _posCertainity(posCertainity), _velocityValid(velocityValid), _FOM(FOM) {}
+		Status(const string& timeStamp, double latitude, double longitude, double heading, double depth, double altitude, double temperature, const string& mode, int satelliteCount, double posCertainity, bool velocityValid, double FOM) :
+			_timeStamp(timeStamp), _latitude(latitude), _longitude(longitude), _heading(heading), _depth(depth), _altitude(altitude), _temperature(temperature), _mode(mode), _satelliteCount(satelliteCount), _posCertainity(posCertainity), _velocityValid(velocityValid), _FOM(FOM) {}
 
 		inline string& GetTimeStamp() { return _timeStamp; }
+		inline double& GetLatitude() { return _latitude; }
+		inline double& GetLongitude() { return _longitude; }
 		inline double& GetHeading() { return _heading; }
 		inline double& GetDepth() { return _depth; }
 		inline double& GetAltitude() { return _altitude; }

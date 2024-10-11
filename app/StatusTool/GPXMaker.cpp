@@ -114,8 +114,8 @@ void GPXMaker::RenderJourney(ostream& writer)
  */
 void GPXMaker::RenderStep(ostream& writer, Status * status) 
 {
-	writer << "<trkpt lat=\"-36.1939925607\" lon=\"175.0471557956\">";
-	writer << "<ele>-1.89</ele>";
+	writer << "<trkpt lat=\"" << status->GetLatitude() << "\" lon=\"" << status->GetLongitude() << "\">";
+	writer << "<ele>" << status->GetAltitude() << "</ele>";
 	writer << "<time>" << status->GetTimeStamp() << "</time>";
 	writer << "<hdop>0.900000</hdop>";
 	writer << "<extensions>";

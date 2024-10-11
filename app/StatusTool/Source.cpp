@@ -66,6 +66,14 @@ void Run()
         response << "</tr>";
 
         response << "<tr>";
+        response << "<td><b>Latitude<b></td><td>" << status->GetLatitude() << "</td>";
+        response << "</tr>";
+
+        response << "<tr>";
+        response << "<td><b>Longitude<b></td><td>" << status->GetLongitude() << "</td>";
+        response << "</tr>";
+
+        response << "<tr>";
         response << "<td><b>Heading<b></td><td>" << status->GetHeading() << " degrees</td>";
         response << "</tr>";
 
@@ -116,8 +124,7 @@ void Run()
     });
 
     //set the port, set the app to run on multiple threads, and run the app
-    app.port(18080).multithreaded().run();
-
+    app.port(9000).multithreaded().run();
 }
 
 //--------------------------------------------------

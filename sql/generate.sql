@@ -10,6 +10,11 @@
 CREATE DATABASE BlueROV;
 
 /*----------------------------
+* Create the database
+------------------------------*/
+USE BlueROV;
+
+/*----------------------------
 * Create a status table
 ------------------------------*/
 

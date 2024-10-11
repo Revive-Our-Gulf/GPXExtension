@@ -1,0 +1,77 @@
+FROM debian:12-slim
+
+# Install Packages
+RUN apt-get update -y
+RUN apt-get upgrade -y
+RUN apt-get install -y build-essential
+RUN apt-get install -y cmake
+RUN apt-get install -y git
+RUN apt-get install -y libopencv-dev
+RUN apt-get install -y libssl-dev
+RUN apt-get install -y libgtest-dev
+RUN apt-get install -y uuid-dev
+RUN apt-get install -y libzip-dev
+RUN apt-get install -y libasio-dev
+RUN apt-get install -y libssl-dev
+RUN apt-get install -y libmariadb3
+RUN apt-get install -y libmariadb-dev
+
+# Create the NVLib Library
+RUN mkdir Libraries
+WORKDIR /Libraries
+RUN git clone https://gitlab.com/project437/nvlib.git
+RUN mv nvlib NVLib
+RUN mkdir NVLib/build
+WORKDIR /Libraries/NVLib/build
+RUN cmake ..
+RUN cmake --build .
+
+# Create Installs folder
+WORKDIR /
+RUN mkdir Installs
+
+# Install Crow
+WORKDIR /Installs
+RUN git clone https://github.com/CrowCpp/Crow.git
+RUN mkdir Crow/build
+WORKDIR /Installs/Crow/build
+RUN cmake .. -DCROW_BUILD_EXAMPLES=OFF -DCROW_BUILD_TESTS=OFF
+RUN make install
+
+# Install MariaDB C++ connector
+WORKDIR /Installs
+COPY mariadb-connector-cpp-1.1.5-debian-bookworm-aarch64.tar.gz .
+RUN tar -xvzf mariadb-connector-cpp-1.1.5-debian-bookworm-aarch64.tar.gz
+RUN rm -r mariadb-connector-cpp-1.1.5-debian-bookworm-aarch64.tar.gz
+WORKDIR /Installs/mariadb-connector-cpp-1.1.5-debian-bookworm-aarch64
+RUN install -d /usr/include/mariadb/conncpp
+RUN install -d /usr/include/mariadb/conncpp/compat
+RUN install ./include/mariadb/* /usr/include/mariadb/; exit 0 
+RUN install ./include/mariadb/conncpp/* /usr/include/mariadb/conncpp; exit 0 
+RUN install ./include/mariadb/conncpp/compat/* /usr/include/mariadb/conncpp/compat
+RUN install -d /usr/lib/mariadb
+RUN install -d /usr/lib/mariadb/plugin
+RUN install ./lib/mariadb/libmariadbcpp.so /usr/lib
+RUN install ./lib/mariadb/plugin/* /usr/lib/mariadb/plugin
+
+# Create Plugin folder
+WORKDIR /
+RUN mkdir Plugin
+
+# Generate the plugin
+WORKDIR /Plugin
+COPY *.h .
+COPY *.cpp .
+COPY CMakeLists_docker.txt CMakeLists.txt
+RUN mkdir templates
+COPY ./templates/* ./templates
+RUN mkdir build
+WORKDIR /Plugin/build
+RUN cmake .. 
+RUN make
+
+# Expose port 9000
+EXPOSE 9000
+
+# Launch the plugin
+ENTRYPOINT ["./StatusTool"]
