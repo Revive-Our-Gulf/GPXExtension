@@ -18,7 +18,8 @@ USE BlueROV;
 * Create a status table
 ------------------------------*/
 
-create table status (
+create table status 
+(
   id INT auto_increment,
   latitude FLOAT not null,
   longitude FLOAT not null,
@@ -37,7 +38,24 @@ create table status (
 );
 
 /*----------------------------
+* Create a settings table
+------------------------------*/
+create table settings 
+(
+  id INT auto_increment,
+  field_name VARCHAR(255),
+  field_value VARCHAR(255),
+  PRIMARY KEY(id)
+);
+
+/*----------------------------
 * Update Example
 ------------------------------*/
 INSERT INTO status (latitude, longitude, heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom) 
 VALUES (5,6,90, 1000, 1, 13, 'DEPTH HOLD', 5, 0.9, 1, 0.8); 
+
+/*----------------------------
+* ADD settings
+------------------------------*/
+INSERT INTO settings (field_name, field_value) VALUES ('LOGGER_STATE', 'STOPPED');
+INSERT INTO settings (field_name, field_value) VALUES ('RATE','1000');
