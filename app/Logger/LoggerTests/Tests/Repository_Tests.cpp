@@ -22,7 +22,7 @@ using namespace NVL_App;
 TEST(Repository_Test, status_update)
 {
 	// Setup
-	auto repository = Repository("BlueROV_Test");
+	auto repository = Repository("127.0.0.1", "BlueROV_Test");
 
 	// Clear the repo
 	repository.ClearTable();
@@ -52,7 +52,7 @@ TEST(Repository_Test, status_update)
 TEST(Repository_Test, confirm_retrieval)
 {
 	// Setup
-	auto repository = Repository("BlueROV_Test");
+	auto repository = Repository("127.0.0.1", "BlueROV_Test");
 
 	// Clear the repo
 	repository.ClearTable();
@@ -79,4 +79,29 @@ TEST(Repository_Test, confirm_retrieval)
 	ASSERT_NEAR(status_1->GetPosCertainity(), status_2->GetPosCertainity(), 1e-4);
 	ASSERT_NEAR(status_1->GetVelocityValid(), status_2->GetVelocityValid(), 1e-4);
 	ASSERT_NEAR(status_1->GetFOM(), status_2->GetFOM(), 1e-4);
+}
+
+/**
+ * Add the logic to get and set the field value
+ */
+TEST(Repository_Test, field_get_and_set)
+{
+	// Setup
+	auto repository = Repository("127.0.0.1", "BlueROV_Test");
+
+	// Set the field to a pre-value
+	repository.SetField(Repository::Field::LOGGER_STATE, "STOPPED");
+	repository.SetField(Repository::Field::RATE, "1000");
+
+	// Confirm the setting
+	ASSERT_EQ(repository.GetField(Repository::Field::LOGGER_STATE), "STOPPED");
+	ASSERT_EQ(repository.GetField(Repository::Field::RATE), "1000");
+
+	// Set the field to a pre-value
+	repository.SetField(Repository::Field::LOGGER_STATE, "STARTED");
+	repository.SetField(Repository::Field::RATE, "500");
+
+	// Confirm the setting
+	ASSERT_EQ(repository.GetField(Repository::Field::LOGGER_STATE), "STARTED");
+	ASSERT_EQ(repository.GetField(Repository::Field::RATE), "500");
 }

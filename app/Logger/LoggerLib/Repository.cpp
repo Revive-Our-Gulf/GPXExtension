@@ -15,12 +15,14 @@ using namespace NVL_App;
 
 /**
  * @brief Initializer Constructor
+ * @param ipAddress The IP address that we are working with
  * @param database Initialize variable <database>
  */
-Repository::Repository(const string& database) : _database(database)
+Repository::Repository(const string& ipAddress, const string& database) : _database(database)
 {
 	// Build connection string
-	auto connStr = stringstream(); connStr << "jdbc:mariadb://172.17.0.2:3306/" << database;
+
+	auto connStr = stringstream(); connStr << "jdbc:mariadb://" << ipAddress << ":3306/" << database;
 
 	// Setup connection
 	auto driver = sql::mariadb::get_driver_instance();
@@ -158,4 +160,64 @@ void Repository::ClearTable()
 	auto query = "delete from status";
 	auto statement = unique_ptr<sql::PreparedStatement>(_connection->prepareStatement(query));
 	statement->executeQuery();
+}
+
+//--------------------------------------------------
+// Settings
+//--------------------------------------------------
+
+/**
+ * Add the functionality to set the associated field
+ * @param field The field that we are setting
+ * @param value The value that we are setting the field
+ */
+void Repository::SetField(Field field, const string& value) 
+{
+	// Get the field name
+	auto fieldName = GetFieldName(field);
+
+	// Build the query
+	auto query = "UPDATE settings SET field_value = ? WHERE field_name = ?;";
+	auto statement = unique_ptr<sql::PreparedStatement>(_connection->prepareStatement(query));
+	statement->setString(1, value);
+	statement->setString(2, fieldName);
+
+	// Execute the query
+	statement->executeQuery();
+}
+
+/**
+ * Get the associated field value
+ * @param field The field that we are getting the value for
+ */
+string Repository::GetField(Field field) 
+{
+	// Get the field name
+	auto fieldName = GetFieldName(field);
+
+	// Build the query
+	auto query = "SELECT field_value FROM settings WHERE field_name = ?";
+	auto statement = unique_ptr<sql::PreparedStatement>(_connection->prepareStatement(query));
+	statement->setString(1, fieldName);
+
+	// Execute and get the response
+	auto result = statement->executeQuery();
+
+	if (result->next()) return result->getString(1).c_str();
+	else throw runtime_error("Unable to find field: " + fieldName);
+}
+
+/**
+ * Add the functionality to retrieve the associated field name
+ * @param field The field that we want the value for
+ */
+string Repository::GetFieldName(Field field) 
+{
+	switch (field)
+	{
+		case Field::LOGGER_STATE: return "LOGGER_STATE";
+		case Field::RATE: return "RATE";
+	}
+
+	throw runtime_error("Unknown field type");
 }

@@ -19,11 +19,13 @@ namespace NVL_App
 {
 	class Repository
 	{
+	public:
+		enum Field { LOGGER_STATE, RATE };
 	private:
 		sql::Connection * _connection;
 		string _database;
 	public:
-		Repository(const string& database);
+		Repository(const string& ipAddress, const string& database);
 		~Repository();
 
 		void AddStatus(Status * status);
@@ -31,7 +33,12 @@ namespace NVL_App
 		unique_ptr<Status> GetClosestStatus(const string& time);
 		void ClearTable();
 
+		void SetField(Field field, const string& value);
+		string GetField(Field field);
+
 		inline sql::Connection * GetConnection() { return _connection; }
 		inline string& GetDatabase() { return _database; }
+	private:
+		string GetFieldName(Field field);
 	};
 }

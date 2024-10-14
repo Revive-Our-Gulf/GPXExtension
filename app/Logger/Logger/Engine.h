@@ -28,6 +28,7 @@ namespace NVL_App
 		NVLib::Parameters * _parameters;
 		NVLib::Logger* _logger;
 		int _interval;
+		string _ip;
 	public:
 		Engine(NVLib::Logger* logger, NVLib::Parameters * parameters);
 		~Engine();

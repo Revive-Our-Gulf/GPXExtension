@@ -23,6 +23,7 @@ Engine::Engine(NVLib::Logger* logger, NVLib::Parameters* parameters)
     _logger = logger; _parameters = parameters;
 
     _interval = ArgUtils::GetInteger(parameters, "interval");
+    _ip = ArgUtils::GetString(parameters, "database");
     _logger->Log(1, "Recording at interval: %i", _interval);
 }
 
@@ -44,7 +45,7 @@ Engine::~Engine()
 void Engine::Run()
 {
     _logger->Log(1, "Connecting to the database");
-    auto repository = Repository("BlueROV");
+    auto repository = Repository(_ip, "BlueROV");
 
     _logger->Log(1, "Setting up ROV communicator");
     auto communicator = RovCommsFactory::GetCommunicator("random");
