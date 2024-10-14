@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
 <opencv_storage>
-    <database>172.17.0.2</database>
-    <interval>"1000"</interval>
+    <database>"127.0.0.1"</database>
 </opencv_storage>

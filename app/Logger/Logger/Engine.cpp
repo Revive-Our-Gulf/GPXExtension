@@ -21,10 +21,7 @@ using namespace NVL_App;
 Engine::Engine(NVLib::Logger* logger, NVLib::Parameters* parameters) 
 {
     _logger = logger; _parameters = parameters;
-
-    _interval = ArgUtils::GetInteger(parameters, "interval");
     _ip = ArgUtils::GetString(parameters, "database");
-    _logger->Log(1, "Recording at interval: %i", _interval);
 }
 
 /**
@@ -53,8 +50,17 @@ void Engine::Run()
     _logger->Log(1, "Starting control");
     while(true) 
     {
-        auto status = communicator->GetCurrentStatus();
-        repository.AddStatus(status.get());
-        this_thread::sleep_for(std::chrono::milliseconds(_interval));
+        auto status = repository.GetField(Repository::Field::LOGGER_STATE);
+        auto interval = NVLib::StringUtils::String2Int(repository.GetField(Repository::Field::RATE));
+    
+        if (status != "STOPPED") 
+        {
+            auto timeString = NVLib::StringUtils::GetDateTimeString();
+            _logger->Log(1, "Adding status entry: %s", timeString.c_str());
+            auto status = communicator->GetCurrentStatus();
+            repository.AddStatus(status.get());
+        }
+
+        this_thread::sleep_for(std::chrono::milliseconds(interval));
     }
 }
