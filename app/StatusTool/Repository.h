@@ -19,6 +19,8 @@ namespace NVL_App
 {
 	class Repository
 	{
+	public:
+		enum Field { LOGGER_STATE, RATE };
 	private:
 		sql::Connection * _connection;
 		string _database;
@@ -32,7 +34,12 @@ namespace NVL_App
 		void GetStatuses(int limit, vector<Status *>& output);
 		void ClearTable();
 
+		void SetField(Field field, const string& value);
+		string GetField(Field field);
+
 		inline sql::Connection * GetConnection() { return _connection; }
 		inline string& GetDatabase() { return _database; }
+	private:
+		string GetFieldName(Field field);
 	};
 }
