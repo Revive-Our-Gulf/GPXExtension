@@ -30,6 +30,12 @@ tr:nth-child(even)
 	background-color: #dddddd;
 }
 
+input, select 
+{
+  margin-top: 5px;
+  width: 100px;
+}
+
  /*--------------------------------------------------*
   * Menu Box                                                 
   *--------------------------------------------------*/

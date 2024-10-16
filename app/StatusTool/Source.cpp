@@ -15,6 +15,7 @@ using namespace std;
 
 #include "GPXMaker.h"
 #include "Repository.h"
+#include "Settings.h"
 
 //--------------------------------------------------
 // Function Prototypes
@@ -44,13 +45,30 @@ void Run()
         return page;
     });
 
-   // Status page
+    // Status page
     CROW_ROUTE(app, "/status")([]()
     {
         auto page = crow::mustache::load_text("status.html");
         return page;
     });
 
+    // Settings page
+    CROW_ROUTE(app, "/settings")([&IP_DB](const crow::request& request)
+    {
+        auto repo = NVL_App::Repository(IP_DB, "BlueROV");
+
+        auto parameters = unordered_map<string, string>();
+        if (request.url_params.get("submit") != nullptr) 
+        {
+            parameters["submit"] = "submit";
+            parameters["status"] = request.url_params.get("status");
+            parameters["interval"] = request.url_params.get("interval");
+        }
+
+        auto page = NVL_App::Settings(&repo, parameters);
+
+        return page.Render();
+    });
 
     // CSS
     CROW_ROUTE(app, "/styles.css")([]()

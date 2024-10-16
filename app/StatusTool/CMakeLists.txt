@@ -42,6 +42,7 @@ add_executable(StatusTool
     Source.cpp
     Repository.cpp
     GPXMaker.cpp
+    Settings.cpp
 )
 
 # Add link libraries                               
