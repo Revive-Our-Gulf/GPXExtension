@@ -14,6 +14,7 @@ using namespace std;
 #include "RovCommsBase.h"
 #include "RandomRovComms.h"
 #include "FileRovComms.h"
+#include "HttpRovComms.h"
 
 namespace NVL_App
 {

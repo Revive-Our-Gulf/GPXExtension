@@ -45,7 +45,7 @@ void Engine::Run()
     auto repository = Repository(_ip, "BlueROV");
 
     _logger->Log(1, "Setting up ROV communicator");
-    auto communicator = RovCommsFactory::GetCommunicator("random");
+    auto communicator = RovCommsFactory::GetCommunicator("http");
 
     _logger->Log(1, "Starting control");
     while(true) 

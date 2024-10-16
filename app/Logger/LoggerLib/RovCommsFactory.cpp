@@ -22,5 +22,6 @@ unique_ptr<RovCommsBase> RovCommsFactory::GetCommunicator(const string& name)
 {
 	if (name == "random") return unique_ptr<RovCommsBase>(new RandomRovComms());
 	else if (name == "file") return unique_ptr<RovCommsBase>(new FileRovComms());
+	else if (name == "http") return unique_ptr<RovCommsBase>(new HttpRovComms());
 	else throw runtime_error("Unknown Communicator type: " + name);
 }
