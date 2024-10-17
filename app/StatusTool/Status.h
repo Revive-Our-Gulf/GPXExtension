@@ -35,6 +35,22 @@ namespace NVL_App
 		Status(const string& timeStamp, double latitude, double longitude, double heading, double depth, double altitude, double temperature, const string& mode, int satelliteCount, double posCertainity, bool velocityValid, double FOM) :
 			_timeStamp(timeStamp), _latitude(latitude), _longitude(longitude), _heading(heading), _depth(depth), _altitude(altitude), _temperature(temperature), _mode(mode), _satelliteCount(satelliteCount), _posCertainity(posCertainity), _velocityValid(velocityValid), _FOM(FOM) {}
 
+		Status(Status * status) 
+		{
+			_timeStamp = status->_timeStamp;
+			_latitude = status->_latitude;
+			_longitude = status->_longitude;
+			_heading = status->_heading;
+			_depth = status->_depth;
+			_altitude = status->_altitude;
+			_temperature = status->_temperature;
+			_mode = status->_mode;
+			_satelliteCount = status->_satelliteCount;
+			_posCertainity = status->_posCertainity;
+			_velocityValid = status->_velocityValid;
+			_FOM = status->_FOM;
+		}
+
 		inline string& GetTimeStamp() { return _timeStamp; }
 		inline double& GetLatitude() { return _latitude; }
 		inline double& GetLongitude() { return _longitude; }

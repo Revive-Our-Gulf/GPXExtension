@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+
+<class>
+
+<namespace>NVL_App</namespace>
+<solution>F</solution>
+<name>QueryPage</name>
+<description>Query Page for GPX</description>
+
+<includes>
+    <include name="unordered_map" namespace="std" local="false" />
+    <include name="iostream" namespace="std" local="false" />
+    <include name="Repository.h" local="false" />
+    <include name="GPXMaker.h" local="false" />
+</includes>
+
+<variables>
+    <variable type="Repository *" name="repo" code="10" />
+    <variable type="unordered_map<string, string>" name="fields" code="10" />
+</variables>
+
+<constructors>
+    
+    <!-- Main Constructor -->
+    <constructor type="custom" inline="false">
+        <parameter type="Repository *" name="repo" description="A link to the repository" />
+        <parameter type="unordered_map<string, string>&" name="parameters" description="The input parameters of the application" />
+    </constructor>
+
+</constructors>
+
+<methods>
+    
+    <!-- Main Render entry point -->
+    <method section="Render" access="public" return="string" name="Render" description="The main render logic" inline="false" />
+
+    <!-- Render Form -->
+    <method section="Render Form" access="private" return="string" name="RenderForm" description="Render the form for the application" inline="false" />
+
+    <!-- Render Response -->
+    <method section="Render Reponse" access="private" return="string" name="RenderResponse" description="Render the response after an update" inline="false" />
+
+</methods>
+
+</class>
