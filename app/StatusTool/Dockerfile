@@ -80,8 +80,8 @@ WORKDIR /Plugin/build
 RUN cmake .. 
 RUN make
 
-# Expose port 1234
-EXPOSE 1234
+# Expose port 88
+EXPOSE 88
 
 # Launch the plugin
 ENTRYPOINT ["./StatusTool"]
