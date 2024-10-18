@@ -50,9 +50,9 @@ RUN install ./lib/mariadb/plugin/* /usr/lib/mariadb/plugin
 # Fix the version of MariaDB C++ connector
 WORKDIR /Installs
 RUN git clone https://github.com/mariadb-corporation/mariadb-connector-cpp.git
-RUN git checkout tags/1.1.5
 RUN mkdir mariadb-connector-cpp/build
 WORKDIR /Installs/mariadb-connector-cpp/build
+RUN git checkout tags/1.1.5
 RUN cmake ..
 RUN cmake --build .
 RUN install ./libmariadbcpp.so /usr/lib
