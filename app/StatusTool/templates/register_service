@@ -1,0 +1,10 @@
+{
+    "name": "GPX",
+    "description": "Logs position data",
+    "icon": "mdi-sail-boat",
+    "company": "Revive our Gulf",
+    "version": "0.0.0",
+    "new_page": true,
+    "webpage": "",
+    "api": ""
+}

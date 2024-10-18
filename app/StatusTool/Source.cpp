@@ -96,6 +96,13 @@ void Run()
         return stylesheet;
     });
 
+    // Logic to register the service
+    CROW_ROUTE(app, "/register_service")([]()
+    {
+        auto stylesheet = crow::mustache::load_text("register_service");
+        return stylesheet;
+    });
+
    // Get a status update
     CROW_ROUTE(app, "/current")([&IP_DB]()
     {
