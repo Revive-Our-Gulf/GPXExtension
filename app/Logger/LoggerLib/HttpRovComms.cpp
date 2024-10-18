@@ -32,10 +32,10 @@ HttpRovComms::HttpRovComms()
 unique_ptr<Status> HttpRovComms::GetCurrentStatus()
 {
 	// Setup client
-	auto client = httplib::Client(_ip, 8088);
+	auto client = httplib::Client(_ip, 80);
 
 	// Fire off the request
-	auto result = client.Get("/v1/mavlink/vehicles/1/components/1/messages/GLOBAL_POSITION_INT");
+	auto result = client.Get("/mavlink2rest/mavlink/vehicles/1/components/1/messages/GLOBAL_POSITION_INT");
 	auto body = result->body;
 
 	// Decode the message
