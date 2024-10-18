@@ -50,25 +50,26 @@ RUN install ./lib/mariadb/plugin/* /usr/lib/mariadb/plugin
 # Fix the version of MariaDB C++ connector
 WORKDIR /Installs
 RUN git clone https://github.com/mariadb-corporation/mariadb-connector-cpp.git
+RUN git checkout tags/1.1.5
 RUN mkdir mariadb-connector-cpp/build
 WORKDIR /Installs/mariadb-connector-cpp/build
-#RUN cmake ..
-#RUN cmake --build .
-#RUN install ./libmariadbcpp.so /usr/lib
+RUN cmake ..
+RUN cmake --build .
+RUN install ./libmariadbcpp.so /usr/lib
 
 # Create App folder
-#WORKDIR /
-#RUN mkdir App
+WORKDIR /
+RUN mkdir App
 
 # Create Logger Application
-#WORKDIR /App
-#COPY Resources Resources
-#COPY Logger Logger
-#COPY LoggerLib LoggerLib
-#COPY CMakeLists_docker.txt CMakeLists.txt
-#RUN cmake . -B build
-#RUN cmake --build build -j
+WORKDIR /App
+COPY Resources Resources
+COPY Logger Logger
+COPY LoggerLib LoggerLib
+COPY CMakeLists_docker.txt CMakeLists.txt
+RUN cmake . -B build
+RUN cmake --build build -j
 
 # Launch the Logger
-#WORKDIR /App/build/Logger
-#ENTRYPOINT [ "./Logger" ]
+WORKDIR /App/build/Logger
+ENTRYPOINT [ "./Logger" ]
