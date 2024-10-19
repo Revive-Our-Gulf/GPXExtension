@@ -120,6 +120,6 @@ void QueryPage::RenderHeader(ostream& writer)
  */
 void QueryPage::RenderFooter(ostream& writer) 
 {
-	writer << "<p>Go <a href=\"\\\" target=\"_blank\">back</a>.</p>";
+	writer << "<p>Go <a href=\"\\\">back</a>.</p>";
 	writer << "</body></html>" << endl;
 }
