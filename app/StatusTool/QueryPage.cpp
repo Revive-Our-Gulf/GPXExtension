@@ -59,15 +59,17 @@ void QueryPage::RenderForm(ostream& writer)
 	writer << "<form action=\"\\query\">";
 
 	// Render Start Time
+	auto start = NVLib::StringUtils::GetDateTimeString();
 	writer << "<label=for\"status\">Start Time:</label><br>";
-	writer << "<input type=\"datetime-local\" name=\"start\" id=\"start\" /><br>";
+	writer << "<input type=\"datetime-local\" name=\"start\" id=\"start\" value=\"" << start << "\" step=\"any\" /><br>";
 
 	// Space
 	writer << "<br>";
 
 	// Render End Time
+	auto end = NVLib::StringUtils::GetDateTimeString();
 	writer << "<label=for\"status\">End Time:</label><br>";
-	writer << "<input type=\"datetime-local\" name=\"end\" id=\"end\" /><br>";
+	writer << "<input type=\"datetime-local\" name=\"end\" id=\"end\"  value=\"" << end << "\" step=\"any\" /><br>";
 
 	// Add a submit button
 	writer << "<br><input type=\"submit\" id=\"submit\" name=\"submit\" value=\"Submit\"><br>";
@@ -82,12 +84,14 @@ void QueryPage::RenderForm(ostream& writer)
  */
 void QueryPage::RenderResponse(ostream& writer)
 {
-	auto status = _repo->GetClosestStatus(_fields["start"]);
-	auto statuses = vector<Status *> { new Status(status.get()) };
+	auto statuses = vector<Status *>();
+	_repo->GetStatuses(_fields["start"], _fields["end"], statuses);
 
 	auto maker = NVL_App::GPXMaker(statuses);
 
 	writer << "<textarea rows=\"20\" cols=\"100\">" << maker.RenderXML() << "</textarea>"; 
+
+	//for (auto status : statuses) delete status;
 }
 
 //--------------------------------------------------

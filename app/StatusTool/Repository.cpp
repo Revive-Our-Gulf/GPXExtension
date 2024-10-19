@@ -195,6 +195,43 @@ void Repository::GetStatuses(int limit, vector<Status *>& output)
 	}
 }
 
+/**
+ * Retrieve the statuses between a given range
+ * @param start The start date that we are getting
+ * @param end The end date that we are getting
+ * @param output The output set of statuses
+ */
+void Repository::GetStatuses(const string& start, const string& end, vector<Status *>& output) 
+{
+	auto query = stringstream();
+	query << "SELECT id, latitude, longitude, heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom, created_at ";
+	query << "FROM status WHERE created_at BETWEEN ? AND ? ORDER BY created_at DESC";
+
+	auto statement = unique_ptr<sql::PreparedStatement>(_connection->prepareStatement(query.str()));
+	statement->setString(1, start);
+	statement->setString(2, end);
+	auto result = statement->executeQuery();
+
+	while (result->next()) 
+	{
+		auto latitude = result->getFloat(2);
+		auto longitude = result->getFloat(3);
+		auto heading = result->getFloat(4);
+		auto depth = result->getFloat(5);
+		auto altitude = result->getFloat(6);
+		auto temperature = result->getFloat(7);
+		auto mode = string(result->getString(8).c_str());
+		auto satCount = result->getInt(9);
+		auto posCertainty = result->getFloat(10);
+		auto velocityValid = result->getBoolean(11);
+		auto fom = result->getFloat(12);
+		auto created = string(result->getString(13));
+
+		auto status = new Status(created, latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom);
+		output.push_back(status);
+	}
+}
+
 //--------------------------------------------------
 // Settings
 //--------------------------------------------------

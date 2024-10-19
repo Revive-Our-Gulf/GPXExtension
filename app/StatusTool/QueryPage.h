@@ -12,6 +12,8 @@
 #include <iostream>
 using namespace std;
 
+#include <NVLib/StringUtils.h>
+
 #include "Repository.h"
 #include "GPXMaker.h"
 

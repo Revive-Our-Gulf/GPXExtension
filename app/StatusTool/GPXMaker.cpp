@@ -40,6 +40,8 @@ GPXMaker::~GPXMaker()
  */
 string GPXMaker::RenderXML()
 {
+	if (_statuses.size() == 0) return "No data found";
+
 	auto writer = stringstream();
 
 	writer << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
