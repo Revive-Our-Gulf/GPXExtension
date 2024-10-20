@@ -89,13 +89,13 @@ ARG IMAGE_NAME
 LABEL permissions='\
 {\
   "ExposedPorts": {\
-    "5420/tcp": {}\
+    "5428/tcp": {}\
   },\
   "HostConfig": {\
     "Binds":["/usr/blueos/extensions/GPX:/app/logs"],\
     "ExtraHosts": ["host.docker.internal:host-gateway"],\
     "PortBindings": {\
-      "5420/tcp": [\
+      "5428/tcp": [\
         {\
           "HostPort": ""\
         }\
