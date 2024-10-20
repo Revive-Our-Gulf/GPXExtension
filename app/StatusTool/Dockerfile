@@ -80,7 +80,7 @@ WORKDIR /Plugin/build
 RUN cmake .. 
 RUN make
 
-EXPOSE 5420/tcp
+EXPOSE 5428/tcp
 
 LABEL version="1.0.1"
 
