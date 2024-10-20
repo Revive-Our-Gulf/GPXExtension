@@ -75,7 +75,8 @@ COPY *.cpp .
 COPY CMakeLists_docker.txt CMakeLists.txt
 RUN mkdir templates
 COPY ./templates/* ./templates
-COPY config/ .
+RUN mkdir config
+COPY ./config/ ./config
 RUN mkdir build
 WORKDIR /Plugin/build
 RUN cmake .. 
