@@ -21,18 +21,18 @@ USE BlueROV;
 create table status 
 (
   id INT auto_increment,
-  latitude FLOAT not null,
-  longitude FLOAT not null,
-  heading FLOAT not null,
-  depth FLOAT not null,
-  altitude FLOAT not null,
-  temperature FLOAT not null,
-  mode varchar(255) not null,
-  sat_count INT not null,
-  pos_certainty FLOAT not null,
-  velocity_valid BOOLEAN not null,
-  fom FLOAT not null,
-  created_at datetime not null default CURRENT_TIMESTAMP,
+  latitude DOUBLE not null,
+  longitude DOUBLE not null,
+  heading DOUBLE not null,
+  rov_depth DOUBLE not null,
+  dvl_altitude DOUBLE not null,
+  temperature DOUBLE not null,
+  drive_mode varchar(255) not null,
+  gps_sat_count INT not null,
+  gps_pos_certainty DOUBLE not null,
+  dvl_velocity_valid BOOLEAN not null,
+  dvl_fom DOUBLE not null,
+  created_at DATETIME not null default CURRENT_TIMESTAMP,
   primary key(id),
   INDEX create_idx (created_at)
 );
@@ -51,7 +51,7 @@ create table settings
 /*----------------------------
 * Update Example
 ------------------------------*/
-INSERT INTO status (latitude, longitude, heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom) 
+INSERT INTO status (latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_pos_certainty, dvl_velocity_valid, dvl_fom) 
 VALUES (5,6,90, 1000, 1, 13, 'DEPTH HOLD', 5, 0.9, 1, 0.8); 
 
 /*----------------------------
