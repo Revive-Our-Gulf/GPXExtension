@@ -51,7 +51,7 @@ Repository::~Repository()
  */
 void Repository::AddStatus(Status * status)
 {
-	auto query = "INSERT INTO status (latitude, longitude, heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom) "
+	auto query = "INSERT INTO status (latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_pos_certainty, dvl_velocity_valid, dvl_fom) "
 				 "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
 	auto statement = unique_ptr<sql::PreparedStatement>(_connection->prepareStatement(query));
@@ -81,7 +81,7 @@ void Repository::AddStatus(Status * status)
  */
 unique_ptr<Status> Repository::GetLastStatus()
 {
-	auto query = "SELECT id, latitude, longitude, heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom, created_at "
+	auto query = "SELECT id, latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_pos_certainty, dvl_velocity_valid, dvl_fom, created_at "
 				 "FROM status ORDER BY created_at DESC LIMIT 1;";
 
 	auto statement = unique_ptr<sql::Statement>(_connection->createStatement());
@@ -115,7 +115,7 @@ unique_ptr<Status> Repository::GetLastStatus()
  */
 unique_ptr<Status> Repository::GetClosestStatus(const string& time)
 {
-	auto query = "SELECT id, latitude, longitude, heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom, created_at, "
+	auto query = "SELECT id, latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_pos_certainty, dvl_velocity_valid, dvl_fom, created_at, "
 	             "TIME_TO_SEC(ABS(TIMEDIFF(?,created_at))) as time_diff "
 				 "FROM status ORDER BY time_diff LIMIT 1;";
 
