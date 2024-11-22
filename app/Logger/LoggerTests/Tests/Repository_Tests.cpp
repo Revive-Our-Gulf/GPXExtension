@@ -61,6 +61,10 @@ TEST(Repository_Test, confirm_retrieval)
 	auto comms = NVL_App::RovCommsFactory::GetCommunicator("random");
 	auto status_1 = comms->GetCurrentStatus();
 
+	// Add some decimals to the lat and long
+	status_1->GetLatitude() = 0.123456789;
+	status_1->GetLongitude() = 0.123456789;
+
 	// Add the status to the repository
 	repository.AddStatus(status_1.get());
 
@@ -68,8 +72,8 @@ TEST(Repository_Test, confirm_retrieval)
 	auto status_2 = repository.GetLastStatus();
 
 	// Confirm
-	ASSERT_NEAR(status_1->GetLatitude(), status_2->GetLatitude(), 1e-4);
-	ASSERT_NEAR(status_1->GetLongitude(), status_2->GetLongitude(), 1e-4);
+	ASSERT_NEAR(status_1->GetLatitude(), status_2->GetLatitude(), 1e-9);
+	ASSERT_NEAR(status_1->GetLongitude(), status_2->GetLongitude(), 1e-9);
 	ASSERT_NEAR(status_1->GetHeading(), status_2->GetHeading(), 1e-4);
 	ASSERT_NEAR(status_1->GetDepth(), status_2->GetDepth(), 1e-4);
 	ASSERT_NEAR(status_1->GetAltitude(), status_2->GetAltitude(), 1e-4);

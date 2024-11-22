@@ -56,17 +56,17 @@ void Repository::AddStatus(Status * status)
 
 	auto statement = unique_ptr<sql::PreparedStatement>(_connection->prepareStatement(query));
 
-	statement->setFloat(1, status->GetLatitude());
-	statement->setFloat(2, status->GetLongitude());
-	statement->setFloat(3, status->GetHeading());
-	statement->setFloat(4, status->GetDepth());
-	statement->setFloat(5, status->GetAltitude());
-	statement->setFloat(6, status->GetTemperature());
+	statement->setDouble(1, status->GetLatitude());
+	statement->setDouble(2, status->GetLongitude());
+	statement->setDouble(3, status->GetHeading());
+	statement->setDouble(4, status->GetDepth());
+	statement->setDouble(5, status->GetAltitude());
+	statement->setDouble(6, status->GetTemperature());
 	statement->setString(7, status->GetMode());
 	statement->setInt(8, status->GetSatelliteCount());
-	statement->setFloat(9, status->GetPosCertainity());
+	statement->setDouble(9, status->GetPosCertainity());
 	statement->setBoolean(10, status->GetVelocityValid());
-	statement->setFloat(11, status->GetFOM());
+	statement->setDouble(11, status->GetFOM());
 
 	statement->executeQuery();
 }
@@ -89,17 +89,17 @@ unique_ptr<Status> Repository::GetLastStatus()
 
 	if (result->next()) 
 	{
-		auto latitude = result->getFloat(2);
-		auto longitude = result->getFloat(3);
-		auto heading = result->getFloat(4);
-		auto depth = result->getFloat(5);
-		auto altitude = result->getFloat(6);
-		auto temperature = result->getFloat(7);
+		auto latitude = result->getDouble(2);
+		auto longitude = result->getDouble(3);
+		auto heading = result->getDouble(4);
+		auto depth = result->getDouble(5);
+		auto altitude = result->getDouble(6);
+		auto temperature = result->getDouble(7);
 		auto mode = string(result->getString(8).c_str());
 		auto satCount = result->getInt(9);
-		auto posCertainty = result->getFloat(10);
+		auto posCertainty = result->getDouble(10);
 		auto velocityValid = result->getBoolean(11);
-		auto fom = result->getFloat(12);
+		auto fom = result->getDouble(12);
 		auto created = string(result->getString(13));
 
 		return unique_ptr<Status>(new Status(created, latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom));
