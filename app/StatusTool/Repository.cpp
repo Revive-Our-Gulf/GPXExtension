@@ -15,12 +15,13 @@ using namespace NVL_App;
 
 /**
  * @brief Initializer Constructor
- * @param ipAddress The ip address of the database
+ * @param ipAddress The IP address that we are working with
  * @param database Initialize variable <database>
  */
 Repository::Repository(const string& ipAddress, const string& database) : _database(database)
 {
 	// Build connection string
+
 	auto connStr = stringstream(); connStr << "jdbc:mariadb://" << ipAddress << ":3306/" << database;
 
 	// Setup connection
@@ -50,22 +51,22 @@ Repository::~Repository()
  */
 void Repository::AddStatus(Status * status)
 {
-	auto query = "INSERT INTO status (latitude, longitude, heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom) "
+	auto query = "INSERT INTO status (latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_pos_certainty, dvl_velocity_valid, dvl_fom) "
 				 "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
 	auto statement = unique_ptr<sql::PreparedStatement>(_connection->prepareStatement(query));
 
-	statement->setFloat(1, status->GetLatitude());
-	statement->setFloat(2, status->GetLongitude());
-	statement->setFloat(3, status->GetHeading());
-	statement->setFloat(4, status->GetDepth());
-	statement->setFloat(5, status->GetAltitude());
-	statement->setFloat(6, status->GetTemperature());
+	statement->setDouble(1, status->GetLatitude());
+	statement->setDouble(2, status->GetLongitude());
+	statement->setDouble(3, status->GetHeading());
+	statement->setDouble(4, status->GetDepth());
+	statement->setDouble(5, status->GetAltitude());
+	statement->setDouble(6, status->GetTemperature());
 	statement->setString(7, status->GetMode());
 	statement->setInt(8, status->GetSatelliteCount());
-	statement->setFloat(9, status->GetPosCertainity());
+	statement->setDouble(9, status->GetPosCertainity());
 	statement->setBoolean(10, status->GetVelocityValid());
-	statement->setFloat(11, status->GetFOM());
+	statement->setDouble(11, status->GetFOM());
 
 	statement->executeQuery();
 }
@@ -80,7 +81,7 @@ void Repository::AddStatus(Status * status)
  */
 unique_ptr<Status> Repository::GetLastStatus()
 {
-	auto query = "SELECT id, latitude, longitude, heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom, created_at "
+	auto query = "SELECT id, latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_pos_certainty, dvl_velocity_valid, dvl_fom, created_at "
 				 "FROM status ORDER BY created_at DESC LIMIT 1;";
 
 	auto statement = unique_ptr<sql::Statement>(_connection->createStatement());
@@ -88,17 +89,17 @@ unique_ptr<Status> Repository::GetLastStatus()
 
 	if (result->next()) 
 	{
-		auto latitude = result->getFloat(2);
-		auto longitude = result->getFloat(3);
-		auto heading = result->getFloat(4);
-		auto depth = result->getFloat(5);
-		auto altitude = result->getFloat(6);
-		auto temperature = result->getFloat(7);
+		auto latitude = result->getDouble(2);
+		auto longitude = result->getDouble(3);
+		auto heading = result->getDouble(4);
+		auto depth = result->getDouble(5);
+		auto altitude = result->getDouble(6);
+		auto temperature = result->getDouble(7);
 		auto mode = string(result->getString(8).c_str());
 		auto satCount = result->getInt(9);
-		auto posCertainty = result->getFloat(10);
+		auto posCertainty = result->getDouble(10);
 		auto velocityValid = result->getBoolean(11);
-		auto fom = result->getFloat(12);
+		auto fom = result->getDouble(12);
 		auto created = string(result->getString(13));
 
 		return unique_ptr<Status>(new Status(created, latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom));
@@ -114,7 +115,7 @@ unique_ptr<Status> Repository::GetLastStatus()
  */
 unique_ptr<Status> Repository::GetClosestStatus(const string& time)
 {
-	auto query = "SELECT id, latitude, longitude, heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom, created_at, "
+	auto query = "SELECT id, latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_pos_certainty, dvl_velocity_valid, dvl_fom, created_at, "
 	             "TIME_TO_SEC(ABS(TIMEDIFF(?,created_at))) as time_diff "
 				 "FROM status ORDER BY time_diff LIMIT 1;";
 
@@ -169,7 +170,7 @@ void Repository::ClearTable()
 void Repository::GetStatuses(int limit, vector<Status *>& output) 
 {
 	auto query = stringstream();
-	query << "SELECT id, latitude, longitude, heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom, created_at ";
+	query << "SELECT id, latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_pos_certainty, dvl_velocity_valid, dvl_fom, created_at ";
 	query << "FROM status ORDER BY created_at DESC LIMIT " << limit;
 
 	auto statement = unique_ptr<sql::Statement>(_connection->createStatement());
@@ -177,17 +178,17 @@ void Repository::GetStatuses(int limit, vector<Status *>& output)
 
 	while (result->next()) 
 	{
-		auto latitude = result->getFloat(2);
-		auto longitude = result->getFloat(3);
-		auto heading = result->getFloat(4);
-		auto depth = result->getFloat(5);
-		auto altitude = result->getFloat(6);
-		auto temperature = result->getFloat(7);
+		auto latitude = result->getDouble(2);
+		auto longitude = result->getDouble(3);
+		auto heading = result->getDouble(4);
+		auto depth = result->getDouble(5);
+		auto altitude = result->getDouble(6);
+		auto temperature = result->getDouble(7);
 		auto mode = string(result->getString(8).c_str());
 		auto satCount = result->getInt(9);
-		auto posCertainty = result->getFloat(10);
+		auto posCertainty = result->getDouble(10);
 		auto velocityValid = result->getBoolean(11);
-		auto fom = result->getFloat(12);
+		auto fom = result->getDouble(12);
 		auto created = string(result->getString(13));
 
 		auto status = new Status(created, latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom);
@@ -204,7 +205,7 @@ void Repository::GetStatuses(int limit, vector<Status *>& output)
 void Repository::GetStatuses(const string& start, const string& end, vector<Status *>& output) 
 {
 	auto query = stringstream();
-	query << "SELECT id, latitude, longitude, heading, depth, altitude, temperature, mode, sat_count, pos_certainty, velocity_valid, fom, created_at ";
+	query << "SELECT id, latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_pos_certainty, dvl_velocity_valid, dvl_fom, created_at ";
 	query << "FROM status WHERE created_at BETWEEN ? AND ? ORDER BY created_at DESC";
 
 	auto statement = unique_ptr<sql::PreparedStatement>(_connection->prepareStatement(query.str()));
@@ -214,17 +215,17 @@ void Repository::GetStatuses(const string& start, const string& end, vector<Stat
 
 	while (result->next()) 
 	{
-		auto latitude = result->getFloat(2);
-		auto longitude = result->getFloat(3);
-		auto heading = result->getFloat(4);
-		auto depth = result->getFloat(5);
-		auto altitude = result->getFloat(6);
-		auto temperature = result->getFloat(7);
+		auto latitude = result->getDouble(2);
+		auto longitude = result->getDouble(3);
+		auto heading = result->getDouble(4);
+		auto depth = result->getDouble(5);
+		auto altitude = result->getDouble(6);
+		auto temperature = result->getDouble(7);
 		auto mode = string(result->getString(8).c_str());
 		auto satCount = result->getInt(9);
-		auto posCertainty = result->getFloat(10);
+		auto posCertainty = result->getDouble(10);
 		auto velocityValid = result->getBoolean(11);
-		auto fom = result->getFloat(12);
+		auto fom = result->getDouble(12);
 		auto created = string(result->getString(13));
 
 		auto status = new Status(created, latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom);
