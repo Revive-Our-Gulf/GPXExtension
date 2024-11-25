@@ -197,6 +197,39 @@ void Repository::GetStatuses(int limit, vector<Status *>& output)
 }
 
 /**
+ * Get all statuses from the application
+ * @param output The output set of statuses
+ */
+void Repository::GetStatuses(vector<Status *>& output) 
+{
+	auto query = stringstream();
+	query << "SELECT id, latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_pos_certainty, dvl_velocity_valid, dvl_fom, created_at ";
+	query << "FROM status ORDER BY created_at";
+
+	auto statement = unique_ptr<sql::Statement>(_connection->createStatement());
+	auto result = statement->executeQuery(query.str());
+
+	while (result->next()) 
+	{
+		auto latitude = result->getDouble(2);
+		auto longitude = result->getDouble(3);
+		auto heading = result->getDouble(4);
+		auto depth = result->getDouble(5);
+		auto altitude = result->getDouble(6);
+		auto temperature = result->getDouble(7);
+		auto mode = string(result->getString(8).c_str());
+		auto satCount = result->getInt(9);
+		auto posCertainty = result->getDouble(10);
+		auto velocityValid = result->getBoolean(11);
+		auto fom = result->getDouble(12);
+		auto created = string(result->getString(13));
+
+		auto status = new Status(created, latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom);
+		output.push_back(status);
+	}
+}
+
+/**
  * Retrieve the statuses between a given range
  * @param start The start date that we are getting
  * @param end The end date that we are getting

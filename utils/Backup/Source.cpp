@@ -17,6 +17,7 @@ using namespace std;
 using namespace cv;
 
 #include "ArgReader.h"
+#include "Repository.h"
 
 //--------------------------------------------------
 // Function Prototypes
@@ -37,10 +38,23 @@ void Run(NVLib::Parameters * parameters)
 
     logger.StartApplication();
 
-    // Create a helper for path tracking
-    auto database = NVL_Utils::ArgReader::ReadString(parameters, "database");
-    auto dataset = NVL_Utils::ArgReader::ReadString(parameters, "dataset");
-    auto pathHelper = NVLib::PathHelper(database, dataset);
+    logger.Log(1, "Loading the database location");
+    auto reader = cv::FileStorage("config.xml", cv::FileStorage::FORMAT_XML | cv::FileStorage::READ);
+    auto IP_DB = string(); reader["db"] >> IP_DB;
+    logger.Log(1, "Loaded database location: %s", IP_DB.c_str());
+    reader.release();
+
+    logger.Log(1, "Creating a link to the database");
+    auto repo = NVL_App::Repository(IP_DB, "BlueROV");
+
+    logger.Log(1, "Retrieving all the available statuses");
+    auto result = vector<NVL_App::Status *>(); repo.GetStatuses(result);
+    logger.Log(1, "Number of statuses returned: %i", result.size());
+
+    logger.Log(1, "Writing the output to a CSV file");
+    auto writer = ofstream("status.csv"); if (!writer.is_open()) throw runtime_error("Unable to open: status.csv");
+    for (auto record : result) { writer << record->ToString() << endl; delete record; }
+    writer.close();
 
     logger.StopApplication();
 }

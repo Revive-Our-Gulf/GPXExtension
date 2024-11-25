@@ -51,6 +51,26 @@ namespace NVL_App
 			_FOM = status->_FOM;
 		}
 
+		inline string ToString() 
+		{
+			auto result = stringstream();
+
+			result << "\"" << _timeStamp << "\",";
+			result << _latitude << ",";
+			result << _longitude << ",";
+			result << _heading << ",";
+			result << _depth << ",";
+			result << _altitude << ",";
+			result << _temperature << ",";
+			result << "\"" << _mode << "\",";
+			result << _satelliteCount << ",";
+			result << _posCertainity << ",";
+			result << _velocityValid << ",";
+			result << _FOM;
+
+			return result.str();
+		}
+
 		inline string& GetTimeStamp() { return _timeStamp; }
 		inline double& GetLatitude() { return _latitude; }
 		inline double& GetLongitude() { return _longitude; }
