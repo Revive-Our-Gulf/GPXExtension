@@ -21,7 +21,13 @@ using namespace NVL_App;
 Engine::Engine(NVLib::Logger* logger, NVLib::Parameters* parameters) 
 {
     _logger = logger; _parameters = parameters;
+
+    _logger->Log(1, "Getting Parameters");
     _ip = ArgUtils::GetString(parameters, "database");
+    _factoryType = ArgUtils::GetString(parameters, "factory");
+
+    _logger->Log(1, "Input [database]: %s", _ip.c_str());
+    _logger->Log(1, "Input [factory]: %s", _factoryType.c_str());
 }
 
 /**
@@ -45,7 +51,7 @@ void Engine::Run()
     auto repository = Repository(_ip, "BlueROV");
 
     _logger->Log(1, "Setting up ROV communicator");
-    auto communicator = RovCommsFactory::GetCommunicator("http");
+    auto communicator = RovCommsFactory::GetCommunicator(_factoryType);
 
     _logger->Log(1, "Starting control");
     while(true) 
