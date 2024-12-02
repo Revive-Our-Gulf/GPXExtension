@@ -89,7 +89,7 @@ void QueryPage::RenderResponse(ostream& writer)
 
 	auto maker = NVL_App::GPXMaker(statuses);
 
-	writer << "<textarea rows=\"20\" cols=\"100\">" << maker.RenderXML() << "</textarea>"; 
+	writer << "<pre lang=\"xml\">" << maker.RenderXML() << "</pre>"; 
 
 	//for (auto status : statuses) delete status;
 }
@@ -108,10 +108,27 @@ void QueryPage::RenderHeader(ostream& writer)
   	writer << "<meta charset=\"utf-8\">";
   	writer << "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">";
   	writer << "<title>GPX Logger</title>";
-  	writer << "<link rel=\"stylesheet\" href=\"styles.css\">";
+  	writer << "<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css\">";
+	writer << "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js\"></script>";
+	writer << "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js\"></script>";
 	writer << "</head>";
 	writer << "<body>";
   	writer << "<h1>Settings</h1>";
+
+	writer << "<body>";
+  	writer << "<nav class=\"navbar navbar-default\">";
+    writer << "<div class=\"container-fluid\">";
+    writer << "<div class=\"navbar-header\">";
+    writer << "<a class=\"navbar-brand\" href=\"#\">GPX Plugin</a>";
+    writer << "</div>";
+    writer << "<ul class=\"nav navbar-nav\">";
+	writer << "<li class=\"active\"><a href=\"#\">Home</a></li>";
+	writer << "<li><a href=\"\\status\">Status</a></li>";
+	writer << "<li><a href=\"\\query\">Query</a></li>";
+	writer << "<li><a href=\"\\settings\">Settings</a></li>";
+	writer << "</ul>";     
+    writer << "</div>";
+  	writer << "</nav>";
 }
 
 /**

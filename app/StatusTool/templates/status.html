@@ -5,7 +5,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GPX Logger</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
   <script>
 
@@ -38,13 +40,30 @@
 </head>
 
 <body onload="load()">
-  <h1>GPX Logger</h1>
 
-  <div id="status">
-    <p>Loading...</p>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">GPX Plugin</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li><a href=".">Home</a></li>
+        <li class="active"><a href="#">Status</a></li>
+        <li><a href="\query">Query</a></li>
+        <li><a href="\settings">Settings</a></li>
+      </ul>     
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <div id="status">
+      <p>Loading...</p>
+    </div>
+
+    <p>Go <a href="\">back</a>.</p>
+
   </div>
-
-  <p>Go <a href="\">back</a>.</p>
 
 </body>
 
