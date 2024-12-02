@@ -110,57 +110,69 @@ void Run()
         auto status = repo.GetLastStatus();
 
         auto response = stringstream();
-        response << "<table>";
+        response << "<div class=\"container-fluid\">";
 
-        response << "<tr>";
-        response << "<td><b>Created<b></td><td>" << status->GetTimeStamp() << "</td>";
-        response << "</tr>";
+        response << "<div class=\"row\" style=\"background-color:white;\">";
+        response << "<div class=\"col-sm-4\"><b>Created</b></div>";
+        response << "<div class=\"col_sm_8\">" << status->GetTimeStamp() << "</div>";
+        response << "</div>";
 
-        response << "<tr>";
-        response << "<td><b>Latitude<b></td><td>" << fixed << setprecision(8) << status->GetLatitude() << "</td>";
-        response << "</tr>";
+        response << "<div class=\"row\" style=\"background-color:lightgrey;\">";
+        response << "<div class=\"col-sm-4\"><b>Latitude</b></div>";
+        response << "<div class=\"col_sm_8\">" << fixed << setprecision(8) << status->GetLatitude() << "</div>";
+        response << "</div>";
 
-        response << "<tr>";
-        response << "<td><b>Longitude<b></td><td>" << fixed << setprecision(8) << status->GetLongitude() << "</td>";
-        response << "</tr>";
+        response << "<div class=\"row\" style=\"background-color:white;\">";
+        response << "<div class=\"col-sm-4\"><b>Longitude</b></div>";
+        response << "<div class=\"col_sm_8\">" << fixed << setprecision(8) << status->GetLongitude() << "</div>";
+        response << "</div>";
 
-        response << "<tr>";
-        response << "<td><b>Heading<b></td><td>" << status->GetHeading() << " degrees</td>";
-        response << "</tr>";
+        response << "<div class=\"row\" style=\"background-color:lightgrey;\">";
+        response << "<div class=\"col-sm-4\"><b>Heading</b></div>";
+        response << "<div class=\"col_sm_8\">" << status->GetHeading() << " degrees</div>";
+        response << "</div>";
 
-        response << "<tr>";
-        response << "<td><b>Depth<b></td><td>" << status->GetDepth() << " meters</td>";
-        response << "</tr>";
+        response << "<div class=\"row\" style=\"background-color:white;\">";
+        response << "<div class=\"col-sm-4\"><b>Depth</b></div>";
+        response << "<div class=\"col_sm_8\">" << status->GetDepth() << " meters</div>";
+        response << "</div>";
 
-        response << "<tr>";
-        response << "<td><b>Altitude<b></td><td>" << status->GetAltitude() << " meters</td>";
-        response << "</tr>";
+        response << "<div class=\"row\" style=\"background-color:lightgrey;\">";
+        response << "<div class=\"col-sm-4\"><b>Altitude</b></div>";
+        response << "<div class=\"col_sm_8\">" << status->GetAltitude() << " meters</div>";
+        response << "</div>";
 
-        response << "<tr>";
-        response << "<td><b>Temperature<b></td><td>" << status->GetTemperature() << " degrees</td>";
-        response << "</tr>";
+        response << "<div class=\"row\" style=\"background-color:white;\">";
+        response << "<div class=\"col-sm-4\"><b>Temperature</b></div>";
+        response << "<div class=\"col_sm_8\">" << status->GetTemperature() << " degrees</div>";
+        response << "</div>";
 
-        response << "<tr>";
-        response << "<td><b>Mode<b></td><td>" << status->GetMode() << "</td>";
-        response << "</tr>";
+        response << "<div class=\"row\" style=\"background-color:lightgrey;\">";
+        response << "<div class=\"col-sm-4\"><b>Mode</b></div>";
+        response << "<div class=\"col_sm_8\">" << status->GetMode() << "</div>";
+        response << "</div>";
 
-        response << "<tr>";
-        response << "<td><b>Satellite Count<b></td><td>" << status->GetSatelliteCount() << "</td>";
-        response << "</tr>";
+        response << "<div class=\"row\" style=\"background-color:white;\">";
+        response << "<div class=\"col-sm-4\"><b>Satellite Count</b></div>";
+        response << "<div class=\"col_sm_8\">" << status->GetSatelliteCount() << "</div>";
+        response << "</div>";
 
-        response << "<tr>";
-        response << "<td><b>Pose Certainty<b></td><td>" << status->GetPosCertainity() << "</td>";
-        response << "</tr>";
+        response << "<div class=\"row\" style=\"background-color:lightgrey;\">";
+        response << "<div class=\"col-sm-4\"><b>Pose Certainty</b></div>";
+        response << "<div class=\"col_sm_8\">" << status->GetPosCertainity() << "</div>";
+        response << "</div>";
 
-        response << "<tr>";
-        response << "<td><b>Valid Velocity<b></td><td>" << (status->GetVelocityValid() ? "true" : "false") << "</td>";
-        response << "</tr>";
+        response << "<div class=\"row\" style=\"background-color:white;\">";
+        response << "<div class=\"col-sm-4\"><b>Valid Velocity</b></div>";
+        response << "<div class=\"col_sm_8\">" << (status->GetVelocityValid() ? "true" : "false") << "</div>";
+        response << "</div>";
 
-        response << "<tr>";
-        response << "<td><b>FOM<b></td><td>" << status->GetFOM() << "</td>";
-        response << "</tr>";
+        response << "<div class=\"row\" style=\"background-color:lightgrey;\">";
+        response << "<div class=\"col-sm-4\"><b>FOM</b></div>";
+        response << "<div class=\"col_sm_8\">" << status->GetFOM() << "</div>";
+        response << "</div>";
 
-        response << "</table>";
+        response << "</div>";
 
         return response.str();
     });
