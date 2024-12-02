@@ -117,11 +117,11 @@ void Run()
         response << "</tr>";
 
         response << "<tr>";
-        response << "<td><b>Latitude<b></td><td>" << status->GetLatitude() << "</td>";
+        response << "<td><b>Latitude<b></td><td>" << fixed << setprecision(8) << status->GetLatitude() << "</td>";
         response << "</tr>";
 
         response << "<tr>";
-        response << "<td><b>Longitude<b></td><td>" << status->GetLongitude() << "</td>";
+        response << "<td><b>Longitude<b></td><td>" << fixed << setprecision(8) << status->GetLongitude() << "</td>";
         response << "</tr>";
 
         response << "<tr>";

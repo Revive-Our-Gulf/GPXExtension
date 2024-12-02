@@ -31,8 +31,8 @@ RandomRovComms::RandomRovComms()
  */
 unique_ptr<Status> RandomRovComms::GetCurrentStatus()
 {
-	auto latitude = NVLib::RandomUtils::GetInteger(-10,10);
-	auto longitude = NVLib::RandomUtils::GetInteger(-10,10);
+	auto latitude = NVLib::RandomUtils::GetInteger(-1e8,1e8) / 1e7;
+	auto longitude = NVLib::RandomUtils::GetInteger(-1e8,1e8) / 1e7;
 	auto heading = 90 + NVLib::RandomUtils::GetInteger(-10,10);
 	auto depth = 500 + NVLib::RandomUtils::GetInteger(-20, 20);
 	auto altitude = 8 + NVLib::RandomUtils::GetInteger(-3, 3);
