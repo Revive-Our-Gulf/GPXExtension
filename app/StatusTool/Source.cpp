@@ -110,7 +110,10 @@ void Run()
         auto status = repo.GetLastStatus();
 
         auto response = stringstream();
-        response << "<div class=\"container-fluid\">";
+
+        response << "<div class=\"p-4\">";
+
+        response << "<div class=\"container-fluid border\">";
 
         response << "<div class=\"row\" style=\"background-color:white;\">";
         response << "<div class=\"col-sm-4\"><b>Created</b></div>";
@@ -172,7 +175,7 @@ void Run()
         response << "<div class=\"col_sm_8\">" << status->GetFOM() << "</div>";
         response << "</div>";
 
-        response << "</div>";
+        response << "</div></div>";
 
         return response.str();
     });
