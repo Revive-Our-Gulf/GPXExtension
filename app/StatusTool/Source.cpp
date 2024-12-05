@@ -71,11 +71,9 @@ void Run()
         return page.Render();
     });
 
-        // Settings page
+    // Query page
     CROW_ROUTE(app, "/query")([&IP_DB](const crow::request& request)
     {
-        auto repo = NVL_App::Repository(IP_DB, "BlueROV");
-
         auto parameters = unordered_map<string, string>();
         if (request.url_params.get("submit") != nullptr) 
         {
@@ -84,9 +82,19 @@ void Run()
             parameters["end"] = request.url_params.get("end");
         }
 
-        auto page = NVL_App::QueryPage(&repo, parameters);
+        auto page = NVL_App::QueryPage(parameters);
 
         return page.Render();
+    });
+
+    // GPX data
+    CROW_ROUTE(app, "/gpx")([&IP_DB](const crow::request& request)
+    {
+        auto repo = NVL_App::Repository(IP_DB, "BlueROV");        
+        auto statuses = vector<NVL_App::Status *>();
+	    repo.GetStatuses(request.url_params.get("start"), request.url_params.get("end"), statuses);
+	    auto maker = NVL_App::GPXMaker(statuses);
+        return maker.RenderXML();
     });
 
     // CSS
@@ -112,6 +120,8 @@ void Run()
         auto response = stringstream();
 
         response << "<div class=\"p-4\">";
+
+        response << "<p class=\"alert alert-info\">Latest update</p>";
 
         response << "<div class=\"container-fluid border\">";
 
@@ -178,15 +188,6 @@ void Run()
         response << "</div></div>";
 
         return response.str();
-    });
-
-    // Generate the GPX file
-    CROW_ROUTE(app, "/gpx")([&IP_DB]()
-    {
-       auto repo = NVL_App::Repository(IP_DB, "BlueROV");
-       auto statusList = vector<NVL_App::Status *>(); repo.GetStatuses(10, statusList);
-       auto gpx = NVL_App::GPXMaker(statusList);
-       return gpx.RenderXML();
     });
 
     //set the port, set the app to run on multiple threads, and run the app

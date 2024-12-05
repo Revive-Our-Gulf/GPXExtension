@@ -8,24 +8,20 @@
 
 #pragma once
 
-#include <unordered_map>
 #include <iostream>
+#include <unordered_map>
 using namespace std;
 
 #include <NVLib/StringUtils.h>
-
-#include "Repository.h"
-#include "GPXMaker.h"
 
 namespace NVL_App
 {
 	class QueryPage
 	{
 	private:
-		Repository * _repo;
 		unordered_map<string, string> _fields;
 	public:
-		QueryPage(Repository * repo, unordered_map<string, string>& parameters);
+		QueryPage(unordered_map<string, string>& parameters);
 
 		string Render();
 

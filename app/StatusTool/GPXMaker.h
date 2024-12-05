@@ -14,6 +14,8 @@
 #include <iomanip>
 using namespace std;
 
+#include <NVLib/Formatter.h>
+
 #include "Status.h"
 
 namespace NVL_App

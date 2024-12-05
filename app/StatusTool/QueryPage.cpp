@@ -15,10 +15,9 @@ using namespace NVL_App;
 
 /**
  * @brief Custom Constructor
- * @param repo A link to the repository
  * @param parameters The input parameters of the application
  */
-QueryPage::QueryPage(Repository * repo, unordered_map<string, string>& parameters)  : _repo(repo), _fields(parameters)
+QueryPage::QueryPage(unordered_map<string, string>& parameters)  : _fields(parameters)
 {
 	// Extra implementation can go here
 }
@@ -58,24 +57,29 @@ void QueryPage::RenderForm(ostream& writer)
 	// Defines a form
 	writer << "<form action=\"\\query\">";
 
+	writer << "<div class=\"p-4\">";
+
+	writer << "<div class=\"alert alert-info\">Select the time range for the GPX</div>";
+
 	// Render Start Time
 	auto start = NVLib::StringUtils::GetDateTimeString();
-	writer << "<label=for\"status\">Start Time:</label><br>";
-	writer << "<input type=\"datetime-local\" name=\"start\" id=\"start\" value=\"" << start << "\" step=\"any\" /><br>";
-
-	// Space
-	writer << "<br>";
+	writer << "<div class=\"form-group\">";
+	writer << "<label=for\"status\" class=\"form-label\">Start Time:</label>";
+	writer << "<input type=\"datetime-local\"  class=\"form-control\" name=\"start\" id=\"start\" value=\"" << start << "\" step=\"any\" />";
+	writer << "</div>";
 
 	// Render End Time
 	auto end = NVLib::StringUtils::GetDateTimeString();
-	writer << "<label=for\"status\">End Time:</label><br>";
-	writer << "<input type=\"datetime-local\" name=\"end\" id=\"end\"  value=\"" << end << "\" step=\"any\" /><br>";
+	writer << "<div class=\"form-group\">";
+	writer << "<label=for\"status\" class=\"form-label\">End Time:</label>";
+	writer << "<input type=\"datetime-local\" class=\"form-control\" name=\"end\" id=\"end\" value=\"" << end << "\" step=\"any\" />";
+	writer << "</div>";
 
 	// Add a submit button
-	writer << "<br><input type=\"submit\" id=\"submit\" name=\"submit\" value=\"Submit\"><br>";
+	writer << "<br><input type=\"submit\" id=\"submit\" name=\"submit\" value=\"Submit\"  class=\"btn btn-primary\">";
 
 	// End the form
-	writer << "</form>";
+	writer << "</div></form>";
 }
 
 /**
@@ -84,14 +88,33 @@ void QueryPage::RenderForm(ostream& writer)
  */
 void QueryPage::RenderResponse(ostream& writer)
 {
-	auto statuses = vector<Status *>();
-	_repo->GetStatuses(_fields["start"], _fields["end"], statuses);
+	writer << "<div class=\"p-4\">";
 
-	auto maker = NVL_App::GPXMaker(statuses);
+	writer << "<div class=\"alert alert-info\">GPX Response Received</div>";
 
-	writer << "<pre lang=\"xml\">" << maker.RenderXML() << "</pre>"; 
+	writer << "<div class=\"pt-3 pb-4\">";
+	writer << "<a href=\"\\gpx?start=" << _fields["start"] << "&end="<< _fields["end"] << "\" download=\"gpx.xml\" class=\"btn btn-info\"/>Download</a>";
+	writer << "</div>";
 
-	//for (auto status : statuses) delete status;
+	writer << "<p class=\"text-muted\">GPX preview</p>";
+	writer << "<div class=\"bg-light border border-dark pt-2\">";
+	writer << "<pre><code class=\"p-2\" id=\"xml\"></code></pre>"; 
+	writer << "</div></div>";
+
+	writer << "<script>";
+
+	writer << "function TextReceived() {";
+	writer << "var xml = this.responseText;";
+	writer << "var box = document.getElementById('xml');";
+	writer << "box.innerText = new XmlBeautify().beautify(xml, {";
+	writer << "indent: \"   \", useSelfClosingElement: true });";
+	writer << "} ";
+
+	writer << "var request = new XMLHttpRequest();";
+	writer << "request.addEventListener(\"load\", TextReceived);";
+	writer << "request.open(\"GET\", \"\\gpx?start=" << _fields["start"] << "&end="<< _fields["end"] << "\");";
+	writer << "request.send();";
+	writer << "</script>";
 }
 
 //--------------------------------------------------
@@ -108,27 +131,28 @@ void QueryPage::RenderHeader(ostream& writer)
   	writer << "<meta charset=\"utf-8\">";
   	writer << "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">";
   	writer << "<title>GPX Logger</title>";
-  	writer << "<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css\">";
-	writer << "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js\"></script>";
-	writer << "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js\"></script>";
+  	writer << "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css\">";
+  	writer << "<script src=\"https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js\"></script>";
+  	writer << "<script src=\"https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js\"></script>";
+  	writer << "<script src=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js\"></script>";
+	writer << "<script src=\"https://cdn.jsdelivr.net/npm/xml-beautify@1.2.3/dist/XmlBeautify.js\"></script>";
 	writer << "</head>";
-	writer << "<body>";
-  	writer << "<h1>Settings</h1>";
 
 	writer << "<body>";
-  	writer << "<nav class=\"navbar navbar-default\">";
-    writer << "<div class=\"container-fluid\">";
+
+  	writer << "<nav class=\"navbar  navbar-expand-sm bg-dark navbar-dark\">";
     writer << "<div class=\"navbar-header\">";
     writer << "<a class=\"navbar-brand\" href=\"#\">GPX Plugin</a>";
     writer << "</div>";
-    writer << "<ul class=\"nav navbar-nav\">";
-	writer << "<li class=\"active\"><a href=\"#\">Home</a></li>";
-	writer << "<li><a href=\"\\status\">Status</a></li>";
-	writer << "<li><a href=\"\\query\">Query</a></li>";
-	writer << "<li><a href=\"\\settings\">Settings</a></li>";
+    writer << "<ul class=\"navbar-nav\">";
+	writer << "<li><a class=\"nav-link\" href=\".\">Home</a></li>";
+	writer << "<li><a class=\"nav-link\" href=\"\\status\">Status</a></li>";
+	writer << "<li class=\"nav-item active\"><a class=\"nav-link\" href=\"#\">Query</a></li>";
+	writer << "<li><a class=\"nav-link\" href=\"\\settings\">Settings</a></li>";
 	writer << "</ul>";     
-    writer << "</div>";
   	writer << "</nav>";
+
+	writer << "<div class=\"pl-5\">";
 }
 
 /**
@@ -137,6 +161,6 @@ void QueryPage::RenderHeader(ostream& writer)
  */
 void QueryPage::RenderFooter(ostream& writer) 
 {
-	writer << "<p>Go <a href=\"\\\">back</a>.</p>";
-	writer << "</body></html>" << endl;
+	if (_fields.find("submit") != _fields.end()) writer << "<div class=\"pl-4 pt-4\">Go <a href=\"\\query\">back</a>.</div>";
+	writer << "</div></body></html>" << endl;
 }
