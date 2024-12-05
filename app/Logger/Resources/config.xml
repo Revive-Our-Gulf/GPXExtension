@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <opencv_storage>
-    <database>"127.0.0.1"</database>
-    <factory>"random"</factory>
+    <database>"gpx_db"</database>
+    <factory>"http"</factory>
 </opencv_storage>

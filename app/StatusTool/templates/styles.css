@@ -7,7 +7,7 @@
 body {
 	margin: 0px 50px 0px 50px;
 	font-family: Verdana, Geneva, Tahoma, sans-serif;
-	background-color: whitesmoke;
+	background-color: blue;
 	color: black;
 }
 
@@ -50,7 +50,7 @@ input, select
     min-width: 200px;
     border: 5px solid black;
     border-radius: 10px;
-    background-color: white;
+    background-color: blue;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: large;
   }
