@@ -20,3 +20,4 @@ test/Messages/build/
 # User Config
 #----------------------------------------------------
 app/Logger/Resources/config.xml
+app/StatusTool/config/config.xml
