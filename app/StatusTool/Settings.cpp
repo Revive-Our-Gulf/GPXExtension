@@ -137,7 +137,6 @@ void Settings::RenderHeader(ostream& writer)
     writer << "<a class=\"navbar-brand\" href=\"#\">GPX Plugin</a>";
     writer << "</div>";
     writer << "<ul class=\"navbar-nav\">";
-	writer << "<li><a class=\"nav-link\" href=\".\">Home</a></li>";
 	writer << "<li><a class=\"nav-link\" href=\"\\status\">Status</a></li>";
 	writer << "<li><a class=\"nav-link\" href=\"\\query\">Query</a></li>";
 	writer << "<li class=\"nav-item active\"><a class=\"nav-link\" href=\"#\">Settings</a></li>";

@@ -39,15 +39,8 @@ void Run()
     auto IP_DB = string(); reader["db"] >> IP_DB;
     reader.release();
 
-    // Index page
-    CROW_ROUTE(app, "/")([]()
-    {
-        auto page = crow::mustache::load_text("menu.html");
-        return page;
-    });
-
     // Status page
-    CROW_ROUTE(app, "/status")([]()
+    CROW_ROUTE(app, "/")([]()
     {
         auto page = crow::mustache::load_text("status.html");
         return page;

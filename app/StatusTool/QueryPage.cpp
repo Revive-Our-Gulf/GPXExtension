@@ -146,7 +146,6 @@ void QueryPage::RenderHeader(ostream& writer)
     writer << "</div>";
     writer << "<ul class=\"navbar-nav\">";
 	writer << "<li><a class=\"nav-link\" href=\".\">Home</a></li>";
-	writer << "<li><a class=\"nav-link\" href=\"\\status\">Status</a></li>";
 	writer << "<li class=\"nav-item active\"><a class=\"nav-link\" href=\"#\">Query</a></li>";
 	writer << "<li><a class=\"nav-link\" href=\"\\settings\">Settings</a></li>";
 	writer << "</ul>";     
