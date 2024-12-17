@@ -15,8 +15,9 @@ using namespace NVL_App;
 
 /**
  * @brief Default Constructor
+ * @param A handle to the application repository
  */
-RandomRovComms::RandomRovComms()
+RandomRovComms::RandomRovComms(Repository * repository) : RovCommsBase(repository)
 {
 	NVLib::RandomUtils::TimeSeedRandomNumbers();
 }
@@ -43,5 +44,7 @@ unique_ptr<Status> RandomRovComms::GetCurrentStatus()
 	auto velocity = true;
 	auto fom =  0.8 + (NVLib::RandomUtils::GetInteger(-200,200) / 1000.0);
 
-	return unique_ptr<Status>(new Status(latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCert, velocity, fom));
+	auto trackName = GetTrackName();
+
+	return unique_ptr<Status>(new Status(latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCert, velocity, fom, trackName));
 }

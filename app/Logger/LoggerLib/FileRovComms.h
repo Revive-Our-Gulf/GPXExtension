@@ -22,7 +22,7 @@ namespace NVL_App
 	class FileRovComms : public RovCommsBase
 	{
 	public:
-		FileRovComms();
+		FileRovComms(Repository * repository);
 		virtual unique_ptr<Status> GetCurrentStatus() override;
 	private:
 		string ReadMessage(const string& messageName);

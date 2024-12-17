@@ -28,9 +28,9 @@ TEST(Repository_Test, status_update)
 	repository.ClearTable();
 
 	// Create insert statuses
-	auto insert_1 = Status(1,1,1, 1, 1, 1, "TEST", 1, 1, true, 1);
-	auto insert_2 = Status(2,2,2, 2, 2, 2, "TEST", 2, 2, true, 2);
-	auto insert_3 = Status(3,3,3, 3, 3, 3, "TEST", 3, 3, true, 3);
+	auto insert_1 = Status(1,1,1, 1, 1, 1, "TEST", 1, 1, true, 1, string());
+	auto insert_2 = Status(2,2,2, 2, 2, 2, "TEST", 2, 2, true, 2, string());
+	auto insert_3 = Status(3,3,3, 3, 3, 3, "TEST", 3, 3, true, 3, string());
 
 	// Add elements and get the times back
 	repository.AddStatus(&insert_1); auto added_1 = repository.GetLastStatus();
@@ -58,7 +58,7 @@ TEST(Repository_Test, confirm_retrieval)
 	repository.ClearTable();
 
 	// Create a new status
-	auto comms = NVL_App::RovCommsFactory::GetCommunicator("random");
+	auto comms = NVL_App::RovCommsFactory::GetCommunicator("random", &repository);
 	auto status_1 = comms->GetCurrentStatus();
 
 	// Add some decimals to the lat and long

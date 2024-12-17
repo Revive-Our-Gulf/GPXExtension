@@ -15,8 +15,9 @@ using namespace NVL_App;
 
 /**
  * @brief Default Constructor
+ * @param repository A handle to the database
  */
-HttpRovComms::HttpRovComms()
+HttpRovComms::HttpRovComms(Repository * repository) : RovCommsBase(repository)
 {
 	_ip = "192.168.2.2";
 }
@@ -47,6 +48,9 @@ unique_ptr<Status> HttpRovComms::GetCurrentStatus()
 	auto depth = valueGPS["message"]["relative_alt"].asDouble() / 1e3;
 	auto altitude = valueGPS["message"]["alt"].asDouble() / 1e3; 
 
+	// Retrieve the track name
+	auto trackName = GetTrackName();
+
 	// Return the result
-	return unique_ptr<Status>(new Status(latitude, longitude, header, depth, altitude, 0, string(), 0, 0, false, 0));
+	return unique_ptr<Status>(new Status(latitude, longitude, header, depth, altitude, 0, string(), 0, 0, false, 0, trackName));
 }

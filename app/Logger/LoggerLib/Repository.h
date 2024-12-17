@@ -20,7 +20,7 @@ namespace NVL_App
 	class Repository
 	{
 	public:
-		enum Field { LOGGER_STATE, RATE };
+		enum Field { LOGGER_STATE, RATE, CURRENT_TRACK };
 	private:
 		sql::Connection * _connection;
 		string _database;

@@ -51,8 +51,8 @@ Repository::~Repository()
  */
 void Repository::AddStatus(Status * status)
 {
-	auto query = "INSERT INTO status (latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_pos_certainty, dvl_velocity_valid, dvl_fom) "
-				 "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+	auto query = "INSERT INTO status (latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_pos_certainty, dvl_velocity_valid, dvl_fom, track_name) "
+				 "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	auto statement = unique_ptr<sql::PreparedStatement>(_connection->prepareStatement(query));
 
@@ -67,6 +67,7 @@ void Repository::AddStatus(Status * status)
 	statement->setDouble(9, status->GetPosCertainity());
 	statement->setBoolean(10, status->GetVelocityValid());
 	statement->setDouble(11, status->GetFOM());
+	statement->setString(12, status->GetTrackName());
 
 	statement->executeQuery();
 }
@@ -102,7 +103,7 @@ unique_ptr<Status> Repository::GetLastStatus()
 		auto fom = result->getDouble(12);
 		auto created = string(result->getString(13));
 
-		return unique_ptr<Status>(new Status(created, latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom));
+		return unique_ptr<Status>(new Status(created, latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom, string()));
 	}
 
 	return unique_ptr<Status>(nullptr);
@@ -142,7 +143,7 @@ unique_ptr<Status> Repository::GetClosestStatus(const string& time)
 
 		cout << "Time difference: " << timeDiff << endl;
 
-		return unique_ptr<Status>(new Status(created, latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom));
+		return unique_ptr<Status>(new Status(created, latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom, string()));
 	}
 
 	return unique_ptr<Status>(nullptr);
@@ -217,6 +218,7 @@ string Repository::GetFieldName(Field field)
 	{
 		case Field::LOGGER_STATE: return "LOGGER_STATE";
 		case Field::RATE: return "RATE";
+		case Field::CURRENT_TRACK: return "CURRENT_TRACK";
 	}
 
 	throw runtime_error("Unknown field type");

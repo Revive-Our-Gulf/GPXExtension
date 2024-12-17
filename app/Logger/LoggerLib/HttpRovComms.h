@@ -24,7 +24,7 @@ namespace NVL_App
 	private:
 		string _ip;
 	public:
-		HttpRovComms();
+		HttpRovComms(Repository * repository);
 		virtual unique_ptr<Status> GetCurrentStatus() override;
 	};
 }

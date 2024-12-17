@@ -32,6 +32,7 @@ create table status
   gps_pos_certainty DOUBLE not null,
   dvl_velocity_valid BOOLEAN not null,
   dvl_fom DOUBLE not null,
+  track_name varchar(500) default 'unknown',
   created_at DATETIME not null default CURRENT_TIMESTAMP,
   primary key(id),
   INDEX create_idx (created_at)
@@ -58,4 +59,5 @@ VALUES (5,6,90, 1000, 1, 13, 'DEPTH HOLD', 5, 0.9, 1, 0.8);
 * ADD settings
 ------------------------------*/
 INSERT INTO settings (field_name, field_value) VALUES ('LOGGER_STATE', 'STOPPED');
-INSERT INTO settings (field_name, field_value) VALUES ('RATE','1000');
+INSERT INTO settings (field_name, field_value) VALUES ('RATE','500');
+INSERT INTO settings (field_name, field_value) VALUES ('CURRENT_TRACK', 'unknown');

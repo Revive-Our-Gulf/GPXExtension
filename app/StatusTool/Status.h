@@ -28,12 +28,13 @@ namespace NVL_App
 		double _posCertainity;
 		bool _velocityValid;
 		double _FOM;
+		string _trackName;
 	public:
-		Status(double latitude, double longitude, double heading, double depth, double altitude, double temperature, const string& mode, int satelliteCount, double posCertainity, bool velocityValid, double FOM) :
-			_timeStamp(string()), _latitude(latitude), _longitude(longitude), _heading(heading), _depth(depth), _altitude(altitude), _temperature(temperature), _mode(mode), _satelliteCount(satelliteCount), _posCertainity(posCertainity), _velocityValid(velocityValid), _FOM(FOM) {}
+		Status(double latitude, double longitude, double heading, double depth, double altitude, double temperature, const string& mode, int satelliteCount, double posCertainity, bool velocityValid, double FOM, const string& trackName) :
+			_timeStamp(string()), _latitude(latitude), _longitude(longitude), _heading(heading), _depth(depth), _altitude(altitude), _temperature(temperature), _mode(mode), _satelliteCount(satelliteCount), _posCertainity(posCertainity), _velocityValid(velocityValid), _FOM(FOM), _trackName(trackName) {}
 
-		Status(const string& timeStamp, double latitude, double longitude, double heading, double depth, double altitude, double temperature, const string& mode, int satelliteCount, double posCertainity, bool velocityValid, double FOM) :
-			_timeStamp(timeStamp), _latitude(latitude), _longitude(longitude), _heading(heading), _depth(depth), _altitude(altitude), _temperature(temperature), _mode(mode), _satelliteCount(satelliteCount), _posCertainity(posCertainity), _velocityValid(velocityValid), _FOM(FOM) {}
+		Status(const string& timeStamp, double latitude, double longitude, double heading, double depth, double altitude, double temperature, const string& mode, int satelliteCount, double posCertainity, bool velocityValid, double FOM, const string& trackName) :
+			_timeStamp(timeStamp), _latitude(latitude), _longitude(longitude), _heading(heading), _depth(depth), _altitude(altitude), _temperature(temperature), _mode(mode), _satelliteCount(satelliteCount), _posCertainity(posCertainity), _velocityValid(velocityValid), _FOM(FOM), _trackName(trackName) {}
 
 		Status(Status * status) 
 		{
@@ -49,6 +50,7 @@ namespace NVL_App
 			_posCertainity = status->_posCertainity;
 			_velocityValid = status->_velocityValid;
 			_FOM = status->_FOM;
+			_trackName = status->_trackName;
 		}
 
 		inline string& GetTimeStamp() { return _timeStamp; }
@@ -63,5 +65,6 @@ namespace NVL_App
 		inline double& GetPosCertainity() { return _posCertainity; }
 		inline bool GetVelocityValid() { return _velocityValid; }
 		inline double& GetFOM() { return _FOM; }
+		inline string& GetTrackName() { return _trackName; }
 	};
 }

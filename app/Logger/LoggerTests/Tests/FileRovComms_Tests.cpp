@@ -21,7 +21,13 @@ using namespace NVL_App;
 TEST(FileRovComms_Test, read_test)
 {
 	// Setup
-	auto communicator = RovCommsFactory::GetCommunicator("file");
+	auto repository = Repository("127.0.0.1", "BlueROV_Test");
+
+	// Clear the repo
+	repository.ClearTable();
+
+	// Setup
+	auto communicator = RovCommsFactory::GetCommunicator("file", &repository);
 
 	// Execute
 	auto status = communicator->GetCurrentStatus();

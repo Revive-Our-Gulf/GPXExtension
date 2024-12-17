@@ -19,7 +19,7 @@ namespace NVL_App
 	class RandomRovComms : public RovCommsBase
 	{
 	public:
-		RandomRovComms();
+		RandomRovComms(Repository * repository);
 		virtual unique_ptr<Status> GetCurrentStatus() override;
 	};
 }

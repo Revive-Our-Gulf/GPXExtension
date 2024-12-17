@@ -15,8 +15,9 @@ using namespace NVL_App;
 
 /**
  * @brief Default Constructor
+ * @param repository A handle to the database
  */
-FileRovComms::FileRovComms()
+FileRovComms::FileRovComms(Repository * repository) : RovCommsBase(repository)
 {
 	// Extra implementation
 }
@@ -53,8 +54,11 @@ unique_ptr<Status> FileRovComms::GetCurrentStatus()
 	readerGPS_RAW.parse(jsonGPS_RAW, valueGPS_RAW);
 	auto satellite_count = valueGPS_RAW["message"]["satellites_visible"].asDouble();
 
+	// Retrieve the current track name
+	auto trackName = GetTrackName();
+
 	// Return the result
-	return unique_ptr<Status>(new Status(latitude, longitude, header, depth, altitude, temperature, string(), satellite_count, 0, false, 0));
+	return unique_ptr<Status>(new Status(latitude, longitude, header, depth, altitude, temperature, string(), satellite_count, 0, false, 0, trackName));
 }
 
 //--------------------------------------------------

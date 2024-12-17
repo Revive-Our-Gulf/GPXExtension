@@ -11,6 +11,8 @@
 #include <iostream>
 using namespace std;
 
+#include "Repository.h"
+
 #include "RovCommsBase.h"
 #include "RandomRovComms.h"
 #include "FileRovComms.h"
@@ -21,6 +23,6 @@ namespace NVL_App
 	class RovCommsFactory
 	{
 	public:
-		static unique_ptr<RovCommsBase> GetCommunicator(const string& name);
+		static unique_ptr<RovCommsBase> GetCommunicator(const string& name, Repository * repository);
 	};
 }

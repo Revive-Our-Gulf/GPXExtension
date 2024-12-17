@@ -20,8 +20,14 @@ using namespace NVL_App;
  */
 TEST(RovComms_Test, read_test)
 {
+		// Setup
+	auto repository = Repository("127.0.0.1", "BlueROV_Test");
+
+	// Clear the repo
+	repository.ClearTable();
+
 	// Create a communicator
-	auto comms = RovCommsFactory::GetCommunicator("random");
+	auto comms = RovCommsFactory::GetCommunicator("random", &repository);
 
 	// Get the next status
 	auto status = comms->GetCurrentStatus();
