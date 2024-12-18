@@ -69,6 +69,8 @@ void Repository::AddStatus(Status * status)
 	statement->setDouble(11, status->GetFOM());
 	statement->setString(12, status->GetTrackName());
 
+	cout << status->GetTemperature() << endl;
+
 	statement->executeQuery();
 }
 
