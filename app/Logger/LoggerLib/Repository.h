@@ -33,6 +33,8 @@ namespace NVL_App
 		unique_ptr<Status> GetClosestStatus(const string& time);
 		void ClearTable();
 
+		void GetStatuses(const string& trackName, vector<Status *>& output);
+
 		void SetField(Field field, const string& value);
 		string GetField(Field field);
 
