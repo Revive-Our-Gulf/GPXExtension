@@ -36,9 +36,10 @@ GPXMaker::~GPXMaker()
 
 /**
  * @brief Render the GPX xml
+ * @param trackName The name of the track that is being rendered
  * @return string Returns a string
  */
-string GPXMaker::RenderXML()
+string GPXMaker::RenderXML(const string& trackName)
 {
 	auto writer = stringstream();
 
@@ -50,7 +51,7 @@ string GPXMaker::RenderXML()
 	RenderMeta(writer);
 
 	writer << "<trk>";
-	RenderJourney(writer);
+	RenderJourney(writer, trackName);
 	for (auto status : _statuses) RenderStep(writer, status);
 	writer << "</trk>";
 
@@ -83,11 +84,13 @@ void GPXMaker::RenderStartTag(ostream& writer)
  */
 void GPXMaker::RenderMeta(ostream& writer) 
 {
+	auto timeString = NVLib::StringUtils::GetDateTimeString();
+
 	writer << "<metadata>";
     writer << "<link href=\"http://www.garmin.com\">";
 	writer << "<text>Revive Our Gulf - BlueROV2 GPX plugin</text> ";
     writer << "</link>";
-    writer << "<time>2024-04-16T04:05:32Z</time>";
+    writer << "<time>" << timeString << "</time>";
     writer << "<extensions>";
 	writer << "<bluerov2:gpxDataSource>ROG GPX plugin for BlueOS</bluerov2:gpxDataSource>";
     writer << "<bluerov2:blueOSVersion>1.0</bluerov2:blueOSVersion>";
@@ -100,9 +103,9 @@ void GPXMaker::RenderMeta(ostream& writer)
  * Render the journey details
  * @param writer The writer that we are rendering
  */
-void GPXMaker::RenderJourney(ostream& writer) 
+void GPXMaker::RenderJourney(ostream& writer, const string& trackName) 
 {
-	writer << "<name>Journey 23-04-2023 11:00</name>";
+	writer << "<name>" << trackName << "</name>";
 	writer << "<extensions>";
     writer << "<gpxx:TrackExtension>";
 	writer << "<gpxx:DisplayColor>Cyan</gpxx:DisplayColor>";

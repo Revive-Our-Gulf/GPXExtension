@@ -72,8 +72,9 @@ void Run()
         if (request.url_params.get("submit") != nullptr) 
         {
             parameters["submit"] = "submit";
-            parameters["start"] = request.url_params.get("start");
-            parameters["end"] = request.url_params.get("end");
+            //parameters["start"] = request.url_params.get("start");
+            //parameters["end"] = request.url_params.get("end");
+            parameters["track"] = request.url_params.get("track");
         }
 
         auto page = NVL_App::QueryPage(parameters);
@@ -86,9 +87,11 @@ void Run()
     {
         auto repo = NVL_App::Repository(IP_DB, "BlueROV");        
         auto statuses = vector<NVL_App::Status *>();
-	    repo.GetStatuses(request.url_params.get("start"), request.url_params.get("end"), statuses);
+	    //repo.GetStatuses(request.url_params.get("start"), request.url_params.get("end"), statuses);
+        auto trackName = request.url_params.get("track");
+        repo.GetStatuses(trackName, statuses);
 	    auto maker = NVL_App::GPXMaker(statuses);
-        return maker.RenderXML();
+        return maker.RenderXML(trackName);
     });
 
     // CSS

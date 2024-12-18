@@ -14,6 +14,7 @@
 #include <iomanip>
 using namespace std;
 
+#include <NVLib/StringUtils.h>
 #include <NVLib/Formatter.h>
 
 #include "Status.h"
@@ -28,11 +29,11 @@ namespace NVL_App
 		GPXMaker(vector<Status *>& statuses);
 		~GPXMaker();
 
-		string RenderXML();
+		string RenderXML(const string& trackName);
 	private:
 		void RenderStartTag(ostream& writer);
 		void RenderMeta(ostream& writer);
-		void RenderJourney(ostream& writer);
+		void RenderJourney(ostream& writer, const string& trackName);
 		void RenderStep(ostream& writer, Status * status);
 	};
 }

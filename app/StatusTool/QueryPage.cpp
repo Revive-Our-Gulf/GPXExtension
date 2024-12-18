@@ -61,18 +61,24 @@ void QueryPage::RenderForm(ostream& writer)
 
 	writer << "<div class=\"alert alert-info\">Select the time range for the GPX</div>";
 
-	// Render Start Time
-	auto start = NVLib::StringUtils::GetDateTimeString();
-	writer << "<div class=\"form-group\">";
-	writer << "<label=for\"status\" class=\"form-label\">Start Time:</label>";
-	writer << "<input type=\"datetime-local\"  class=\"form-control\" name=\"start\" id=\"start\" value=\"" << start << "\" step=\"any\" />";
-	writer << "</div>";
+	// // Render Start Time
+	// auto start = NVLib::StringUtils::GetDateTimeString();
+	// writer << "<div class=\"form-group\">";
+	// writer << "<label=for\"status\" class=\"form-label\">Start Time:</label>";
+	// writer << "<input type=\"datetime-local\"  class=\"form-control\" name=\"start\" id=\"start\" value=\"" << start << "\" step=\"any\" />";
+	// writer << "</div>";
 
-	// Render End Time
-	auto end = NVLib::StringUtils::GetDateTimeString();
+	// // Render End Time
+	// auto end = NVLib::StringUtils::GetDateTimeString();
+	// writer << "<div class=\"form-group\">";
+	// writer << "<label=for\"status\" class=\"form-label\">End Time:</label>";
+	// writer << "<input type=\"datetime-local\" class=\"form-control\" name=\"end\" id=\"end\" value=\"" << end << "\" step=\"any\" />";
+	// writer << "</div>";
+
+	// Render the track name functionality
 	writer << "<div class=\"form-group\">";
-	writer << "<label=for\"status\" class=\"form-label\">End Time:</label>";
-	writer << "<input type=\"datetime-local\" class=\"form-control\" name=\"end\" id=\"end\" value=\"" << end << "\" step=\"any\" />";
+	writer << "<label=for\"track\" class=\"form-label\">Track Name:</label>";
+	writer << "<input type=\"text\" class=\"form-control\" name=\"track\" id=\"track\" />";
 	writer << "</div>";
 
 	// Add a submit button
@@ -92,8 +98,12 @@ void QueryPage::RenderResponse(ostream& writer)
 
 	writer << "<div class=\"alert alert-info\">GPX Response Received</div>";
 
+	// Setup the GPX filename
+	auto gpxFile = stringstream(); gpxFile << _fields["track"] << ".gpx";
+
+
 	writer << "<div class=\"pt-3 pb-4\">";
-	writer << "<a href=\"\\gpx?start=" << _fields["start"] << "&end="<< _fields["end"] << "\" download=\"gpx.xml\" class=\"btn btn-info\"/>Download</a>";
+	writer << "<a href=\"\\gpx?track=" << _fields["track"] << "\" download=\"" << gpxFile.str() << "\" class=\"btn btn-info\"/>Download</a>";
 	writer << "</div>";
 
 	writer << "<p class=\"text-muted\">GPX preview</p>";
@@ -112,7 +122,7 @@ void QueryPage::RenderResponse(ostream& writer)
 
 	writer << "var request = new XMLHttpRequest();";
 	writer << "request.addEventListener(\"load\", TextReceived);";
-	writer << "request.open(\"GET\", \"\\gpx?start=" << _fields["start"] << "&end="<< _fields["end"] << "\");";
+	writer << "request.open(\"GET\", \"\\gpx?track=" << _fields["track"] << "\");";
 	writer << "request.send();";
 	writer << "</script>";
 }
