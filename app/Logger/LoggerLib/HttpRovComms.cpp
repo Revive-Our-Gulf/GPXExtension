@@ -44,13 +44,31 @@ unique_ptr<Status> HttpRovComms::GetCurrentStatus()
 	readerGPS.parse(body, valueGPS);
 	auto latitude = valueGPS["message"]["lat"].asDouble() / 1e7;
 	auto longitude = valueGPS["message"]["lon"].asDouble() / 1e7;
-	auto header = valueGPS["message"]["hdg"].asDouble() / 1e2;
+	//auto header = valueGPS["message"]["hdg"].asDouble() / 1e2;
 	auto depth = valueGPS["message"]["relative_alt"].asDouble() / 1e3;
 	auto altitude = valueGPS["message"]["alt"].asDouble() / 1e3; 
+
+	// Get a better heading
+	result = client.Get("mavlink2rest/mavlink/vehicles/1/components/1/messages/VFR_HUD");
+	auto valueHeading = Json::Value();
+	readerGPS.parse(result->body, valueHeading) / 1e2;
+	auto heading = valueHeading["message"]["heading"].asDouble();
+
+	// Get the temperature
+	result = client.Get("mavlink2rest/mavlink/vehicles/1/components/1/messages/SCALED_PRESSURE2");
+	auto valuePressure = Json::Value();
+	readerGPS.parse(result->body, valuePressure);
+	auto temperature = valuePressure["message"]["temperature"].asDouble() / 1e2;
+
+	// Get the drive mode
+	result = client.Get("mavlink2rest/mavlink/vehicles/1/components/1/messages/HEARTBEAT");
+	auto valueHeart = Json::Value();
+	readerGPS.parse(result->body, valueHeart);
+	auto driveMode = valuePressure["message"]["custom_mode"].asString();
 
 	// Retrieve the track name
 	auto trackName = GetTrackName();
 
 	// Return the result
-	return unique_ptr<Status>(new Status(latitude, longitude, header, depth, altitude, 0, string(), 0, 0, false, 0, trackName));
+	return unique_ptr<Status>(new Status(latitude, longitude, heading, depth, altitude, temperature, driveMode, 0, 0, false, 0, trackName));
 }
