@@ -52,7 +52,11 @@ string GPXMaker::RenderXML(const string& trackName)
 
 	writer << "<trk>";
 	RenderJourney(writer, trackName);
+
+	writer << "<trkseg>";
 	for (auto status : _statuses) RenderStep(writer, status);
+	writer << "</trkseg>";
+	
 	writer << "</trk>";
 
 	writer << "</gpx>";
