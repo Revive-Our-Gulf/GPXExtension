@@ -57,6 +57,7 @@ void Run()
             parameters["submit"] = "submit";
             parameters["status"] = request.url_params.get("status");
             parameters["interval"] = request.url_params.get("interval");
+            parameters["track"] = request.url_params.get("track");
         }
 
         auto page = NVL_App::Settings(&repo, parameters);

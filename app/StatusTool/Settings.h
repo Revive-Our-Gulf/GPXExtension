@@ -26,7 +26,7 @@ namespace NVL_App
 
 		string Render();
 
-		inline Repository *& GetRepo() { return _repo; }
+		inline Repository * GetRepo() { return _repo; }
 		inline unordered_map<string, string>& GetFields() { return _fields; }
 
 	private:

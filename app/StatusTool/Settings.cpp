@@ -60,6 +60,13 @@ void Settings::RenderForm(ostream& writer)
 
 	writer << "<div class=\"p-4\">";
 
+	// Render the Track Name
+	auto trackName = _repo->GetField(Repository::Field::CURRENT_TRACK);
+	writer << "<div class=\"form-group\">";
+	writer << "<label=for\"track\" class=\"form-label\">Current Track Name:</label>";
+	writer << "<input type=\"text\" class=\"form-control\" id=\"track\" name=\"track\" value=\"" << trackName << "\" />";
+	writer << "</div>";
+
 	// Render the Status
 	auto status = _repo->GetField(Repository::Field::LOGGER_STATE);
 	auto stoppedSelected = status == "STOPPED" ? "selected" : string();
@@ -99,7 +106,8 @@ void Settings::RenderForm(ostream& writer)
 void Settings::RenderResponse(ostream& writer)
 {
 	try 
-	{
+	{	
+		_repo->SetField(Repository::Field::CURRENT_TRACK, _fields["track"]);
 		_repo->SetField(Repository::Field::LOGGER_STATE, _fields["status"]);
 		_repo->SetField(Repository::Field::RATE, _fields["interval"]);
 		writer << "<div class=\"alert alert-success m-4\"><b>Update performed successfully<b></div>";
