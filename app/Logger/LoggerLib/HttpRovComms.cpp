@@ -64,7 +64,7 @@ unique_ptr<Status> HttpRovComms::GetCurrentStatus()
 	result = client.Get("/mavlink2rest/mavlink/vehicles/1/components/1/messages/HEARTBEAT");
 	auto valueHeart = Json::Value();
 	readerGPS.parse(result->body, valueHeart);
-	auto driveMode = valuePressure["message"]["custom_mode"].asString();
+	auto driveMode = valueHeart["message"]["custom_mode"].asString();
 
 	// Retrieve the track name
 	auto trackName = GetTrackName();
