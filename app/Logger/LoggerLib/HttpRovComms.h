@@ -26,5 +26,7 @@ namespace NVL_App
 	public:
 		HttpRovComms(Repository * repository);
 		virtual unique_ptr<Status> GetCurrentStatus() override;
+	private:
+		double GetValue(const string& path, const string& name);
 	};
 }
