@@ -17,7 +17,10 @@ string Home::Render()
     auto tracks = _repo->GetTracks();
     std::stringstream tracksHtml;
     for (const auto& track : tracks) {
-        tracksHtml << "<tr><td>" << track << "</td></tr>";
+        auto gpxFile = stringstream(); gpxFile << track << ".gpx";
+        std::cout << "GPX File: " << gpxFile.str() << std::endl;
+        tracksHtml << "<tr><td>" << track << "</td>";
+        tracksHtml << "<td><a href=\"\\gpx?track=" << track << "\" download=\"" << gpxFile.str() << "\" class=\"btn btn-info\"/>Download</a></td></tr>";
     }
 
     // Replace placeholder with tracks HTML
