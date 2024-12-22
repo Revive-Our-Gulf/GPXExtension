@@ -40,11 +40,19 @@ namespace NVL_App
 		void SetField(Field field, const string& value);
 		string GetField(Field field);
 
+		string GetEarliestEntryDate(const string& trackName, const string& field);
+        string GetEarliestEntryTime(const string& trackName, const string& field);
+        string GetLatestEntryDate(const string& trackName, const string& field);
+        string GetLatestEntryTime(const string& trackName, const string& field);
+
 		void DeleteTrack(const string& trackName);
 
 		inline sql::Connection * GetConnection() { return _connection; }
 		inline string& GetDatabase() { return _database; }
+
+
 	private:
+		string ExecuteQuery(const string& query, const string& trackName);
 		string GetFieldName(Field field);
 	};
 }

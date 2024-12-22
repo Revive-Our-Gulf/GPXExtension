@@ -349,6 +349,50 @@ string Repository::GetFieldName(Field field)
 	throw runtime_error("Unknown field type");
 }
 
+string Repository::ExecuteQuery(const string& query, const string& trackName)
+{
+    auto statement = unique_ptr<sql::PreparedStatement>(_connection->prepareStatement(query));
+    statement->setString(1, trackName);
+
+    auto result = statement->executeQuery();
+    if (result->next()) {
+        return result->getString(1).c_str();
+    } else {
+        throw runtime_error("No entries found for track: " + trackName);
+    }
+}
+
+string Repository::GetEarliestEntryDate(const string& trackName, const string& field)
+{
+    auto query = stringstream();
+    query << "SELECT DATE(" << field << ") FROM status WHERE track_name = ? ORDER BY " << field << " ASC LIMIT 1";
+    return ExecuteQuery(query.str(), trackName);
+}
+
+string Repository::GetEarliestEntryTime(const string& trackName, const string& field)
+{
+    auto query = stringstream();
+    query << "SELECT TIME(" << field << ") FROM status WHERE track_name = ? ORDER BY " << field << " ASC LIMIT 1";
+    return ExecuteQuery(query.str(), trackName);
+}
+
+string Repository::GetLatestEntryDate(const string& trackName, const string& field)
+{
+    auto query = stringstream();
+    query << "SELECT DATE(" << field << ") FROM status WHERE track_name = ? ORDER BY " << field << " DESC LIMIT 1";
+    return ExecuteQuery(query.str(), trackName);
+}
+
+string Repository::GetLatestEntryTime(const string& trackName, const string& field)
+{
+    auto query = stringstream();
+    query << "SELECT TIME(" << field << ") FROM status WHERE track_name = ? ORDER BY " << field << " DESC LIMIT 1";
+    return ExecuteQuery(query.str(), trackName);
+}
+
+
+
+
 
 void Repository::DeleteTrack(const string& trackName)
 {
