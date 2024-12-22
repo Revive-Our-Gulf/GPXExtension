@@ -44,7 +44,9 @@ void Run()
     CROW_ROUTE(app, "/")([&IP_DB](const crow::request& request)
     {
         auto repo = NVL_App::Repository(IP_DB, "BlueROV");
-        auto page = NVL_App::Home();
+        auto parameters = unordered_map<string, string>();
+
+        auto page = NVL_App::Home(&repo, parameters);
 
         return page.Render();
     });

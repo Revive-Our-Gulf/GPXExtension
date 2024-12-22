@@ -268,6 +268,26 @@ void Repository::GetStatuses(const string& trackName, vector<Status *>& output)
 	}
 }
 
+
+/**
+ * Retrieve all tracks
+ */
+vector<string> Repository::GetTracks()
+{
+	vector<string> tracks;
+	auto query = stringstream();
+	query << "SELECT DISTINCT track_name FROM status";
+
+    auto statement = unique_ptr<sql::Statement>(_connection->createStatement());
+	auto result = statement->executeQuery(query.str());
+
+    while (result->next()) {
+        tracks.push_back(result->getString(1).c_str());
+    }
+
+    return tracks;
+}
+
 //--------------------------------------------------
 // Settings
 //--------------------------------------------------

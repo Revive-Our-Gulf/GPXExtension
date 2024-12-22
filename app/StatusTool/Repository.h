@@ -34,6 +34,7 @@ namespace NVL_App
 		void GetStatuses(int limit, vector<Status *>& output);
 		void GetStatuses(const string& start, const string& end, vector<Status *>& output);
 		void GetStatuses(const string& trackName, vector<Status *>& output); 
+		vector<string> GetTracks();
 		void ClearTable();
 
 		void SetField(Field field, const string& value);
