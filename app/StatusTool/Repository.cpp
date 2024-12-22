@@ -274,16 +274,16 @@ vector<string> Repository::GetTracks()
 {
 	vector<string> tracks;
 	auto query = stringstream();
-	query << "SELECT DISTINCT track_name FROM status";
+	query << "SELECT track_name FROM status GROUP BY track_name ORDER BY MAX(created_at) DESC";
 
-    auto statement = unique_ptr<sql::Statement>(_connection->createStatement());
+	auto statement = unique_ptr<sql::Statement>(_connection->createStatement());
 	auto result = statement->executeQuery(query.str());
 
-    while (result->next()) {
-        tracks.push_back(result->getString(1).c_str());
-    }
+	while (result->next()) {
+		tracks.push_back(result->getString(1).c_str());
+	}
 
-    return tracks;
+	return tracks;
 }
 
 //--------------------------------------------------

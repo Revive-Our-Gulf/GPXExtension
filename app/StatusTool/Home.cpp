@@ -52,6 +52,7 @@ void Home::RenderTracks(string& content){
             tracksHtml << "<td>" << track << "</td>";
             tracksHtml << "<td>" << entryDate << "</td>";
             tracksHtml << "<td>" << earliestEntryTime << "</td>";
+            tracksHtml << "<td>" << latestEntryTime << "</td>";
             tracksHtml << "<td>" << duration << "</td>";
             tracksHtml << "<td><a href=\"\\gpx?track=" << track << "\" download=\"" << gpxFile.str() << "\" class=\"btn btn-info\">Download</a></td>";
             tracksHtml << "<td><button class=\"btn btn-danger\" onclick=\"deleteTrack('" << track << "')\">Delete</button></td>";
