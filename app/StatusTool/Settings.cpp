@@ -30,30 +30,14 @@ string Settings::Render()
 
 void Settings::SubmitForm()
 {
-    // Update the repository fields if parameters are provided
-    if (_fields.find("status") != _fields.end()) {
-        _repo->SetField(Repository::Field::LOGGER_STATE, _fields["status"]);
-    }
     if (_fields.find("interval") != _fields.end()) {
         _repo->SetField(Repository::Field::RATE, _fields["interval"]);
-    }
-    if (_fields.find("track") != _fields.end()) {
-        _repo->SetField(Repository::Field::CURRENT_TRACK, _fields["track"]);
     }
 }
 
 void Settings::RenderSettings(string& content)
 {
-    // Replace placeholders with actual values
-    auto trackName = _repo->GetField(Repository::Field::CURRENT_TRACK);
-    auto status = _repo->GetField(Repository::Field::LOGGER_STATE);
-    auto stoppedSelected = status == "STOPPED" ? "selected" : string();
-    auto startedSelected = status == "STARTED" ? "selected" : string();
     auto rate = _repo->GetField(Repository::Field::RATE);
-
-    ReplacePlaceholder(content, "{{trackName}}", trackName);
-    ReplacePlaceholder(content, "{{stoppedSelected}}", stoppedSelected);
-    ReplacePlaceholder(content, "{{startedSelected}}", startedSelected);
     ReplacePlaceholder(content, "{{rate}}", rate);
 }
 

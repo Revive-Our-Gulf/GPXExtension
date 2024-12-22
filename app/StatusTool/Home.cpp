@@ -1,17 +1,29 @@
+// filepath: /home/sam/repos/GPXExtension/app/StatusTool/Home.cpp
 #include "Home.h"
 #include <crow.h>
 #include <fstream>
 #include <sstream>
 using namespace NVL_App;
 
-Home::Home(Repository* repo, unordered_map<string, string>& parameters) : _repo(repo), _fields(parameters) {}
+Home::Home(Repository* repo, unordered_map<string, string>& parameters) : _repo(repo), _fields(parameters) {
+    if (_fields.find("submit") != _fields.end()) {
+        SubmitForm();
+    }
+}
 
 string Home::Render()
 {
     std::ifstream file("templates/home.html");
+    if (!file.is_open()) {
+        std::cerr << "Error: Could not open settings.html" << std::endl;
+        return "";
+    }
+
     std::stringstream buffer;
     buffer << file.rdbuf();
     string content = buffer.str();
+
+    RenderSettings(content);
 
     // Fetch tracks from the database
     auto tracks = _repo->GetTracks();
@@ -26,31 +38,7 @@ string Home::Render()
         auto earliestEntryTime = _repo->GetEarliestEntryTime(track, "created_at");
         auto latestEntryTime = _repo->GetLatestEntryTime(track, "created_at");
 
-        // Calculate the length of time between the earliest and latest entry times
-        std::tm earliestTm = {};
-        std::tm latestTm = {};
-        std::istringstream earliestStream(earliestEntryTime);
-        std::istringstream latestStream(latestEntryTime);
-        earliestStream >> std::get_time(&earliestTm, "%H:%M:%S");
-        latestStream >> std::get_time(&latestTm, "%H:%M:%S");
-
-        std::time_t earliestTime = std::mktime(&earliestTm);
-        std::time_t latestTime = std::mktime(&latestTm);
-        double secondsDiff = std::difftime(latestTime, earliestTime);
-
-        int hours = static_cast<int>(secondsDiff) / 3600;
-        int minutes = (static_cast<int>(secondsDiff) % 3600) / 60;
-        int seconds = static_cast<int>(secondsDiff) % 60;
-
-        std::stringstream durationStream;
-        durationStream << std::setw(2) << std::setfill('0') << hours << ":"
-                   << std::setw(2) << std::setfill('0') << minutes << ":"
-                   << std::setw(2) << std::setfill('0') << seconds;
-        std::string duration = durationStream.str();
-        
-        std::cout << "Duration: " << duration << std::endl;
-        std::cout << "Entry Date: " << entryDate << std::endl;
-        std::cout << "Earliest Entry Time: " << earliestEntryTime << std::endl;
+        auto duration = CalculateDuration(earliestEntryTime, latestEntryTime);
 
         tracksHtml << "<tr>";
         tracksHtml << "<td>" << track << "</td>";
@@ -67,6 +55,35 @@ string Home::Render()
     return content;
 }
 
+void Home::RenderSettings(string& content)
+{
+    // Fetch track name and status
+    auto trackName = _repo->GetField(Repository::Field::CURRENT_TRACK);
+    auto status = _repo->GetField(Repository::Field::LOGGER_STATE);
+
+    std::cout << "Status: " << status << std::endl;
+
+    status = status == "STOPPED" ? "STARTED" : "STOPPED";
+
+    std::cout << "New Status: " << status << std::endl;
+
+    // Replace placeholders in the content
+    ReplacePlaceholder(content, "{{trackName}}", trackName);
+    ReplacePlaceholder(content, "{{status}}", status == "STOPPED" ? "Start" : "Stop");
+    _repo->SetField(Repository::Field::LOGGER_STATE, status);
+}
+
+void Home::SubmitForm()
+{
+    // Update the repository fields if parameters are provided
+    if (_fields.find("status") != _fields.end()) {
+        _repo->SetField(Repository::Field::LOGGER_STATE, _fields["status"]);
+    }
+    if (_fields.find("track") != _fields.end()) {
+        _repo->SetField(Repository::Field::CURRENT_TRACK, _fields["track"]);
+    }
+}
+
 void Home::ReplacePlaceholder(string& content, const string& placeholder, const string& value)
 {
     size_t pos = 0;
@@ -74,4 +91,28 @@ void Home::ReplacePlaceholder(string& content, const string& placeholder, const 
         content.replace(pos, placeholder.length(), value);
         pos += value.length();
     }
+}
+
+std::string Home::CalculateDuration(const std::string& earliestEntryTime, const std::string& latestEntryTime)
+{
+    std::tm earliestTm = {};
+    std::tm latestTm = {};
+    std::istringstream earliestStream(earliestEntryTime);
+    std::istringstream latestStream(latestEntryTime);
+    earliestStream >> std::get_time(&earliestTm, "%H:%M:%S");
+    latestStream >> std::get_time(&latestTm, "%H:%M:%S");
+
+    std::time_t earliestTime = std::mktime(&earliestTm);
+    std::time_t latestTime = std::mktime(&latestTm);
+    double secondsDiff = std::difftime(latestTime, earliestTime);
+
+    int hours = static_cast<int>(secondsDiff) / 3600;
+    int minutes = (static_cast<int>(secondsDiff) % 3600) / 60;
+    int seconds = static_cast<int>(secondsDiff) % 60;
+
+    std::stringstream durationStream;
+    durationStream << std::setw(2) << std::setfill('0') << hours << ":"
+                   << std::setw(2) << std::setfill('0') << minutes << ":"
+                   << std::setw(2) << std::setfill('0') << seconds;
+    return durationStream.str();
 }

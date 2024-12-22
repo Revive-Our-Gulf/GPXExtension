@@ -61,10 +61,18 @@ void Run()
     std::string navbarHtml = loadNavbarHtml("templates/navbar.html");
 
     // Home Page
-    CROW_ROUTE(app, "/")([&IP_DB, &navbarHtml](const crow::request& request)
+    CROW_ROUTE(app, "/")([&IP_DB, &navbarHtml](const crow::request& req)
     {
         auto repo = NVL_App::Repository(IP_DB, "BlueROV");
         auto parameters = unordered_map<string, string>();
+
+        if (req.url_params.get("submit") != nullptr) 
+        {
+            parameters["submit"] = "submit";
+            parameters["track"] = req.url_params.get("track");
+
+            cout << "Track: " << parameters["track"] << endl;
+        }
 
         auto page = NVL_App::Home(&repo, parameters);
 
@@ -78,13 +86,11 @@ void Run()
     CROW_ROUTE(app, "/settings")([&IP_DB, &navbarHtml](const crow::request& req)
     {
         auto repo = NVL_App::Repository(IP_DB, "BlueROV");
-
         auto parameters = unordered_map<string, string>();
+        
         if (req.url_params.get("submit") != nullptr) 
         {
             parameters["submit"] = "submit";
-            parameters["track"] = req.url_params.get("track");
-            parameters["status"] = req.url_params.get("status");
             parameters["interval"] = req.url_params.get("interval");
         }
 
