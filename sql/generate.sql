@@ -33,7 +33,7 @@ create table status
   dvl_velocity_valid BOOLEAN not null,
   dvl_fom DOUBLE not null,
   track_name varchar(500) default 'unknown',
-  created_at DATETIME not null default CURRENT_TIMESTAMP,
+  created_at DATETIME(1) not null default CURRENT_TIMESTAMP,
   primary key(id),
   INDEX create_idx (created_at)
 );
