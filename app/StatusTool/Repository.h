@@ -40,6 +40,8 @@ namespace NVL_App
 		void SetField(Field field, const string& value);
 		string GetField(Field field);
 
+		void DeleteTrack(const string& trackName);
+
 		inline sql::Connection * GetConnection() { return _connection; }
 		inline string& GetDatabase() { return _database; }
 	private:

@@ -348,3 +348,13 @@ string Repository::GetFieldName(Field field)
 
 	throw runtime_error("Unknown field type");
 }
+
+
+void Repository::DeleteTrack(const string& trackName)
+{
+    auto query = stringstream();
+    query << "DELETE FROM status WHERE track_name = ?";
+    auto statement = unique_ptr<sql::PreparedStatement>(_connection->prepareStatement(query.str()));
+    statement->setString(1, trackName);
+    statement->executeQuery();
+}

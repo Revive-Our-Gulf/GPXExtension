@@ -19,11 +19,14 @@ string Home::Render()
     for (const auto& track : tracks) {
         auto gpxFile = stringstream(); gpxFile << track << ".gpx";
         std::cout << "GPX File: " << gpxFile.str() << std::endl;
-        tracksHtml << "<tr><td>" << track << "</td>";
-        tracksHtml << "<td><a href=\"\\gpx?track=" << track << "\" download=\"" << gpxFile.str() << "\" class=\"btn btn-info\"/>Download</a></td></tr>";
+        tracksHtml << "<tr>";
+        tracksHtml << "<td>" << track << "</td>";
+        tracksHtml << "<td><a href=\"\\gpx?track=" << track << "\" download=\"" << gpxFile.str() << "\" class=\"btn btn-info\">Download</a></td>";
+        tracksHtml << "<td><button class=\"btn btn-danger\" onclick=\"deleteTrack('" << track << "')\">Delete</button></td>";
+        tracksHtml << "</tr>";
     }
 
-    ReplacePlaceholder(content, "{{trackName}}", tracksHtml.str());
+    ReplacePlaceholder(content, "{{tracks}}", tracksHtml.str());
 
     return content;
 }

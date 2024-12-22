@@ -139,6 +139,16 @@ void Run()
         return jsonResponse;
     });
 
+    CROW_ROUTE(app, "/delete_track")([&IP_DB](const crow::request& request) 
+    {
+        auto track = request.url_params.get("track");
+        auto repo = NVL_App::Repository(IP_DB, "BlueROV");
+        if (track != nullptr) {
+            repo.DeleteTrack(track);
+        }
+        return crow::response(200);
+    });
+
     //set the port, set the app to run on multiple threads, and run the app
     app.port(5428).multithreaded().run();
 }
