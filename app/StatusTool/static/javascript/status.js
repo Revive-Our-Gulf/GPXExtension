@@ -1,4 +1,5 @@
 function load() { 
+    requestUpdate()
     setTimeout(requestUpdate, 1000); 
 }
 
@@ -14,7 +15,6 @@ function requestUpdate() {
 function updateStatus(responseText) { 
     var status = JSON.parse(responseText);
 
-    document.getElementById("track").innerText = status.track;
     document.getElementById("created").innerText = status.created;
     document.getElementById("latitude").innerText = status.latitude + "°";
     document.getElementById("longitude").innerText = status.longitude + "°";

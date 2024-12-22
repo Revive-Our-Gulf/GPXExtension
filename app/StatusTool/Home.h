@@ -24,6 +24,7 @@ namespace NVL_App
     
     private:
         void RenderSettings(string& content);
+        void RenderTracks(string& content);
         void SubmitForm();
         void ReplacePlaceholder(string& content, const string& placeholder, const string& value);
         string CalculateDuration(const std::string& earliestEntryTime, const std::string& latestEntryTime);

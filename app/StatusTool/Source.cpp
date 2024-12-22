@@ -17,6 +17,11 @@ using namespace std;
 #include "QueryPage.h"
 #include "Home.h"
 
+#include <unordered_map>
+#include <string>
+#include <sstream>
+
+
 // Function to load the navbar HTML from a file
 std::string loadNavbarHtml(const std::string& filepath) {
     std::ifstream file(filepath);
@@ -35,6 +40,24 @@ std::string replacePlaceholder(const std::string& content, const std::string& pl
     }
     return result;
 }
+
+std::unordered_map<std::string, std::string> extractFormData(const std::string& body) {
+    std::unordered_map<std::string, std::string> formData;
+    std::string delimiter = "Content-Disposition: form-data; name=\"";
+    size_t pos = 0;
+    while ((pos = body.find(delimiter, pos)) != std::string::npos) {
+        pos += delimiter.length();
+        size_t endPos = body.find("\"", pos);
+        std::string name = body.substr(pos, endPos - pos);
+        pos = body.find("\r\n\r\n", endPos) + 4;
+        endPos = body.find("\r\n--", pos);
+        std::string value = body.substr(pos, endPos - pos);
+        formData[name] = value;
+        pos = endPos;
+    }
+    return formData;
+}
+
 
 //--------------------------------------------------
 // Function Prototypes
@@ -60,18 +83,26 @@ void Run()
     // Load the navbar HTML
     std::string navbarHtml = loadNavbarHtml("templates/navbar.html");
 
+    
+
     // Home Page
-    CROW_ROUTE(app, "/")([&IP_DB, &navbarHtml](const crow::request& req)
+    CROW_ROUTE(app, "/").methods(crow::HTTPMethod::GET, crow::HTTPMethod::POST)([&IP_DB, &navbarHtml](const crow::request& req)
     {
         auto repo = NVL_App::Repository(IP_DB, "BlueROV");
         auto parameters = unordered_map<string, string>();
 
-        if (req.url_params.get("submit") != nullptr) 
+        if (req.method == crow::HTTPMethod::POST)
         {
+            // Handle form submission
+            auto formData = extractFormData(req.body);
+            parameters["submit"] = formData["submit"];
+            parameters["track"] = formData["track"];
+        }
+        else if (req.url_params.get("submit") != nullptr)
+        {
+            // Handle GET request with URL parameters
             parameters["submit"] = "submit";
             parameters["track"] = req.url_params.get("track");
-
-            cout << "Track: " << parameters["track"] << endl;
         }
 
         auto page = NVL_App::Home(&repo, parameters);
@@ -81,6 +112,7 @@ void Run()
 
         return crow::response(content);
     });
+
 
     // Settings page
     CROW_ROUTE(app, "/settings")([&IP_DB, &navbarHtml](const crow::request& req)
@@ -135,21 +167,24 @@ void Run()
         auto status = repo.GetLastStatus();
         auto trackField = NVL_App::Repository::Field::CURRENT_TRACK;
         
-
         crow::json::wvalue jsonResponse;
-        jsonResponse["track"] = repo.GetField(trackField);
-        jsonResponse["created"] = status->GetTimeStamp();
-        jsonResponse["latitude"] = status->GetLatitude();
-        jsonResponse["longitude"] = status->GetLongitude();
-        jsonResponse["heading"] = status->GetHeading();
-        jsonResponse["depth"] = status->GetDepth();
-        jsonResponse["altitude"] = status->GetAltitude();
-        jsonResponse["temperature"] = status->GetTemperature();
-        jsonResponse["mode"] = status->GetMode();
-        jsonResponse["satelliteCount"] = status->GetSatelliteCount();
-        jsonResponse["poseCertainty"] = status->GetPosCertainity();
-        jsonResponse["validVelocity"] = status->GetVelocityValid();
-        jsonResponse["fom"] = status->GetFOM();
+
+        if (status != nullptr) {
+            jsonResponse["created"] = status->GetTimeStamp();
+            jsonResponse["latitude"] = status->GetLatitude();
+            jsonResponse["longitude"] = status->GetLongitude();
+            jsonResponse["heading"] = status->GetHeading();
+            jsonResponse["depth"] = status->GetDepth();
+            jsonResponse["altitude"] = status->GetAltitude();
+            jsonResponse["temperature"] = status->GetTemperature();
+            jsonResponse["mode"] = status->GetMode();
+            jsonResponse["satelliteCount"] = status->GetSatelliteCount();
+            jsonResponse["poseCertainty"] = status->GetPosCertainity();
+            jsonResponse["validVelocity"] = status->GetVelocityValid();
+            jsonResponse["fom"] = status->GetFOM();
+        } else {
+            jsonResponse["error"] = "No status available";
+        }
 
         return jsonResponse;
     });

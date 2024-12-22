@@ -141,8 +141,6 @@ unique_ptr<Status> Repository::GetClosestStatus(const string& time)
 		auto created = string(result->getString(13));
 		auto timeDiff = result->getFloat(14);
 
-		cout << "Time difference: " << timeDiff << endl;
-
 		return unique_ptr<Status>(new Status(created, latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom, string()));
 	}
 

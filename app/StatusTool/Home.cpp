@@ -8,6 +8,7 @@ using namespace NVL_App;
 Home::Home(Repository* repo, unordered_map<string, string>& parameters) : _repo(repo), _fields(parameters) {
     if (_fields.find("submit") != _fields.end()) {
         SubmitForm();
+        Render();
     }
 }
 
@@ -23,36 +24,42 @@ string Home::Render()
     buffer << file.rdbuf();
     string content = buffer.str();
 
+    RenderTracks(content);
     RenderSettings(content);
 
+    return content;
+}
+
+void Home::RenderTracks(string& content){
     // Fetch tracks from the database
     auto tracks = _repo->GetTracks();
     std::stringstream tracksHtml;
 
-    for (const auto& track : tracks) {
-        auto gpxFile = stringstream(); gpxFile << track << ".gpx";
-        std::cout << "GPX File: " << gpxFile.str() << std::endl;
+    if (tracks.empty()) {
+        tracksHtml << "<tr><td colspan=\"6\">No tracks available</td></tr>";
+    } else {
+        for (const auto& track : tracks) {
+            auto gpxFile = stringstream(); gpxFile << track << ".gpx";
 
-        // Fetch earliest and latest entry dates and times
-        auto entryDate = _repo->GetEarliestEntryDate(track, "created_at");
-        auto earliestEntryTime = _repo->GetEarliestEntryTime(track, "created_at");
-        auto latestEntryTime = _repo->GetLatestEntryTime(track, "created_at");
+            // Fetch earliest and latest entry dates and times
+            auto entryDate = _repo->GetEarliestEntryDate(track, "created_at");
+            auto earliestEntryTime = _repo->GetEarliestEntryTime(track, "created_at");
+            auto latestEntryTime = _repo->GetLatestEntryTime(track, "created_at");
 
-        auto duration = CalculateDuration(earliestEntryTime, latestEntryTime);
+            auto duration = CalculateDuration(earliestEntryTime, latestEntryTime);
 
-        tracksHtml << "<tr>";
-        tracksHtml << "<td>" << track << "</td>";
-        tracksHtml << "<td>" << entryDate << "</td>";
-        tracksHtml << "<td>" << earliestEntryTime << "</td>";
-        tracksHtml << "<td>" << duration << "</td>";
-        tracksHtml << "<td><a href=\"\\gpx?track=" << track << "\" download=\"" << gpxFile.str() << "\" class=\"btn btn-info\">Download</a></td>";
-        tracksHtml << "<td><button class=\"btn btn-danger\" onclick=\"deleteTrack('" << track << "')\">Delete</button></td>";
-        tracksHtml << "</tr>";
+            tracksHtml << "<tr>";
+            tracksHtml << "<td>" << track << "</td>";
+            tracksHtml << "<td>" << entryDate << "</td>";
+            tracksHtml << "<td>" << earliestEntryTime << "</td>";
+            tracksHtml << "<td>" << duration << "</td>";
+            tracksHtml << "<td><a href=\"\\gpx?track=" << track << "\" download=\"" << gpxFile.str() << "\" class=\"btn btn-info\">Download</a></td>";
+            tracksHtml << "<td><button class=\"btn btn-danger\" onclick=\"deleteTrack('" << track << "')\">Delete</button></td>";
+            tracksHtml << "</tr>";
+        }
     }
     
     ReplacePlaceholder(content, "{{tracks}}", tracksHtml.str());
-
-    return content;
 }
 
 void Home::RenderSettings(string& content)
@@ -61,24 +68,17 @@ void Home::RenderSettings(string& content)
     auto trackName = _repo->GetField(Repository::Field::CURRENT_TRACK);
     auto status = _repo->GetField(Repository::Field::LOGGER_STATE);
 
-    std::cout << "Status: " << status << std::endl;
-
-    status = status == "STOPPED" ? "STARTED" : "STOPPED";
-
-    std::cout << "New Status: " << status << std::endl;
-
     // Replace placeholders in the content
     ReplacePlaceholder(content, "{{trackName}}", trackName);
     ReplacePlaceholder(content, "{{status}}", status == "STOPPED" ? "Start" : "Stop");
-    _repo->SetField(Repository::Field::LOGGER_STATE, status);
 }
 
 void Home::SubmitForm()
 {
-    // Update the repository fields if parameters are provided
-    if (_fields.find("status") != _fields.end()) {
-        _repo->SetField(Repository::Field::LOGGER_STATE, _fields["status"]);
-    }
+    auto currentStatus = _repo->GetField(Repository::Field::LOGGER_STATE);
+    auto newStatus = currentStatus == "STOPPED" ? "STARTED" : "STOPPED";
+    _repo->SetField(Repository::Field::LOGGER_STATE, newStatus);
+    
     if (_fields.find("track") != _fields.end()) {
         _repo->SetField(Repository::Field::CURRENT_TRACK, _fields["track"]);
     }
