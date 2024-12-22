@@ -20,5 +20,11 @@ namespace NVL_App
 		inline unordered_map<string, string>& GetFields() { return _fields; }
 
         string Render();
+    
+    private:
+        void ReplacePlaceholder(string& content, const string& placeholder, const string& value);
+        
     };
+
+    
 }

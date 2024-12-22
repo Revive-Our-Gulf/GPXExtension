@@ -23,11 +23,16 @@ string Home::Render()
         tracksHtml << "<td><a href=\"\\gpx?track=" << track << "\" download=\"" << gpxFile.str() << "\" class=\"btn btn-info\"/>Download</a></td></tr>";
     }
 
-    // Replace placeholder with tracks HTML
-    size_t pos = content.find("{{tracks}}");
-    if (pos != string::npos) {
-        content.replace(pos, 9, tracksHtml.str());
-    }
+    ReplacePlaceholder(content, "{{trackName}}", tracksHtml.str());
 
     return content;
+}
+
+void Home::ReplacePlaceholder(string& content, const string& placeholder, const string& value)
+{
+    size_t pos = 0;
+    while ((pos = content.find(placeholder, pos)) != std::string::npos) {
+        content.replace(pos, placeholder.length(), value);
+        pos += value.length();
+    }
 }

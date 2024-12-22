@@ -118,78 +118,25 @@ void Run()
     {
         auto repo = NVL_App::Repository(IP_DB, "BlueROV");
         auto status = repo.GetLastStatus();
+        auto trackField = NVL_App::Repository::Field::CURRENT_TRACK;
+        
 
-        auto response = stringstream();
+        crow::json::wvalue jsonResponse;
+        jsonResponse["track"] = repo.GetField(trackField);
+        jsonResponse["created"] = status->GetTimeStamp();
+        jsonResponse["latitude"] = status->GetLatitude();
+        jsonResponse["longitude"] = status->GetLongitude();
+        jsonResponse["heading"] = status->GetHeading();
+        jsonResponse["depth"] = status->GetDepth();
+        jsonResponse["altitude"] = status->GetAltitude();
+        jsonResponse["temperature"] = status->GetTemperature();
+        jsonResponse["mode"] = status->GetMode();
+        jsonResponse["satelliteCount"] = status->GetSatelliteCount();
+        jsonResponse["poseCertainty"] = status->GetPosCertainity();
+        jsonResponse["validVelocity"] = status->GetVelocityValid();
+        jsonResponse["fom"] = status->GetFOM();
 
-        response << "<div class=\"p-4\">";
-
-        response << "<p class=\"alert alert-info\">Latest update</p>";
-
-        response << "<div class=\"container-fluid border\">";
-
-        response << "<div class=\"row\" style=\"background-color:white;\">";
-        response << "<div class=\"col-sm-4\"><b>Created</b></div>";
-        response << "<div class=\"col_sm_8\">" << status->GetTimeStamp() << "</div>";
-        response << "</div>";
-
-        response << "<div class=\"row\" style=\"background-color:lightgrey;\">";
-        response << "<div class=\"col-sm-4\"><b>Latitude</b></div>";
-        response << "<div class=\"col_sm_8\">" << fixed << setprecision(8) << status->GetLatitude() << "</div>";
-        response << "</div>";
-
-        response << "<div class=\"row\" style=\"background-color:white;\">";
-        response << "<div class=\"col-sm-4\"><b>Longitude</b></div>";
-        response << "<div class=\"col_sm_8\">" << fixed << setprecision(8) << status->GetLongitude() << "</div>";
-        response << "</div>";
-
-        response << "<div class=\"row\" style=\"background-color:lightgrey;\">";
-        response << "<div class=\"col-sm-4\"><b>Heading</b></div>";
-        response << "<div class=\"col_sm_8\">" << status->GetHeading() << " degrees</div>";
-        response << "</div>";
-
-        response << "<div class=\"row\" style=\"background-color:white;\">";
-        response << "<div class=\"col-sm-4\"><b>Depth</b></div>";
-        response << "<div class=\"col_sm_8\">" << status->GetDepth() << " meters</div>";
-        response << "</div>";
-
-        response << "<div class=\"row\" style=\"background-color:lightgrey;\">";
-        response << "<div class=\"col-sm-4\"><b>Altitude</b></div>";
-        response << "<div class=\"col_sm_8\">" << status->GetAltitude() << " meters</div>";
-        response << "</div>";
-
-        response << "<div class=\"row\" style=\"background-color:white;\">";
-        response << "<div class=\"col-sm-4\"><b>Temperature</b></div>";
-        response << "<div class=\"col_sm_8\">" << status->GetTemperature() << " degrees</div>";
-        response << "</div>";
-
-        response << "<div class=\"row\" style=\"background-color:lightgrey;\">";
-        response << "<div class=\"col-sm-4\"><b>Mode</b></div>";
-        response << "<div class=\"col_sm_8\">" << status->GetMode() << "</div>";
-        response << "</div>";
-
-        response << "<div class=\"row\" style=\"background-color:white;\">";
-        response << "<div class=\"col-sm-4\"><b>Satellite Count</b></div>";
-        response << "<div class=\"col_sm_8\">" << status->GetSatelliteCount() << "</div>";
-        response << "</div>";
-
-        response << "<div class=\"row\" style=\"background-color:lightgrey;\">";
-        response << "<div class=\"col-sm-4\"><b>Pose Certainty</b></div>";
-        response << "<div class=\"col_sm_8\">" << status->GetPosCertainity() << "</div>";
-        response << "</div>";
-
-        response << "<div class=\"row\" style=\"background-color:white;\">";
-        response << "<div class=\"col-sm-4\"><b>Valid Velocity</b></div>";
-        response << "<div class=\"col_sm_8\">" << (status->GetVelocityValid() ? "true" : "false") << "</div>";
-        response << "</div>";
-
-        response << "<div class=\"row\" style=\"background-color:lightgrey;\">";
-        response << "<div class=\"col-sm-4\"><b>FOM</b></div>";
-        response << "<div class=\"col_sm_8\">" << status->GetFOM() << "</div>";
-        response << "</div>";
-
-        response << "</div></div>";
-
-        return response.str();
+        return jsonResponse;
     });
 
     //set the port, set the app to run on multiple threads, and run the app
