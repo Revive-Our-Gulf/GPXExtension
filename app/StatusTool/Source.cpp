@@ -17,6 +17,7 @@ using namespace std;
 #include "Repository.h"
 #include "Settings.h"
 #include "QueryPage.h"
+#include "Home.h"
 
 //--------------------------------------------------
 // Function Prototypes
@@ -39,11 +40,13 @@ void Run()
     auto IP_DB = string(); reader["db"] >> IP_DB;
     reader.release();
 
-    // Status page
-    CROW_ROUTE(app, "/")([]()
+    // Home Page
+    CROW_ROUTE(app, "/")([&IP_DB](const crow::request& request)
     {
-        auto page = crow::mustache::load_text("status.html");
-        return page;
+        auto repo = NVL_App::Repository(IP_DB, "BlueROV");
+        auto page = NVL_App::Home();
+
+        return page.Render();
     });
 
     // Settings page
