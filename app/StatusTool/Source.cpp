@@ -1,7 +1,6 @@
+// filepath: /home/sam/repos/GPXExtension/app/StatusTool/Source.cpp
 //--------------------------------------------------
 // Startup code module
-//
-// @author: Wild Boar
 //
 // @date: 2024-07-26
 //--------------------------------------------------
@@ -12,12 +11,30 @@ using namespace std;
 #include <opencv2/opencv.hpp>
 
 #include <crow.h>
-
 #include "GPXMaker.h"
 #include "Repository.h"
 #include "Settings.h"
 #include "QueryPage.h"
 #include "Home.h"
+
+// Function to load the navbar HTML from a file
+std::string loadNavbarHtml(const std::string& filepath) {
+    std::ifstream file(filepath);
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    return buffer.str();
+}
+
+// Function to replace a placeholder in a string
+std::string replacePlaceholder(const std::string& content, const std::string& placeholder, const std::string& replacement) {
+    std::string result = content;
+    size_t pos = result.find(placeholder);
+    while (pos != std::string::npos) {
+        result.replace(pos, placeholder.length(), replacement);
+        pos = result.find(placeholder, pos + replacement.length());
+    }
+    return result;
+}
 
 //--------------------------------------------------
 // Function Prototypes
@@ -40,51 +57,43 @@ void Run()
     auto IP_DB = string(); reader["db"] >> IP_DB;
     reader.release();
 
+    // Load the navbar HTML
+    std::string navbarHtml = loadNavbarHtml("templates/navbar.html");
+
     // Home Page
-    CROW_ROUTE(app, "/")([&IP_DB](const crow::request& request)
+    CROW_ROUTE(app, "/")([&IP_DB, &navbarHtml](const crow::request& request)
     {
         auto repo = NVL_App::Repository(IP_DB, "BlueROV");
         auto parameters = unordered_map<string, string>();
 
         auto page = NVL_App::Home(&repo, parameters);
 
-        return page.Render();
+        std::string content = page.Render();
+        content = replacePlaceholder(content, "{{navbar}}", navbarHtml);
+
+        return crow::response(content);
     });
 
     // Settings page
-    CROW_ROUTE(app, "/settings")([&IP_DB](const crow::request& request)
+    CROW_ROUTE(app, "/settings")([&IP_DB, &navbarHtml](const crow::request& req)
     {
         auto repo = NVL_App::Repository(IP_DB, "BlueROV");
 
         auto parameters = unordered_map<string, string>();
-        if (request.url_params.get("submit") != nullptr) 
+        if (req.url_params.get("submit") != nullptr) 
         {
             parameters["submit"] = "submit";
-            parameters["status"] = request.url_params.get("status");
-            parameters["interval"] = request.url_params.get("interval");
-            parameters["track"] = request.url_params.get("track");
+            parameters["track"] = req.url_params.get("track");
+            parameters["status"] = req.url_params.get("status");
+            parameters["interval"] = req.url_params.get("interval");
         }
 
         auto page = NVL_App::Settings(&repo, parameters);
 
-        return page.Render();
-    });
+        std::string content = page.Render();
+        content = replacePlaceholder(content, "{{navbar}}", navbarHtml);
 
-    // Query page
-    CROW_ROUTE(app, "/query")([&IP_DB](const crow::request& request)
-    {
-        auto parameters = unordered_map<string, string>();
-        if (request.url_params.get("submit") != nullptr) 
-        {
-            parameters["submit"] = "submit";
-            //parameters["start"] = request.url_params.get("start");
-            //parameters["end"] = request.url_params.get("end");
-            parameters["track"] = request.url_params.get("track");
-        }
-
-        auto page = NVL_App::QueryPage(parameters);
-
-        return page.Render();
+        return crow::response(content);
     });
 
     // GPX data
@@ -92,10 +101,10 @@ void Run()
     {
         auto repo = NVL_App::Repository(IP_DB, "BlueROV");        
         auto statuses = vector<NVL_App::Status *>();
-	    //repo.GetStatuses(request.url_params.get("start"), request.url_params.get("end"), statuses);
+        //repo.GetStatuses(request.url_params.get("start"), request.url_params.get("end"), statuses);
         auto trackName = request.url_params.get("track");
         repo.GetStatuses(trackName, statuses);
-	    auto maker = NVL_App::GPXMaker(statuses);
+        auto maker = NVL_App::GPXMaker(statuses);
         return maker.RenderXML(trackName);
     });
 
@@ -113,7 +122,7 @@ void Run()
         return stylesheet;
     });
 
-   // Get a status update
+    // Get a status update
     CROW_ROUTE(app, "/current")([&IP_DB]()
     {
         auto repo = NVL_App::Repository(IP_DB, "BlueROV");
