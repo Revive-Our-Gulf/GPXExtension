@@ -95,14 +95,11 @@ void Run()
         {
             // Handle form submission
             auto formData = extractFormData(req.body);
-            parameters["submit"] = formData["submit"];
-            parameters["track"] = formData["track"];
-        }
-        else if (req.url_params.get("submit") != nullptr)
-        {
-            // Handle GET request with URL parameters
-            parameters["submit"] = "submit";
-            parameters["track"] = req.url_params.get("track");
+            for (const auto& pair : formData) {
+                cout << pair.first << ": " << pair.second << endl;
+            }
+            repo.SetField(NVL_App::Repository::Field::LOGGER_STATE, formData["status"]);
+            repo.SetField(NVL_App::Repository::Field::CURRENT_TRACK, formData["track"]);
         }
 
         auto page = NVL_App::Home(&repo, parameters);

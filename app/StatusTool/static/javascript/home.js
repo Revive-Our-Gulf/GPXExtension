@@ -1,35 +1,57 @@
 document.addEventListener("DOMContentLoaded", function() {
-    var submitButton = document.getElementById("submit");
-    updateButtonColor(submitButton);
+  var status = GetStatus(document);
+  UpdateSubmitButton(document, status);
 
-    document.getElementById("trackForm").addEventListener("submit", function(event) {
-      event.preventDefault();
-      var formData = new FormData(this);
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", "/", true);
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          // Handle successful response
-          console.log("Form submitted successfully");
-          // Update button value and color
-          submitButton.value = submitButton.value.toLowerCase() === "start" ? "Stop" : "Start";
-          updateButtonColor(submitButton);
-          location.reload();
-        } else {
-          // Handle error response
-          console.error("Failed to submit form");
-        }
-      };
-      xhr.send(formData);
-    });
+  document.getElementById("trackForm").addEventListener("submit", function(event) {
+    event.preventDefault();
 
-    function updateButtonColor(button) {
-      if (button.value.toLowerCase() === "start") {
-        button.classList.remove("btn-danger");
-        button.classList.add("btn-success");
-      } else if (button.value.toLowerCase() === "stop") {
-        button.classList.remove("btn-success");
-        button.classList.add("btn-danger");
-      }
+    // Check and flip state 
+    var status = GetStatus(document);
+    status = status ? false : true;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/", true);
+    xhr.onload = function() {
+      if (xhr.status != 200) return;
+    };
+
+    var formData = new FormData(this);
+
+    formData.append("status", status ? "STARTED" : "STOPPED");
+
+    var track = formData.get("track");
+    if (!track) {
+      alert("Track name cannot be empty!");
+      return;
     }
+
+    UpdateSubmitButton(document, status);
+
+    xhr.send(formData);
   });
+
+  function GetStatus(document) {
+    var submitButton = document.getElementById("submit");
+    return submitButton.innerText.toLowerCase().includes("start") ? false : true;
+  }
+  
+  function UpdateSubmitButton(document, status) {
+    var submitButton = document.getElementById("submit");
+    var submitIcon = document.getElementById("submitIcon");
+    var submitText = document.getElementById("submitText");
+
+    if (status) {
+      submitButton.classList.add("btn-danger");
+      submitButton.classList.remove("btn-success");
+      submitText.textContent = "Stop";
+      submitIcon.classList.add("fa-stop");
+      submitIcon.classList.add("fa-play");
+    } else {
+      submitButton.classList.add("btn-success");
+      submitButton.classList.remove("btn-danger");
+      submitText.textContent = "Start";
+      submitIcon.classList.add("fa-play");
+      submitIcon.classList.add("fa-stop");
+    }
+  }
+});

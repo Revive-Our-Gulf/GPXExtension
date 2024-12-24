@@ -5,12 +5,7 @@
 #include <sstream>
 using namespace NVL_App;
 
-Home::Home(Repository* repo, unordered_map<string, string>& parameters) : _repo(repo), _fields(parameters) {
-    if (_fields.find("submit") != _fields.end()) {
-        SubmitForm();
-        Render();
-    }
-}
+Home::Home(Repository* repo, unordered_map<string, string>& parameters) : _repo(repo), _fields(parameters) {}
 
 string Home::Render()
 {
@@ -46,16 +41,34 @@ void Home::RenderTracks(string& content){
             auto earliestEntryTime = _repo->GetEarliestEntryTime(track, "created_at");
             auto latestEntryTime = _repo->GetLatestEntryTime(track, "created_at");
 
+            // Remove decimal points from entry times
+            earliestEntryTime = earliestEntryTime.substr(0, earliestEntryTime.find('.'));
+            latestEntryTime = latestEntryTime.substr(0, latestEntryTime.find('.'));
+
             auto duration = CalculateDuration(earliestEntryTime, latestEntryTime);
+
+            // Convert duration to a more user-friendly format
+            std::istringstream durationStream(duration);
+            int hours, minutes, seconds;
+            char colon;
+            durationStream >> hours >> colon >> minutes >> colon >> seconds;
+            std::stringstream userFriendlyDuration;
+            if (hours > 0) {
+                userFriendlyDuration << hours << "h ";
+            }
+            if (minutes > 0 || hours > 0) {
+                userFriendlyDuration << minutes << "m ";
+            }
+            userFriendlyDuration << seconds << "s";
 
             tracksHtml << "<tr>";
             tracksHtml << "<td>" << track << "</td>";
             tracksHtml << "<td>" << entryDate << "</td>";
-            tracksHtml << "<td>" << earliestEntryTime << "</td>";
-            tracksHtml << "<td>" << latestEntryTime << "</td>";
-            tracksHtml << "<td>" << duration << "</td>";
-            tracksHtml << "<td><a href=\"\\gpx?track=" << track << "\" download=\"" << gpxFile.str() << "\" class=\"btn btn-info\">Download</a></td>";
-            tracksHtml << "<td><button class=\"btn btn-danger\" onclick=\"deleteTrack('" << track << "')\">Delete</button></td>";
+            tracksHtml << "<td class=\"d-none d-md-table-cell\">" << earliestEntryTime << "</td>";
+            tracksHtml << "<td class=\"d-none d-md-table-cell\">" << latestEntryTime << "</td>";
+            tracksHtml << "<td>" << userFriendlyDuration.str() << "</td>";
+            tracksHtml << "<td><button class=\"btn btn-secondary\" onclick=\"window.location.href='\\gpx?track=" << track << "'\" download=\"" << gpxFile.str() << "\"><i class=\"fa fa-download\"></button></td>";
+            tracksHtml << "<td><button class=\"btn btn-danger\" onclick=\"deleteTrack('" << track << "')\"><i class=\"fa fa-trash\"></i></button></td>";
             tracksHtml << "</tr>";
         }
     }
