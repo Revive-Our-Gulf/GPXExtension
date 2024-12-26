@@ -31,7 +31,7 @@
       <div class="col-lg-8">
         <div class="card border-0 custom-shadow mt-4" style="background-color: #f5f7fa;">
           <div class="card-body">
-            <h2>Track Name</h2>
+            <h2 id="currentTrackName">Current Track: {{trackName}}</h2>
             <form id="trackForm" method="post">
               <div class="input-group mb-3">
                 <div class="col-8">
@@ -39,8 +39,11 @@
                 </div>
                 <input type="hidden" name="submit" value="true">
                 <div class="col-4">
-                  <button type="submit" id="submit" name="submitButton" class="btn btn-primary">
-                    <i class="fa fa-play" id="submitIcon"></i> <span id="submitText">{{status}}</span>
+                  <button type="button" id="saveTrackButton" class="btn btn-primary">
+                    <i class="fa fa-save"></i> Save Track Name
+                  </button>
+                  <button type="button" id="startStopButton" class="btn btn-primary">
+                    <i class="fa fa-circle" id="submitIcon"></i> <span id="submitText">{{status}}</span>
                   </button>
                 </div>
               </div>

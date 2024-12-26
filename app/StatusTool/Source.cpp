@@ -205,6 +205,22 @@ void Run()
         return crow::response(200);
     });
 
+    CROW_ROUTE(app, "/saveTrack").methods("POST"_method)([&repo](const crow::request& req) {
+        auto formData = extractFormData(req.body);
+        if (formData.find("track") != formData.end()) {
+            repo.SetField(NVL_App::Repository::Field::CURRENT_TRACK, formData["track"]);
+        }
+        return crow::response(200);
+    });
+
+    CROW_ROUTE(app, "/startStop").methods("POST"_method)([&repo](const crow::request& req) {
+        auto formData = extractFormData(req.body);
+        auto currentStatus = repo.GetField(NVL_App::Repository::Field::LOGGER_STATE);
+        auto newStatus = currentStatus == "STOPPED" ? "STARTED" : "STOPPED";
+        repo.SetField(NVL_App::Repository::Field::LOGGER_STATE, newStatus);
+        return crow::response(200);
+    });
+
     //set the port, set the app to run on multiple threads, and run the app
     app.port(5428).multithreaded().run();
 }

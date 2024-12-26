@@ -5,43 +5,59 @@ document.addEventListener("DOMContentLoaded", function() {
   setInterval(checkAndUpdateTracks, 1000);
   updateTracks();
 
-  document.getElementById("trackForm").addEventListener("submit", function(event) {
+  document.getElementById("saveTrackButton").addEventListener("click", function(event) {
     event.preventDefault();
 
-    // Check and flip state 
-    var status = GetStatus(document);
-    status = status ? false : true;
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/", true);
-    xhr.onload = function() {
-      if (xhr.status != 200) return;
-    };
-
-    var formData = new FormData(this);
-
-    formData.append("status", status ? "STARTED" : "STOPPED");
-
-    var track = formData.get("track");
+    var track = document.getElementById("track").value;
     if (!track) {
       alert("Track name cannot be empty!");
       return;
     }
 
-    UpdateSubmitButton(document, status);
-    
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/saveTrack", true);
+    xhr.onload = function() {
+      if (xhr.status != 200) {
+        alert("Failed to save track name.");
+      } else {
+        document.getElementById("currentTrackName").textContent = "Current Track: " + track;
+      }
+    };
+
+    var formData = new FormData();
+    formData.append("track", track);
+    xhr.send(formData);
+  });
+
+  document.getElementById("startStopButton").addEventListener("click", function(event) {
+    event.preventDefault();
+
+    var status = GetStatus(document);
+    status = status ? false : true;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/startStop", true);
+    xhr.onload = function() {
+      if (xhr.status != 200) {
+        alert("Failed to start/stop recording.");
+        return;
+      }
+      UpdateSubmitButton(document, status);
+    };
+
+    var formData = new FormData();
+    formData.append("status", status ? "STARTED" : "STOPPED");
     xhr.send(formData);
     updateTracks();
-
   });
 
   function GetStatus(document) {
-    var submitButton = document.getElementById("submit");
+    var submitButton = document.getElementById("startStopButton");
     return submitButton.innerText.toLowerCase().includes("start") ? false : true;
   }
-  
+
   function UpdateSubmitButton(document, status) {
-    var submitButton = document.getElementById("submit");
+    var submitButton = document.getElementById("startStopButton");
     var submitIcon = document.getElementById("submitIcon");
     var submitText = document.getElementById("submitText");
 
