@@ -1,0 +1,22 @@
+/* body {
+      background: linear-gradient(to right, #62cff4, #2c67f2);
+    } */
+.btn-transparent {
+    background-color: transparent;
+    border: none;
+}
+
+.btn-red{
+    color: rgb(204, 0, 0);
+}
+.btn-grey{
+    color: rgb(36, 36, 36);
+}
+.btn-margin {
+    margin-right: 5px;
+}
+
+
+.custom-shadow {
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+}

@@ -14,19 +14,25 @@
   <script src="/static/javascript/bootstrap/jquery-slim.min.js"></script>
   <script src="/static/javascript/bootstrap/popper.min.js"></script>
   <script src="/static/javascript/bootstrap/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" href="/static/css/styles.css">
   
 </head>
 <body onload="load()">
   {{navbar}}
   <div class="p-4">
-    <form action="\settings" method="get">
-      <div class="form-group">
-        <label for="interval" class="form-label">Polling Interval (ms):</label>
-        <input type="text" class="form-control" name="interval" id="interval" value="{{rate}}" />
+    <div class="card border-0 custom-shadow mt-4" style="background-color: #f5f7fa;">
+      <div class="card-body">
+        <form action="\settings" method="get">
+          <div class="form-group">
+            <label for="interval" class="form-label">Polling Interval (ms):</label>
+            <input type="text" class="form-control" name="interval" id="interval" value="{{rate}}" />
+          </div>
+          <br>
+          <input type="submit" id="submit" name="submit" value="Submit" class="btn btn-primary">
+        </form>
       </div>
-      <br>
-      <input type="submit" id="submit" name="submit" value="Submit" class="btn btn-primary">
-    </form>
+    </div>
   </div>
 </body>
 </html>
