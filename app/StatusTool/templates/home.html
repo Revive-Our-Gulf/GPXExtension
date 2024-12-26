@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GPX Logger</title>
+  <title>GPX Recorder</title>
   <link rel="icon" href="/static/images/logo/ROG-Logo-transparent.png" type="image/png" sizes="180x180">
 
   <link rel="stylesheet" href="/static/css/bootstrap/bootstrap.css">
@@ -98,9 +98,7 @@
           <div class="card-body">
             <h2>Free Disk Space</h2>
             <p>{{freeDiskSpace}}</p>
-            <div class="progress bg-dark">
-              <div class="progress-bar" role="progressbar" aria-valuenow="{{usedPercentage}}" aria-valuemin="0" aria-valuemax="100" style="width: {{usedPercentage}}%;">{{usedPercentage}}% (Used)</div>
-            </div>
+            <div id="progressBarContainer">{{progressBar}}</div>
           </div>
         </div>
         <div class="card border-0 custom-shadow mt-4" style="background-color: #f5f7fa;">

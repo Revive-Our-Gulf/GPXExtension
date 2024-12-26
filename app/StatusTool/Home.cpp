@@ -1,4 +1,3 @@
-// filepath: /home/sam/repos/GPXExtension/app/StatusTool/Home.cpp
 #include "Home.h"
 #include <crow.h>
 #include <fstream>
@@ -48,14 +47,21 @@ string Home::Render()
     ReplacePlaceholder(content, "{{tracks}}", tracksHtml);
 
     RenderSettings(content);
-
-    auto [freeDiskSpace, usedPercentage] = GetFreeDiskSpace();
-    ReplacePlaceholder(content, "{{freeDiskSpace}}", freeDiskSpace);
-    std::stringstream ss;
-    ss << std::fixed << std::setprecision(1) << usedPercentage;
-    ReplacePlaceholder(content, "{{usedPercentage}}", ss.str());
+    RenderDiskSpace(content);
+   
 
     return content;
+}
+
+void Home::RenderDiskSpace(string& content){
+    auto [freeDiskSpace, usedPercentage] = GetFreeDiskSpace();
+    ReplacePlaceholder(content, "{{freeDiskSpace}}", freeDiskSpace);
+
+    std::stringstream progressBar;
+    progressBar << "<div class=\"progress bg-dark\">";
+    progressBar << "<div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"" << usedPercentage << "\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: " << usedPercentage << "%;\">";
+    progressBar << usedPercentage << "% (Used)</div></div>";
+    ReplacePlaceholder(content, "{{progressBar}}", progressBar.str());
 }
 
 void Home::RenderTracks(std::string& tracksHtml) {
@@ -118,7 +124,7 @@ void Home::RenderTracks(std::string& tracksHtml) {
             tracksStream << "<td>" << userFriendlyDuration.str() << "</td>";
             tracksStream << "<td>" << friendlyTrackSize << "</td>";
             tracksStream << "<td><button class=\"btn btn-secondary btn-sm btn-transparent btn-grey\" onclick=\"window.open('\\gpx?track=" << track << "', '_blank')\"><i class=\"fa fa-eye\"></i></button></td>";
-            tracksStream << "<td><button class=\"btn btn-secondary btn-sm btn-transparent btn-grey\" onclick=\"window.location.href='\\gpx?track=" << track << "'\" download=\"" << gpxFile.str() << "\"><i class=\"fa fa-download\"></i></button></td>";
+            tracksStream << "<td><a class=\"btn btn-secondary btn-sm btn-transparent btn-grey\" href=\"/gpx?track=" << track << "\" download=\"" << gpxFile.str() << "\"><i class=\"fa fa-download\"></i></a></td>";
             tracksStream << "<td><button class=\"btn btn-danger btn-sm btn-transparent btn-red\" onclick=\"deleteTrack('" << track << "')\"><i class=\"fa fa-trash\"></i></button></td>";
             tracksStream << "</tr>";
         }

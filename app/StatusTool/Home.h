@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <iostream>
 #include <sstream>
+
 using namespace std;
 
 #include "Repository.h"
@@ -26,7 +27,7 @@ namespace NVL_App
     
     private:
         void RenderSettings(string& content);
-        
+        void RenderDiskSpace(string& content);
         pair<std::string, double> GetFreeDiskSpace();
         void SubmitForm();
         void ReplacePlaceholder(string& content, const string& placeholder, const string& value);
