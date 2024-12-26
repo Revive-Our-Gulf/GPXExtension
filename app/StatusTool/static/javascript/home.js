@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function() {
     xhr.open("GET", "/tracks", true);
     xhr.onload = function() {
       if (xhr.status === 200) {
-        document.querySelector("tbody").innerHTML = xhr.responseText;
+        document.querySelector("#tracksTable tbody").innerHTML = xhr.responseText;
       }
     };
     xhr.send();

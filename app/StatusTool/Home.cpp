@@ -3,9 +3,31 @@
 #include <crow.h>
 #include <fstream>
 #include <sstream>
+#include <sys/statvfs.h>
 using namespace NVL_App;
 
 Home::Home(Repository* repo, unordered_map<string, string>& parameters) : _repo(repo), _fields(parameters) {}
+
+
+
+std::string Home::GetFreeDiskSpace() {
+    struct statvfs stat;
+
+    if (statvfs("/", &stat) != 0) {
+        // Error handling
+        return "Error";
+    }
+
+    // Calculate free space and total space in GB
+    unsigned long long freeSpace = stat.f_bsize * stat.f_bfree;
+    unsigned long long totalSpace = stat.f_bsize * stat.f_blocks;
+    double freeSpaceGB = freeSpace / (1024.0 * 1024.0 * 1024.0);
+    double totalSpaceGB = totalSpace / (1024.0 * 1024.0 * 1024.0);
+
+    std::stringstream ss;
+    ss << std::fixed << std::setprecision(2) << freeSpaceGB << " GB / " << totalSpaceGB << " GB";
+    return ss.str();
+}
 
 string Home::Render()
 {
@@ -24,6 +46,9 @@ string Home::Render()
     ReplacePlaceholder(content, "{{tracks}}", tracksHtml);
 
     RenderSettings(content);
+
+    std::string freeDiskSpace = GetFreeDiskSpace();
+    ReplacePlaceholder(content, "{{freeDiskSpace}}", freeDiskSpace);
 
     return content;
 }
@@ -70,9 +95,9 @@ void Home::RenderTracks(std::string& tracksHtml) {
             tracksStream << "<td class=\"d-none d-md-table-cell\">" << earliestEntryTime << "</td>";
             tracksStream << "<td class=\"d-none d-md-table-cell\">" << latestEntryTime << "</td>";
             tracksStream << "<td>" << userFriendlyDuration.str() << "</td>";
-            tracksStream << "<td><button class=\"btn btn-primary\" onclick=\"window.open('\\gpx?track=" << track << "', '_blank')\"><i class=\"fa fa-eye\"></i></button></td>";
-            tracksStream << "<td><button class=\"btn btn-secondary\" onclick=\"window.location.href='\\gpx?track=" << track << "'\" download=\"" << gpxFile.str() << "\"><i class=\"fa fa-download\"></i></button></td>";
-            tracksStream << "<td><button class=\"btn btn-danger\" onclick=\"deleteTrack('" << track << "')\"><i class=\"fa fa-trash\"></i></button></td>";
+            tracksStream << "<td><button class=\"btn btn-secondary btn-sm btn-transparent btn-grey\" onclick=\"window.open('\\gpx?track=" << track << "', '_blank')\"><i class=\"fa fa-eye\"></i></button></td>";
+            tracksStream << "<td><button class=\"btn btn-secondary btn-sm btn-transparent btn-grey\" onclick=\"window.location.href='\\gpx?track=" << track << "'\" download=\"" << gpxFile.str() << "\"><i class=\"fa fa-download\"></i></button></td>";
+            tracksStream << "<td><button class=\"btn btn-danger btn-sm btn-transparent btn-red\" onclick=\"deleteTrack('" << track << "')\"><i class=\"fa fa-trash\"></i></button></td>";
             tracksStream << "</tr>";
         }
     }
