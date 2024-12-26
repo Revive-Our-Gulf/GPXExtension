@@ -11,17 +11,15 @@
 </head>
 <body>
   {{navbar}}
-  <div class="pl-5">
-    <div class="p-4">
-      <form action="\settings" method="get">
-        <div class="form-group">
-          <label for="interval" class="form-label">Polling Interval (ms):</label>
-          <input type="text" class="form-control" name="interval" id="interval" value="{{rate}}" />
-        </div>
-        <br>
-        <input type="submit" id="submit" name="submit" value="Submit" class="btn btn-primary">
-      </form>
-    </div>
+  <div class="p-4">
+    <form action="\settings" method="get">
+      <div class="form-group">
+        <label for="interval" class="form-label">Polling Interval (ms):</label>
+        <input type="text" class="form-control" name="interval" id="interval" value="{{rate}}" />
+      </div>
+      <br>
+      <input type="submit" id="submit" name="submit" value="Submit" class="btn btn-primary">
+    </form>
   </div>
 </body>
 </html>

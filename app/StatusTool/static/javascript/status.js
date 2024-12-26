@@ -17,17 +17,17 @@ function updateStatus(responseText) {
     var status = JSON.parse(responseText);
 
     document.getElementById("created").innerText = status.created;
-    document.getElementById("latitude").innerText = status.latitude + "°";
-    document.getElementById("longitude").innerText = status.longitude + "°";
-    document.getElementById("heading").innerText = status.heading + "°";
-    document.getElementById("depth").innerText = status.depth + " m";
-    document.getElementById("altitude").innerText = status.altitude + " m";
-    document.getElementById("temperature").innerText = status.temperature + "°C";
+    document.getElementById("latitude").innerText = parseFloat(status.latitude).toFixed(7) + " °";
+    document.getElementById("longitude").innerText = parseFloat(status.longitude).toFixed(7) + " °";
+    document.getElementById("heading").innerText = parseFloat(status.heading).toFixed(2) + " °";
+    document.getElementById("depth").innerText = parseFloat(status.depth).toFixed(2) + " m";
+    document.getElementById("altitude").innerText = parseFloat(status.altitude).toFixed(2) + " m";
+    document.getElementById("temperature").innerText = parseFloat(status.temperature).toFixed(1) + " °C";
     document.getElementById("mode").innerText = status.mode;
     document.getElementById("satelliteCount").innerText = status.satelliteCount;
-    document.getElementById("poseCertainty").innerText = status.poseCertainty;
+    document.getElementById("poseCertainty").innerText = parseFloat(status.poseCertainty).toFixed(3);
     document.getElementById("validVelocity").innerText = status.validVelocity;
-    document.getElementById("fom").innerText = status.fom;
+    document.getElementById("fom").innerText = parseFloat(status.fom).toFixed(3);
 
     setTimeout(requestUpdate, 1000); 
 }
