@@ -10,12 +10,12 @@ Home::Home(Repository* repo, unordered_map<string, string>& parameters) : _repo(
 
 
 
-std::string Home::GetFreeDiskSpace() {
+std::pair<std::string, double> Home::GetFreeDiskSpace() {
     struct statvfs stat;
 
     if (statvfs("/", &stat) != 0) {
         // Error handling
-        return "Error";
+        return {"Error", 0.0};
     }
 
     // Calculate free space and total space in GB
@@ -25,8 +25,10 @@ std::string Home::GetFreeDiskSpace() {
     double totalSpaceGB = totalSpace / (1024.0 * 1024.0 * 1024.0);
 
     std::stringstream ss;
-    ss << std::fixed << std::setprecision(2) << freeSpaceGB << " GB / " << totalSpaceGB << " GB";
-    return ss.str();
+    ss << std::fixed << std::setprecision(2) << freeSpaceGB << " GB free of " << totalSpaceGB << " GB";
+    double usedPercentage = 100 - ((freeSpaceGB / totalSpaceGB) * 100.0);
+    usedPercentage = std::round(usedPercentage * 10) / 10.0;
+    return {ss.str(), usedPercentage};
 }
 
 string Home::Render()
@@ -47,8 +49,11 @@ string Home::Render()
 
     RenderSettings(content);
 
-    std::string freeDiskSpace = GetFreeDiskSpace();
+    auto [freeDiskSpace, usedPercentage] = GetFreeDiskSpace();
     ReplacePlaceholder(content, "{{freeDiskSpace}}", freeDiskSpace);
+    std::stringstream ss;
+    ss << std::fixed << std::setprecision(1) << usedPercentage;
+    ReplacePlaceholder(content, "{{usedPercentage}}", ss.str());
 
     return content;
 }
@@ -90,7 +95,7 @@ void Home::RenderTracks(std::string& tracksHtml) {
             userFriendlyDuration << seconds << "s";
 
             tracksStream << "<tr>";
-            tracksStream << "<td>" << track << "</td>";
+            tracksStream << "<td><button class=\"btn btn-transparent btn-secondary text-dark\" id=\"trackName\" onclick=\"copyToClipboard('trackName')\">" << track << "</button></td>";
             tracksStream << "<td>" << entryDate << "</td>";
             tracksStream << "<td class=\"d-none d-md-table-cell\">" << earliestEntryTime << "</td>";
             tracksStream << "<td class=\"d-none d-md-table-cell\">" << latestEntryTime << "</td>";

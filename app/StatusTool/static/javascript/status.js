@@ -31,13 +31,4 @@ function updateStatus(responseText) {
 
     setTimeout(requestUpdate, 1000); 
 }
-
-function copyToClipboard(elementId) {
-    var copyText = document.getElementById(elementId).innerText;
-    var textArea = document.createElement("textarea");
-    textArea.value = copyText;
-    document.body.appendChild(textArea);
-    textArea.select();
-    document.execCommand("copy");
-    document.body.removeChild(textArea);
-}
+let snackbarTimeout;
