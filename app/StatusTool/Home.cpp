@@ -34,7 +34,7 @@ void Home::RenderTracks(std::string& tracksHtml) {
     std::stringstream tracksStream;
 
     if (tracks.empty()) {
-        tracksStream << "<tr><td colspan=\"6\">No tracks available</td></tr>";
+        tracksStream << "<tr><td colspan=\"7\">No tracks available</td></tr>";
     } else {
         for (const auto& track : tracks) {
             auto gpxFile = std::stringstream(); gpxFile << track << ".gpx";
@@ -70,7 +70,8 @@ void Home::RenderTracks(std::string& tracksHtml) {
             tracksStream << "<td class=\"d-none d-md-table-cell\">" << earliestEntryTime << "</td>";
             tracksStream << "<td class=\"d-none d-md-table-cell\">" << latestEntryTime << "</td>";
             tracksStream << "<td>" << userFriendlyDuration.str() << "</td>";
-            tracksStream << "<td><button class=\"btn btn-secondary\" onclick=\"window.location.href='\\gpx?track=" << track << "'\" download=\"" << gpxFile.str() << "\"><i class=\"fa fa-download\"></button></td>";
+            tracksStream << "<td><button class=\"btn btn-primary\" onclick=\"window.open('\\gpx?track=" << track << "', '_blank')\"><i class=\"fa fa-eye\"></i></button></td>";
+            tracksStream << "<td><button class=\"btn btn-secondary\" onclick=\"window.location.href='\\gpx?track=" << track << "'\" download=\"" << gpxFile.str() << "\"><i class=\"fa fa-download\"></i></button></td>";
             tracksStream << "<td><button class=\"btn btn-danger\" onclick=\"deleteTrack('" << track << "')\"><i class=\"fa fa-trash\"></i></button></td>";
             tracksStream << "</tr>";
         }
