@@ -83,7 +83,9 @@ void Run()
     // Load the navbar HTML
     std::string navbarHtml = loadNavbarHtml("templates/navbar.html");
 
-    
+    auto repo = NVL_App::Repository(IP_DB, "BlueROV");
+    auto parameters = unordered_map<string, string>();
+    auto home = NVL_App::Home(&repo, parameters);
 
     // Home Page
     CROW_ROUTE(app, "/").methods(crow::HTTPMethod::GET, crow::HTTPMethod::POST)([&IP_DB, &navbarHtml](const crow::request& req)
@@ -141,6 +143,13 @@ void Run()
         repo.GetStatuses(trackName, statuses);
         auto maker = NVL_App::GPXMaker(statuses);
         return maker.RenderXML(trackName);
+    });
+
+    CROW_ROUTE(app, "/tracks")([&home](const crow::request& req) 
+    {
+        std::string tracksHtml;
+        home.RenderTracks(tracksHtml);
+        return crow::response(tracksHtml);
     });
 
     // CSS

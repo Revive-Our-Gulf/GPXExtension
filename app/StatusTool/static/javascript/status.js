@@ -1,12 +1,13 @@
 function load() { 
-    requestUpdate()
-    setTimeout(requestUpdate, 1000); 
+    requestUpdate();
 }
 
 function requestUpdate() { 
     var request = new XMLHttpRequest(); 
     request.onreadystatechange = function() { 
-    if (request.readyState == 4 && request.status == 200) updateStatus(request.responseText); 
+        if (request.readyState == 4 && request.status == 200) {
+            updateStatus(request.responseText);
+        }
     }; 
     request.open("GET", "current", true); 
     request.send(null); 

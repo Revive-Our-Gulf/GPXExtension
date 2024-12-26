@@ -21,10 +21,12 @@ namespace NVL_App
 		inline unordered_map<string, string>& GetFields() { return _fields; }
 
         string Render();
+
+        void RenderTracks(string& content);
     
     private:
         void RenderSettings(string& content);
-        void RenderTracks(string& content);
+        
         void SubmitForm();
         void ReplacePlaceholder(string& content, const string& placeholder, const string& value);
         string CalculateDuration(const std::string& earliestEntryTime, const std::string& latestEntryTime);

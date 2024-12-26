@@ -11,7 +11,7 @@ string Home::Render()
 {
     std::ifstream file("templates/home.html");
     if (!file.is_open()) {
-        std::cerr << "Error: Could not open settings.html" << std::endl;
+        std::cerr << "Error: Could not open home.html" << std::endl;
         return "";
     }
 
@@ -19,22 +19,25 @@ string Home::Render()
     buffer << file.rdbuf();
     string content = buffer.str();
 
-    RenderTracks(content);
+    std::string tracksHtml;
+    RenderTracks(tracksHtml);
+    ReplacePlaceholder(content, "{{tracks}}", tracksHtml);
+
     RenderSettings(content);
 
     return content;
 }
 
-void Home::RenderTracks(string& content){
+void Home::RenderTracks(std::string& tracksHtml) {
     // Fetch tracks from the database
     auto tracks = _repo->GetTracks();
-    std::stringstream tracksHtml;
+    std::stringstream tracksStream;
 
     if (tracks.empty()) {
-        tracksHtml << "<tr><td colspan=\"6\">No tracks available</td></tr>";
+        tracksStream << "<tr><td colspan=\"6\">No tracks available</td></tr>";
     } else {
         for (const auto& track : tracks) {
-            auto gpxFile = stringstream(); gpxFile << track << ".gpx";
+            auto gpxFile = std::stringstream(); gpxFile << track << ".gpx";
 
             // Fetch earliest and latest entry dates and times
             auto entryDate = _repo->GetEarliestEntryDate(track, "created_at");
@@ -61,19 +64,19 @@ void Home::RenderTracks(string& content){
             }
             userFriendlyDuration << seconds << "s";
 
-            tracksHtml << "<tr>";
-            tracksHtml << "<td>" << track << "</td>";
-            tracksHtml << "<td>" << entryDate << "</td>";
-            tracksHtml << "<td class=\"d-none d-md-table-cell\">" << earliestEntryTime << "</td>";
-            tracksHtml << "<td class=\"d-none d-md-table-cell\">" << latestEntryTime << "</td>";
-            tracksHtml << "<td>" << userFriendlyDuration.str() << "</td>";
-            tracksHtml << "<td><button class=\"btn btn-secondary\" onclick=\"window.location.href='\\gpx?track=" << track << "'\" download=\"" << gpxFile.str() << "\"><i class=\"fa fa-download\"></button></td>";
-            tracksHtml << "<td><button class=\"btn btn-danger\" onclick=\"deleteTrack('" << track << "')\"><i class=\"fa fa-trash\"></i></button></td>";
-            tracksHtml << "</tr>";
+            tracksStream << "<tr>";
+            tracksStream << "<td>" << track << "</td>";
+            tracksStream << "<td>" << entryDate << "</td>";
+            tracksStream << "<td class=\"d-none d-md-table-cell\">" << earliestEntryTime << "</td>";
+            tracksStream << "<td class=\"d-none d-md-table-cell\">" << latestEntryTime << "</td>";
+            tracksStream << "<td>" << userFriendlyDuration.str() << "</td>";
+            tracksStream << "<td><button class=\"btn btn-secondary\" onclick=\"window.location.href='\\gpx?track=" << track << "'\" download=\"" << gpxFile.str() << "\"><i class=\"fa fa-download\"></button></td>";
+            tracksStream << "<td><button class=\"btn btn-danger\" onclick=\"deleteTrack('" << track << "')\"><i class=\"fa fa-trash\"></i></button></td>";
+            tracksStream << "</tr>";
         }
     }
     
-    ReplacePlaceholder(content, "{{tracks}}", tracksHtml.str());
+    tracksHtml = tracksStream.str();
 }
 
 void Home::RenderSettings(string& content)
