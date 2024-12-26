@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return;
       }
       UpdateSubmitButton(document, status);
+      ToggleRecordingIndicator(status);
     };
 
     var formData = new FormData();
@@ -53,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function GetStatus(document) {
     var submitButton = document.getElementById("startStopButton");
-    return submitButton.innerText.toLowerCase().includes("start") ? false : true;
+    return submitButton.innerText.toLowerCase().includes("record") ? false : true;
   }
 
   function UpdateSubmitButton(document, status) {
@@ -70,9 +71,18 @@ document.addEventListener("DOMContentLoaded", function() {
     } else {
       submitButton.classList.add("btn-success");
       submitButton.classList.remove("btn-danger");
-      submitText.textContent = "Start";
+      submitText.textContent = "Record";
       submitIcon.classList.add("fa-play");
       submitIcon.classList.remove("fa-stop");
+    }
+  }
+
+  function ToggleRecordingIndicator(status) {
+    var recordingIndicator = document.getElementById("recordingIndicator");
+    if (status) {
+      recordingIndicator.style.display = "inline-block";
+    } else {
+      recordingIndicator.style.display = "none";
     }
   }
 

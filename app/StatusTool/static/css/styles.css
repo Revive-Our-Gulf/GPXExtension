@@ -20,3 +20,24 @@
 .custom-shadow {
     box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
 }
+
+.recording-indicator {
+    display: none;
+    width: 1.5em; /* Relative unit based on the font size */
+    height: 1.5em; /* Relative unit based on the font size */
+    border-radius: 50%;
+    background-color: rgb(204, 0, 0);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    animation: blink 1s infinite;
+    top: 20px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+  }
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}

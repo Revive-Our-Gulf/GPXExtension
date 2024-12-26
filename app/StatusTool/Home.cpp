@@ -141,7 +141,7 @@ void Home::RenderSettings(string& content)
 
     // Replace placeholders in the content
     ReplacePlaceholder(content, "{{trackName}}", trackName);
-    ReplacePlaceholder(content, "{{status}}", status == "STOPPED" ? "Start" : "Stop");
+    ReplacePlaceholder(content, "{{status}}", status == "STOPPED" ? "Record" : "Stop");
 }
 
 void Home::SubmitForm()
