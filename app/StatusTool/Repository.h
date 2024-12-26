@@ -45,6 +45,8 @@ namespace NVL_App
         string GetLatestEntryDate(const string& trackName, const string& field);
         string GetLatestEntryTime(const string& trackName, const string& field);
 
+		size_t GetTrackDataSize(const string& trackName);
+
 		void DeleteTrack(const string& trackName);
 
 		inline sql::Connection * GetConnection() { return _connection; }

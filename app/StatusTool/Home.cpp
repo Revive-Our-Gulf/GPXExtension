@@ -94,12 +94,29 @@ void Home::RenderTracks(std::string& tracksHtml) {
             }
             userFriendlyDuration << seconds << "s";
 
+            auto trackSize = _repo->GetTrackDataSize(track);
+
+            std::string friendlyTrackSize;
+            std::stringstream sizeStream;
+            sizeStream << std::fixed << std::setprecision(1);
+            if (trackSize >= 1024 * 1024 * 1024) {
+                sizeStream << (trackSize / (1024.0 * 1024.0 * 1024.0)) << " GB";
+            } else if (trackSize >= 1024 * 1024) {
+                sizeStream << (trackSize / (1024.0 * 1024.0)) << " MB";
+            } else if (trackSize >= 1024) {
+                sizeStream << (trackSize / 1024.0) << " KB";
+            } else {
+                sizeStream << trackSize << " B";
+            }
+            friendlyTrackSize = sizeStream.str();
+
             tracksStream << "<tr>";
             tracksStream << "<td><button class=\"btn btn-transparent btn-secondary text-dark\" id=\"trackName\" onclick=\"copyToClipboard('trackName')\">" << track << "</button></td>";
             tracksStream << "<td>" << entryDate << "</td>";
             tracksStream << "<td class=\"d-none d-md-table-cell\">" << earliestEntryTime << "</td>";
             tracksStream << "<td class=\"d-none d-md-table-cell\">" << latestEntryTime << "</td>";
             tracksStream << "<td>" << userFriendlyDuration.str() << "</td>";
+            tracksStream << "<td>" << friendlyTrackSize << "</td>";
             tracksStream << "<td><button class=\"btn btn-secondary btn-sm btn-transparent btn-grey\" onclick=\"window.open('\\gpx?track=" << track << "', '_blank')\"><i class=\"fa fa-eye\"></i></button></td>";
             tracksStream << "<td><button class=\"btn btn-secondary btn-sm btn-transparent btn-grey\" onclick=\"window.location.href='\\gpx?track=" << track << "'\" download=\"" << gpxFile.str() << "\"><i class=\"fa fa-download\"></i></button></td>";
             tracksStream << "<td><button class=\"btn btn-danger btn-sm btn-transparent btn-red\" onclick=\"deleteTrack('" << track << "')\"><i class=\"fa fa-trash\"></i></button></td>";
