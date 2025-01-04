@@ -138,7 +138,6 @@ void Run()
     {
         auto repo = NVL_App::Repository(IP_DB, "BlueROV");        
         auto statuses = vector<NVL_App::Status *>();
-        //repo.GetStatuses(request.url_params.get("start"), request.url_params.get("end"), statuses);
         auto trackName = request.url_params.get("track");
         repo.GetStatuses(trackName, statuses);
         auto maker = NVL_App::GPXMaker(statuses);
@@ -185,9 +184,9 @@ void Run()
             jsonResponse["temperature"] = status->GetTemperature();
             jsonResponse["mode"] = status->GetMode();
             jsonResponse["satelliteCount"] = status->GetSatelliteCount();
-            jsonResponse["poseCertainty"] = status->GetPosCertainity();
+            jsonResponse["hdop"] = status->GetHdop();
+            jsonResponse["haccuracy"] = status->GetHaccuracy();
             jsonResponse["validVelocity"] = status->GetVelocityValid();
-            jsonResponse["fom"] = status->GetFOM();
         } else {
             jsonResponse["error"] = "No status available";
         }

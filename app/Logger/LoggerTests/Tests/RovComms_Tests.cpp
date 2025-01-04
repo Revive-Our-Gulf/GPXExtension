@@ -39,7 +39,8 @@ TEST(RovComms_Test, read_test)
 	ASSERT_GE(status->GetTemperature(), 10);
 	ASSERT_EQ(status->GetMode(), "DEPTH HOLD");
 	ASSERT_GE(status->GetSatelliteCount(), 2);
-	ASSERT_GE(status->GetPosCertainity(), 0.6);
+	ASSERT_GE(status->GetHdop(), 0.6);
+	ASSERT_GE(status->GetHaccuracy(), 0.6);
 	ASSERT_TRUE(status->GetVelocityValid());
-	ASSERT_GE(status->GetFOM(), 0.6);
+	
 }

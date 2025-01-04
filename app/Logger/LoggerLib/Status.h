@@ -25,16 +25,16 @@ namespace NVL_App
 		double _temperature;
 		string _mode;
 		int _satelliteCount;
-		double _posCertainity;
+		double _hdop;
+		double _haccuracy;
 		bool _velocityValid;
-		double _FOM;
 		string _trackName;
 	public:
-		Status(double latitude, double longitude, double heading, double depth, double altitude, double temperature, const string& mode, int satelliteCount, double posCertainity, bool velocityValid, double FOM, const string& trackName) :
-			_timeStamp(string()), _latitude(latitude), _longitude(longitude), _heading(heading), _depth(depth), _altitude(altitude), _temperature(temperature), _mode(mode), _satelliteCount(satelliteCount), _posCertainity(posCertainity), _velocityValid(velocityValid), _FOM(FOM), _trackName(trackName) {}
+		Status(double latitude, double longitude, double heading, double depth, double altitude, double temperature, const string& mode, int satelliteCount, double hdop, double haccuracy, bool velocityValid, const string& trackName) :
+			_timeStamp(string()), _latitude(latitude), _longitude(longitude), _heading(heading), _depth(depth), _altitude(altitude), _temperature(temperature), _mode(mode), _satelliteCount(satelliteCount), _hdop(hdop), _haccuracy(haccuracy), _velocityValid(velocityValid), _trackName(trackName) {}
 
-		Status(const string& timeStamp, double latitude, double longitude, double heading, double depth, double altitude, double temperature, const string& mode, int satelliteCount, double posCertainity, bool velocityValid, double FOM, const string& trackName) :
-			_timeStamp(timeStamp), _latitude(latitude), _longitude(longitude), _heading(heading), _depth(depth), _altitude(altitude), _temperature(temperature), _mode(mode), _satelliteCount(satelliteCount), _posCertainity(posCertainity), _velocityValid(velocityValid), _FOM(FOM), _trackName(trackName) {}
+		Status(const string& timeStamp, double latitude, double longitude, double heading, double depth, double altitude, double temperature, const string& mode, int satelliteCount, double hdop, double haccuracy, bool velocityValid, const string& trackName) :
+			_timeStamp(timeStamp), _latitude(latitude), _longitude(longitude), _heading(heading), _depth(depth), _altitude(altitude), _temperature(temperature), _mode(mode), _satelliteCount(satelliteCount), _hdop(hdop), _haccuracy(haccuracy), _velocityValid(velocityValid), _trackName(trackName) {}
 
 		inline string& GetTimeStamp() { return _timeStamp; }
 		inline double& GetLatitude() { return _latitude; }
@@ -45,9 +45,9 @@ namespace NVL_App
 		inline double& GetTemperature() { return _temperature; }
 		inline string& GetMode() { return _mode; }
 		inline int& GetSatelliteCount() { return _satelliteCount; }
-		inline double& GetPosCertainity() { return _posCertainity; }
+		inline double& GetHdop() { return _hdop; }
+		inline double& GetHaccuracy() { return _haccuracy; }
 		inline bool GetVelocityValid() { return _velocityValid; }
-		inline double& GetFOM() { return _FOM; }
 		inline string& GetTrackName() { return _trackName; }
 	};
 }

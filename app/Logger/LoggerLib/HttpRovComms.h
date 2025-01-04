@@ -27,6 +27,7 @@ namespace NVL_App
 		HttpRovComms(Repository * repository);
 		virtual unique_ptr<Status> GetCurrentStatus() override;
 	private:
+		Json::Value GetMessage(httplib::Client& client, const string& path);
 		double GetValue(const string& path, const string& name);
 	};
 }

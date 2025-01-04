@@ -35,46 +35,57 @@ unique_ptr<Status> HttpRovComms::GetCurrentStatus()
 	// Setup client
 	auto client = httplib::Client(_ip, 80);
 
-	// Fire off the request ddddd
-	auto result = client.Get("/mavlink2rest/mavlink/vehicles/1/components/1/messages/GLOBAL_POSITION_INT");
-	auto body = result->body;
+	// GLOBAL_POSITION_INT
+	auto global_position_int_message = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/GLOBAL_POSITION_INT");
 
-	// Decode the message
-	auto readerGPS = Json::Reader(); auto valueGPS = Json::Value();
-	readerGPS.parse(body, valueGPS);
-	auto latitude = valueGPS["message"]["lat"].asDouble() / 1e7;
-	auto longitude = valueGPS["message"]["lon"].asDouble() / 1e7;
-	//auto header = valueGPS["message"]["hdg"].asDouble() / 1e2;
-	auto depth = valueGPS["message"]["relative_alt"].asDouble() / 1e3;
-	auto altitude = valueGPS["message"]["alt"].asDouble() / 1e3; 
+	auto latitude = global_position_int_message["lat"].asDouble() / 1e7;
+	auto longitude = global_position_int_message["lon"].asDouble() / 1e7;
+	auto depth = global_position_int_message["relative_alt"].asDouble() / 1e3;
+	auto altitude = global_position_int_message["alt"].asDouble() / 1e3; 
 
-	// Get a better heading
-	//result = client.Get("/mavlink2rest/mavlink/vehicles/1/components/1/messages/VFR_HUD");
-	//auto valueHeading = Json::Value();
-	//readerGPS.parse(result->body, valueHeading) / 1e2;
-	//auto heading = valueHeading["message"]["heading"].asDouble();
-	auto heading = GetValue("/mavlink2rest/mavlink/vehicles/1/components/1/messages/VFR_HUD", "heading");
+	// VFR_HUD for heading
+	auto vfr_hud_message = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/VFR_HUD");
+	auto heading = vfr_hud_message["heading"].asDouble();
 
-	// Get the temperature
-	//result = client.Get("/mavlink2rest/mavlink/vehicles/1/components/1/messages/SCALED_PRESSURE2");
-	//auto valuePressure = Json::Value();
-	//readerGPS.parse(result->body, valuePressure);
-	//auto temperature = valuePressure["message"]["temperature"].asDouble() / 1e2;
-	auto temperature = GetValue("/mavlink2rest/mavlink/vehicles/1/components/1/messages/SCALED_PRESSURE2", "temperature");
+	// SCALED_PRESSURE2 for temperature
+	auto scaled_pressure2_message = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/SCALED_PRESSURE2");
+	auto temperature = scaled_pressure2_message["temperature"].asDouble() / 100;
 
-	// Get the drive mode
-	//result = client.Get("/mavlink2rest/mavlink/vehicles/1/components/1/messages/HEARTBEAT");
-	//auto valueHeart = Json::Value();
-	//readerGPS.parse(result->body, valueHeart);
-	//auto driveMode = valueHeart["message"]["custom_mode"].asString();
-	auto driveMode = GetValue("/mavlink2rest/mavlink/vehicles/1/components/1/messages/HEARTBEAT", "custom_mode");
+	// HEARTBEAT for drive mode
+	auto heartbeat_message = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/HEARTBEAT");
+	auto driveMode = heartbeat_message["custom_mode"].asDouble();
 	auto driveString = stringstream(); driveString << driveMode;
+
+	// GPS_RAW_INT
+	auto gps_raw_int_message = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/GPS_RAW_INT");
+	auto satelliteCount = gps_raw_int_message["satellites_visible"].asInt();
+	auto hdop = gps_raw_int_message["eph"].asDouble();
+	auto haccuracy = gps_raw_int_message["h_acc"].asDouble();
 
 	// Retrieve the track name
 	auto trackName = GetTrackName();
 
 	// Return the result
-	return unique_ptr<Status>(new Status(latitude, longitude, heading, depth, altitude, temperature, driveString.str(), 0, 0, false, 0, trackName));
+	return unique_ptr<Status>(new Status(latitude, longitude, heading, depth, altitude, temperature, driveString.str(), satelliteCount, hdop, haccuracy, false, trackName));
+}
+
+/**
+ * @brief Retrieve a JSON message from the given path
+ * @param path The path to the message
+ * @return Json::Value The JSON value of the message
+ */
+Json::Value HttpRovComms::GetMessage(httplib::Client& client, const string& path)
+{
+	// Fire off the request
+	auto detail = client.Get(path);
+	auto body = detail->body;
+
+	// Decode the message
+	auto reader = Json::Reader(); 
+	auto value = Json::Value();
+	reader.parse(body, value);
+
+	return value["message"];
 }
 
 /**

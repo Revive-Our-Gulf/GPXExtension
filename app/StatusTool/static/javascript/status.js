@@ -25,9 +25,9 @@ function updateStatus(responseText) {
     document.getElementById("temperature").innerText = parseFloat(status.temperature).toFixed(1);
     document.getElementById("mode").innerText = status.mode;
     document.getElementById("satelliteCount").innerText = status.satelliteCount;
-    document.getElementById("poseCertainty").innerText = parseFloat(status.poseCertainty).toFixed(3);
+    document.getElementById("hdop").innerText = parseFloat(status.hdop).toFixed(3);
+    document.getElementById("haccuracy").innerText = parseFloat(status.haccuracy).toFixed(3);
     document.getElementById("validVelocity").innerText = status.validVelocity;
-    document.getElementById("fom").innerText = parseFloat(status.fom).toFixed(3);
 
     setTimeout(requestUpdate, 1000); 
 }

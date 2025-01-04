@@ -51,7 +51,7 @@ Repository::~Repository()
  */
 void Repository::AddStatus(Status * status)
 {
-	auto query = "INSERT INTO status (latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_pos_certainty, dvl_velocity_valid, dvl_fom, track_name) "
+	auto query = "INSERT INTO status (latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_hdop, gps_haccuracy, dvl_velocity_valid, track_name) "
 				 "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	auto statement = unique_ptr<sql::PreparedStatement>(_connection->prepareStatement(query));
@@ -64,9 +64,9 @@ void Repository::AddStatus(Status * status)
 	statement->setDouble(6, status->GetTemperature());
 	statement->setString(7, status->GetMode());
 	statement->setInt(8, status->GetSatelliteCount());
-	statement->setDouble(9, status->GetPosCertainity());
-	statement->setBoolean(10, status->GetVelocityValid());
-	statement->setDouble(11, status->GetFOM());
+	statement->setDouble(9, status->GetHdop());
+	statement->setDouble(10, status->GetHaccuracy());
+	statement->setBoolean(11, status->GetVelocityValid());
 	statement->setString(12, status->GetTrackName());
 
 	cout << status->GetTemperature() << endl;
@@ -84,7 +84,7 @@ void Repository::AddStatus(Status * status)
  */
 unique_ptr<Status> Repository::GetLastStatus()
 {
-	auto query = "SELECT id, latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_pos_certainty, dvl_velocity_valid, dvl_fom, created_at "
+	auto query = "SELECT id, latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_hdop, gps_haccuracy, dvl_velocity_valid, created_at "
 				 "FROM status ORDER BY created_at DESC LIMIT 1;";
 
 	auto statement = unique_ptr<sql::Statement>(_connection->createStatement());
@@ -100,12 +100,12 @@ unique_ptr<Status> Repository::GetLastStatus()
 		auto temperature = result->getDouble(7);
 		auto mode = string(result->getString(8).c_str());
 		auto satCount = result->getInt(9);
-		auto posCertainty = result->getDouble(10);
-		auto velocityValid = result->getBoolean(11);
-		auto fom = result->getDouble(12);
+		auto hdop = result->getDouble(10);
+		auto haccuracy = result->getDouble(11);
+		auto velocityValid = result->getBoolean(12);
 		auto created = string(result->getString(13));
 
-		return unique_ptr<Status>(new Status(created, latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom, string()));
+		return unique_ptr<Status>(new Status(created, latitude, longitude, heading, depth, altitude, temperature, mode, satCount, hdop, haccuracy, velocityValid, string()));
 	}
 
 	return unique_ptr<Status>(nullptr);
@@ -118,7 +118,7 @@ unique_ptr<Status> Repository::GetLastStatus()
  */
 unique_ptr<Status> Repository::GetClosestStatus(const string& time)
 {
-	auto query = "SELECT id, latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_pos_certainty, dvl_velocity_valid, dvl_fom, created_at, "
+	auto query = "SELECT id, latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_hdop, gps_haccuracy, dvl_velocity_valid, created_at, "
 	             "TIME_TO_SEC(ABS(TIMEDIFF(?,created_at))) as time_diff "
 				 "FROM status ORDER BY time_diff LIMIT 1;";
 
@@ -129,23 +129,23 @@ unique_ptr<Status> Repository::GetClosestStatus(const string& time)
 
 	if (result->next()) 
 	{
-		auto latitude = result->getFloat(2);
-		auto longitude = result->getFloat(3);
-		auto heading = result->getFloat(4);
-		auto depth = result->getFloat(5);
-		auto altitude = result->getFloat(6);
-		auto temperature = result->getFloat(7);
+		auto latitude = result->getDouble(2);
+		auto longitude = result->getDouble(3);
+		auto heading = result->getDouble(4);
+		auto depth = result->getDouble(5);
+		auto altitude = result->getDouble(6);
+		auto temperature = result->getDouble(7);
 		auto mode = string(result->getString(8).c_str());
 		auto satCount = result->getInt(9);
-		auto posCertainty = result->getFloat(10);
-		auto velocityValid = result->getBoolean(11);
-		auto fom = result->getFloat(12);
+		auto hdop = result->getDouble(10);
+		auto haccuracy = result->getDouble(11);
+		auto velocityValid = result->getBoolean(12);
 		auto created = string(result->getString(13));
 		auto timeDiff = result->getFloat(14);
 
 		cout << "Time difference: " << timeDiff << endl;
 
-		return unique_ptr<Status>(new Status(created, latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom, string()));
+		return unique_ptr<Status>(new Status(created, latitude, longitude, heading, depth, altitude, temperature, mode, satCount, hdop, haccuracy, velocityValid, string()));
 	}
 
 	return unique_ptr<Status>(nullptr);
@@ -159,7 +159,7 @@ unique_ptr<Status> Repository::GetClosestStatus(const string& time)
 void Repository::GetStatuses(const string& trackName, vector<Status *>& output) 
 {
 	auto query = stringstream();
-	query << "SELECT id, latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_pos_certainty, dvl_velocity_valid, dvl_fom, created_at ";
+	query << "SELECT id, latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_hdop, gps_haccuracy, dvl_velocity_valid, created_at ";
 	query << "FROM status WHERE track_name=\'" << trackName << "\' ORDER BY created_at DESC";
 
 	auto statement = unique_ptr<sql::Statement>(_connection->createStatement());
@@ -175,12 +175,12 @@ void Repository::GetStatuses(const string& trackName, vector<Status *>& output)
 		auto temperature = result->getDouble(7);
 		auto mode = string(result->getString(8).c_str());
 		auto satCount = result->getInt(9);
-		auto posCertainty = result->getDouble(10);
-		auto velocityValid = result->getBoolean(11);
-		auto fom = result->getDouble(12);
+		auto hdop = result->getDouble(10);
+		auto haccuracy = result->getDouble(11);
+		auto velocityValid = result->getBoolean(12);
 		auto created = string(result->getString(13));
 
-		auto status = new Status(created, latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCertainty, velocityValid, fom, trackName);
+		auto status = new Status(created, latitude, longitude, heading, depth, altitude, temperature, mode, satCount, hdop, haccuracy, velocityValid, trackName);
 		output.push_back(status);
 	}
 }

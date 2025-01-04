@@ -6,6 +6,11 @@
     border: none;
 }
 
+.btn-transparent:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Lighter background on hover */
+    color: white; /* White text on hover */
+}
+
 .btn-red{
     color: rgb(204, 0, 0);
 }

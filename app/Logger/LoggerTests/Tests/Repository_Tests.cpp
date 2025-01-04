@@ -80,9 +80,10 @@ TEST(Repository_Test, confirm_retrieval)
 	ASSERT_NEAR(status_1->GetTemperature(), status_2->GetTemperature(), 1e-4);
 	ASSERT_EQ(status_1->GetMode(), status_2->GetMode());
 	ASSERT_EQ(status_1->GetSatelliteCount(), status_2->GetSatelliteCount());
-	ASSERT_NEAR(status_1->GetPosCertainity(), status_2->GetPosCertainity(), 1e-4);
+	ASSERT_NEAR(status_1->GetHdop(), status_2->GetHdop(), 1e-4);
+	ASSERT_NEAR(status_1->GetHaccuracy(), status_2->GetHaccuracy(), 1e-4);
 	ASSERT_NEAR(status_1->GetVelocityValid(), status_2->GetVelocityValid(), 1e-4);
-	ASSERT_NEAR(status_1->GetFOM(), status_2->GetFOM(), 1e-4);
+
 }
 
 /**

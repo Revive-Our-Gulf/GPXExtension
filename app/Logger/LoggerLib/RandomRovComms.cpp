@@ -40,11 +40,11 @@ unique_ptr<Status> RandomRovComms::GetCurrentStatus()
 	auto temperature = 15 + NVLib::RandomUtils::GetInteger(-5,5);
 	auto mode = "DEPTH HOLD";
 	auto satCount = 10 + NVLib::RandomUtils::GetInteger(-8,8);
-	auto posCert = 0.8 + (NVLib::RandomUtils::GetInteger(-200,200) / 1000.0);
+	auto hdop = 0.8 + (NVLib::RandomUtils::GetInteger(-200,200) / 1000.0);
+	auto haccuracy =  0.8 + (NVLib::RandomUtils::GetInteger(-200,200) / 1000.0);
 	auto velocity = true;
-	auto fom =  0.8 + (NVLib::RandomUtils::GetInteger(-200,200) / 1000.0);
 
 	auto trackName = GetTrackName();
 
-	return unique_ptr<Status>(new Status(latitude, longitude, heading, depth, altitude, temperature, mode, satCount, posCert, velocity, fom, trackName));
+	return unique_ptr<Status>(new Status(latitude, longitude, heading, depth, altitude, temperature, mode, satCount, hdop, haccuracy, velocity, trackName));
 }

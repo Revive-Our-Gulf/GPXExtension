@@ -76,7 +76,8 @@ void Home::RenderTracks(std::string& tracksHtml) {
             auto gpxFile = std::stringstream(); gpxFile << track << ".gpx";
 
             // Fetch earliest and latest entry dates and times
-            auto entryDate = _repo->GetEarliestEntryDate(track, "created_at");
+            auto earliestEntryDate = _repo->GetEarliestEntryDate(track, "created_at");
+            auto latestEntryDate = _repo->GetLatestEntryDate(track, "created_at");
             auto earliestEntryTime = _repo->GetEarliestEntryTime(track, "created_at");
             auto latestEntryTime = _repo->GetLatestEntryTime(track, "created_at");
 
@@ -84,7 +85,7 @@ void Home::RenderTracks(std::string& tracksHtml) {
             earliestEntryTime = earliestEntryTime.substr(0, earliestEntryTime.find('.'));
             latestEntryTime = latestEntryTime.substr(0, latestEntryTime.find('.'));
 
-            auto duration = CalculateDuration(earliestEntryTime, latestEntryTime);
+            auto duration = CalculateDuration(earliestEntryTime, earliestEntryDate, latestEntryTime, latestEntryDate);
 
             // Convert duration to a more user-friendly format
             std::istringstream durationStream(duration);
@@ -117,14 +118,14 @@ void Home::RenderTracks(std::string& tracksHtml) {
             friendlyTrackSize = sizeStream.str();
 
             tracksStream << "<tr>";
-            tracksStream << "<td><button class=\"btn btn-transparent btn-secondary text-dark\" id=\"trackName\" onclick=\"copyToClipboard('trackName')\">" << track << "</button></td>";
-            tracksStream << "<td>" << entryDate << "</td>";
-            tracksStream << "<td class=\"d-none d-md-table-cell\">" << earliestEntryTime << "</td>";
-            tracksStream << "<td class=\"d-none d-md-table-cell\">" << latestEntryTime << "</td>";
-            tracksStream << "<td>" << userFriendlyDuration.str() << "</td>";
-            tracksStream << "<td>" << friendlyTrackSize << "</td>";
+            tracksStream << "<td><button id=\"track_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('track_" << track << "')\">" << track << "</button></td>";
+            tracksStream << "<td><button id=\"entryDate_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('entryDate_" << track << "')\">" << earliestEntryDate << "</button></td>";
+            tracksStream << "<td><button id=\"earliestEntryTime_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('earliestEntryTime_" << track << "')\">" << earliestEntryTime << "</button></td>";
+            // tracksStream << "<td><button id=\"latestEntryTime_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('latestEntryTime_" << track << "')\">" << latestEntryTime << "</button></td>";
+            tracksStream << "<td><button id=\"duration_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('duration_" << track << "')\">" << userFriendlyDuration.str() << "</button></td>";
+            tracksStream << "<td><button id=\"trackSize_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('trackSize_" << track << "')\">" << friendlyTrackSize << "</button></td>";
             tracksStream << "<td><button class=\"btn btn-secondary btn-sm btn-transparent btn-grey\" onclick=\"window.open('\\gpx?track=" << track << "', '_blank')\"><i class=\"fa fa-eye\"></i></button></td>";
-            tracksStream << "<td><a class=\"btn btn-secondary btn-sm btn-transparent btn-grey\" href=\"/gpx?track=" << track << "\" download=\"" << gpxFile.str() << "\"><i class=\"fa fa-download\"></i></a></td>";
+            tracksStream << "<td><a class=\"btn btn-secondary btn-sm btn-transparent btn-grey\" href=\"/gpx?track=" << track << "\" download=\"ROGGPX_" << gpxFile.str() << "\"><i class=\"fa fa-download\"></i></a></td>";
             tracksStream << "<td><button class=\"btn btn-danger btn-sm btn-transparent btn-red\" onclick=\"deleteTrack('" << track << "')\"><i class=\"fa fa-trash\"></i></button></td>";
             tracksStream << "</tr>";
         }
@@ -164,14 +165,14 @@ void Home::ReplacePlaceholder(string& content, const string& placeholder, const 
     }
 }
 
-std::string Home::CalculateDuration(const std::string& earliestEntryTime, const std::string& latestEntryTime)
+std::string Home::CalculateDuration(const std::string& earliestEntryTime, const std::string& earliestEntryDate, const std::string& latestEntryTime, const std::string& latestEntryDate)
 {
     std::tm earliestTm = {};
     std::tm latestTm = {};
-    std::istringstream earliestStream(earliestEntryTime);
-    std::istringstream latestStream(latestEntryTime);
-    earliestStream >> std::get_time(&earliestTm, "%H:%M:%S");
-    latestStream >> std::get_time(&latestTm, "%H:%M:%S");
+    std::istringstream earliestStream(earliestEntryDate + " " + earliestEntryTime);
+    std::istringstream latestStream(latestEntryDate + " " + latestEntryTime);
+    earliestStream >> std::get_time(&earliestTm, "%Y-%m-%d %H:%M:%S");
+    latestStream >> std::get_time(&latestTm, "%Y-%m-%d %H:%M:%S");
 
     std::time_t earliestTime = std::mktime(&earliestTm);
     std::time_t latestTime = std::mktime(&latestTm);
