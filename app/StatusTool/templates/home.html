@@ -35,11 +35,11 @@
                   <button type="button" id="saveTrackButton" class="btn btn-primary me-2 text-nowrap" style="min-width: 120px;">
                     <i class="fa fa-save"></i>  Set Name
                   </button>
-                  <button type="button" id="startStopButton" class="btn btn-primary text-nowrap" style="min-width: 120px;">
-                    <i class="fa fa-play" id="submitIcon"></i> <span id="submitText">{{status}}</span>
-                  </button>
                 </div>
               </div>
+              <button type="button" id="startStopButton" class="btn btn-primary text-nowrap" style="min-width: 120px;">
+                <i class="fa fa-play" id="submitIcon"></i> <span id="submitText">{{status}}</span>
+              </button>
             </form>
             <div id="recordingIndicator" class="recording-indicator position-absolute"></div>
           </div>
@@ -83,78 +83,58 @@
                 </tr>
               </thead>
                 <tbody id="statusTable"></tbody>
-                <tr>
-                  <td>Created</td>
-                  <td>
-                  <button class="btn btn-transparent btn-secondary text-dark" id="created" onclick="copyToClipboard('created')">Created Value</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Latitude</td>
-                  <td>
-                  <button class="btn btn-transparent btn-secondary text-dark" id="latitude" onclick="copyToClipboard('latitude')">Latitude Value</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Longitude</td>
-                  <td>
-                  <button class="btn btn-transparent btn-secondary text-dark" id="longitude" onclick="copyToClipboard('longitude')">Longitude Value</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Heading</td>
-                  <td>
-                  <button class="btn btn-transparent btn-secondary text-dark" id="heading" onclick="copyToClipboard('heading')">Heading Value</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Depth</td>
-                  <td>
-                  <button class="btn btn-transparent btn-secondary text-dark" id="depth" onclick="copyToClipboard('depth')">Depth Value</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Altitude</td>
-                  <td>
-                  <button class="btn btn-transparent btn-secondary text-dark" id="altitude" onclick="copyToClipboard('altitude')">Altitude Value</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Temperature</td>
-                  <td>
-                  <button class="btn btn-transparent btn-secondary text-dark" id="temperature" onclick="copyToClipboard('temperature')">Temperature Value</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Mode</td>
-                  <td>
-                  <button class="btn btn-transparent btn-secondary text-dark" id="mode" onclick="copyToClipboard('mode')">Mode Value</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Satellite Count</td>
-                  <td>
-                  <button class="btn btn-transparent btn-secondary text-dark" id="satelliteCount" onclick="copyToClipboard('satelliteCount')">Satellite Count Value</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>GPS HDOP</td>
-                  <td>
-                  <button class="btn btn-transparent btn-secondary text-dark" id="hdop" onclick="copyToClipboard('hdop')">HDOP Value</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>H Accuracy</td>
-                  <td>
-                  <button class="btn btn-transparent btn-secondary text-dark" id="haccuracy" onclick="copyToClipboard('haccuracy')">haccuracy Value</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Valid Velocity</td>
-                  <td>
-                  <button class="btn btn-transparent btn-secondary text-dark" id="validVelocity" onclick="copyToClipboard('validVelocity')">Valid Velocity Value</button>
-                  </td>
-                </tr>
+                 <tr>
+                    <td>Created</td>
+                    <td><button class="btn btn-transparent btn-secondary text-dark" id="created" onclick="copyToClipboard('created')">Created Value</button></td>
+                  </tr>
+                  <tr>
+                    <td>Latitude</td>
+                    <td><button class="btn btn-transparent btn-secondary text-dark" id="latitude" onclick="copyToClipboard('latitude')">Latitude Value</button></td>
+                  </tr>
+                  <tr>
+                    <td>Longitude</td>
+                    <td><button class="btn btn-transparent btn-secondary text-dark" id="longitude" onclick="copyToClipboard('longitude')">Longitude Value</button></td>
+                  </tr>
+                  <tr>
+                    <td>Heading</td>
+                    <td><button class="btn btn-transparent btn-secondary text-dark" id="heading" onclick="copyToClipboard('heading')">Heading Value</button></td>
+                  </tr>
+                  <tr>
+                    <td>Depth</td>
+                    <td><button class="btn btn-transparent btn-secondary text-dark" id="depth" onclick="copyToClipboard('depth')">Depth Value</button></td>
+                  </tr>
+                  <tr>
+                    <td>Temperature</td>
+                    <td><button class="btn btn-transparent btn-secondary text-dark" id="temperature" onclick="copyToClipboard('temperature')">Temperature Value</button></td>
+                  </tr>
+                  <tr>
+                    <td>Mode</td>
+                    <td><button class="btn btn-transparent btn-secondary text-dark" id="driveMode" onclick="copyToClipboard('driveMode')">Drive Mode Value</button></td>
+                  </tr>
+                  <tr>
+                    <td>Satellite Count</td>
+                    <td><button class="btn btn-transparent btn-secondary text-dark" id="satellites" onclick="copyToClipboard('satellites')">Satellite Count Value</button></td>
+                  </tr>
+                  <tr>
+                    <td>GPS HDOP</td>
+                    <td><button class="btn btn-transparent btn-secondary text-dark" id="hdop" onclick="copyToClipboard('hdop')">HDOP Value</button></td>
+                  </tr>
+                  <tr>
+                    <td>H Accuracy</td>
+                    <td><button class="btn btn-transparent btn-secondary text-dark" id="haccuracy" onclick="copyToClipboard('haccuracy')">H Accuracy Value</button></td>
+                  </tr>
+                  <tr>
+                    <td>DVL Distance</td>
+                    <td><button class="btn btn-transparent btn-secondary text-dark" id="distance" onclick="copyToClipboard('distance')">DVL Distance Value</button></td>
+                  </tr>
+                  <tr>
+                    <td>DVL FOM</td>
+                    <td><button class="btn btn-transparent btn-secondary text-dark" id="fom" onclick="copyToClipboard('fom')">DVL FOM Value</button></td>
+                  </tr>
+                  <tr>
+                    <td>DVL Valid Velocity</td>
+                    <td><button class="btn btn-transparent btn-secondary text-dark" id="validVelocity" onclick="copyToClipboard('validVelocity')">DVL Valid Velocity Value</button></td>
+                  </tr>
               </tbody>
             </table>
           </div>

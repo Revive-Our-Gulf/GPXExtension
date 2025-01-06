@@ -125,17 +125,19 @@ void GPXMaker::RenderJourney(ostream& writer, const string& trackName)
 void GPXMaker::RenderStep(ostream& writer, Status * status) 
 {
 	writer << "<trkpt lat=\"" << fixed << setprecision(8) << status->GetLatitude() << "\" lon=\"" << status->GetLongitude() << defaultfloat << "\">";
-	writer << "<ele>" << status->GetAltitude() << "</ele>";
+	// writer << "<ele>" << status->GetAltitude() << "</ele>";
 	writer << "<time>" << status->GetTimeStamp() << "</time>";
 	writer << "<extensions>";
 	writer << "<bluerov2:heading>" << status->GetHeading() << "</bluerov2:heading>";
 	writer << "<bluerov2:depth>" << status->GetDepth() << "</bluerov2:depth>";
-	writer << "<bluerov2:altitude>" << status->GetAltitude() << "</bluerov2:altitude>";
-	writer << "<bluerov2:driveMode>" << status->GetMode() << "</bluerov2:driveMode>";
+	writer << "<bluerov2:driveMode>" << status->GetDriveMode() << "</bluerov2:driveMode>";
 	writer << "<bluerov2:waterTemp>" << status->GetTemperature() << "</bluerov2:waterTemp>";
-	writer << "<bluerov2:gpsSatellites>" << status->GetSatelliteCount() << "</bluerov2:gpsSatellites>";
+	writer << "<bluerov2:gpsSatellites>" << status->GetSatellites() << "</bluerov2:gpsSatellites>";
 	writer << "<bluerov2:gpsHDOP>" << status->GetHdop() << "</bluerov2:gpsHDOP>";
 	writer << "<bluerov2:gpsHAccuracy>" << status->GetHaccuracy() << "</bluerov2:gpsHAccuracy>";
+	writer << "<bluerov2:dvlDistance>" << status->GetDistance() << "</bluerov2:dvlDistance>";
+	writer << "<bluerov2:dvlFOM>" << status->GetFom() << "</bluerov2:dvlFOM>";
+	writer << "<bluerov2:dvlValidVelocity>" << status->GetVelocityValid() << "</bluerov2:dvlValidVelocity>";
 	writer << "</extensions>";
 	writer << "</trkpt>";
 }

@@ -30,7 +30,6 @@ namespace NVL_App
 
 		void AddStatus(Status * status);
 		unique_ptr<Status> GetLastStatus();
-		unique_ptr<Status> GetClosestStatus(const string& time);
 		void GetStatuses(int limit, vector<Status *>& output);
 		void GetStatuses(const string& start, const string& end, vector<Status *>& output);
 		void GetStatuses(const string& trackName, vector<Status *>& output); 

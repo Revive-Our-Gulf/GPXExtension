@@ -180,12 +180,13 @@ void Run()
             jsonResponse["longitude"] = status->GetLongitude();
             jsonResponse["heading"] = status->GetHeading();
             jsonResponse["depth"] = status->GetDepth();
-            jsonResponse["altitude"] = status->GetAltitude();
             jsonResponse["temperature"] = status->GetTemperature();
-            jsonResponse["mode"] = status->GetMode();
-            jsonResponse["satelliteCount"] = status->GetSatelliteCount();
+            jsonResponse["driveMode"] = status->GetDriveMode();
+            jsonResponse["satellites"] = status->GetSatellites();
             jsonResponse["hdop"] = status->GetHdop();
             jsonResponse["haccuracy"] = status->GetHaccuracy();
+            jsonResponse["distance"] = status->GetDistance();
+            jsonResponse["fom"] = status->GetFom();
             jsonResponse["validVelocity"] = status->GetVelocityValid();
         } else {
             jsonResponse["error"] = "No status available";

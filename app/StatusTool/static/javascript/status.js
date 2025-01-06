@@ -16,18 +16,19 @@ function requestUpdate() {
 function updateStatus(responseText) { 
     var status = JSON.parse(responseText);
 
-    document.getElementById("created").innerText = status.created;
-    document.getElementById("latitude").innerText = parseFloat(status.latitude).toFixed(7);
-    document.getElementById("longitude").innerText = parseFloat(status.longitude).toFixed(7);
-    document.getElementById("heading").innerText = parseFloat(status.heading).toFixed(2);
-    document.getElementById("depth").innerText = parseFloat(status.depth).toFixed(2);
-    document.getElementById("altitude").innerText = parseFloat(status.altitude).toFixed(2);
-    document.getElementById("temperature").innerText = parseFloat(status.temperature).toFixed(1);
-    document.getElementById("mode").innerText = status.mode;
-    document.getElementById("satelliteCount").innerText = status.satelliteCount;
-    document.getElementById("hdop").innerText = parseFloat(status.hdop).toFixed(3);
-    document.getElementById("haccuracy").innerText = parseFloat(status.haccuracy).toFixed(3);
-    document.getElementById("validVelocity").innerText = status.validVelocity;
+    if (document.getElementById("created")) document.getElementById("created").innerText = status.created;
+    if (document.getElementById("latitude")) document.getElementById("latitude").innerText = parseFloat(status.latitude).toFixed(7);
+    if (document.getElementById("longitude")) document.getElementById("longitude").innerText = parseFloat(status.longitude).toFixed(7);
+    if (document.getElementById("heading")) document.getElementById("heading").innerText = parseFloat(status.heading).toFixed(2);
+    if (document.getElementById("depth")) document.getElementById("depth").innerText = parseFloat(status.depth).toFixed(2);
+    if (document.getElementById("temperature")) document.getElementById("temperature").innerText = parseFloat(status.temperature).toFixed(1);
+    if (document.getElementById("driveMode")) document.getElementById("driveMode").innerText = status.driveMode;
+    if (document.getElementById("satellites")) document.getElementById("satellites").innerText = status.satellites;
+    if (document.getElementById("hdop")) document.getElementById("hdop").innerText = parseFloat(status.hdop).toFixed(3);
+    if (document.getElementById("haccuracy")) document.getElementById("haccuracy").innerText = parseFloat(status.haccuracy).toFixed(3);
+    if (document.getElementById("distance")) document.getElementById("distance").innerText = parseFloat(status.distance).toFixed(3);
+    if (document.getElementById("fom")) document.getElementById("fom").innerText = parseFloat(status.fom).toFixed(3);
+    if (document.getElementById("validVelocity")) document.getElementById("validVelocity").innerText = status.validVelocity;
 
     setTimeout(requestUpdate, 1000); 
 }
