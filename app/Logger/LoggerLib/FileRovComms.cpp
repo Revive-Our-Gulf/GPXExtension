@@ -58,7 +58,7 @@ unique_ptr<Status> FileRovComms::GetCurrentStatus()
 	auto trackName = GetTrackName();
 
 	// Return the result
-	return unique_ptr<Status>(new Status(latitude, longitude, header, depth, altitude, temperature, string(), satellite_count, 0, false, 0, trackName));
+	return unique_ptr<Status>(new Status(latitude, longitude, header, depth, temperature, 1, satellite_count, 0, 0, 0, 0, false, trackName));
 }
 
 //--------------------------------------------------

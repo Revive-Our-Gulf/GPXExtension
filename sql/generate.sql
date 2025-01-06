@@ -24,14 +24,15 @@ create table status
   latitude DOUBLE not null,
   longitude DOUBLE not null,
   heading DOUBLE not null,
-  rov_depth DOUBLE not null,
-  dvl_altitude DOUBLE not null,
+  depth DOUBLE not null,
   temperature DOUBLE not null,
-  drive_mode varchar(255) not null,
-  gps_sat_count INT not null,
-  gps_pos_certainty DOUBLE not null,
-  dvl_velocity_valid BOOLEAN not null,
+  drive_mode INT not null,
+  gps_satellites INT not null,
+  gps_hdop DOUBLE not null,
+  gps_haccuracy DOUBLE not null,
+  dvl_distance DOUBLE not null,
   dvl_fom DOUBLE not null,
+  dvl_velocity_valid BOOLEAN not null,
   track_name varchar(500) default 'unknown',
   created_at DATETIME(1) not null default CURRENT_TIMESTAMP,
   primary key(id),
@@ -52,8 +53,8 @@ create table settings
 /*----------------------------
 * Update Example
 ------------------------------*/
-INSERT INTO status (latitude, longitude, heading, rov_depth, dvl_altitude, temperature, drive_mode, gps_sat_count, gps_pos_certainty, dvl_velocity_valid, dvl_fom) 
-VALUES (5,6,90, 1000, 1, 13, 'DEPTH HOLD', 5, 0.9, 1, 0.8); 
+INSERT INTO status (latitude, longitude, heading, depth, temperature, drive_mode, gps_satellites, gps_hdop, gps_haccuracy, dvl_distance, dvl_fom, dvl_velocity_valid, track_name) 
+VALUES (5, 6, 90, 1000, 13, 1, 5, 0.9, 1, 0.8, 0.5, true, 'unknown');
 
 /*----------------------------
 * ADD settings

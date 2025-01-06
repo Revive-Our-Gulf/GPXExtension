@@ -34,17 +34,18 @@ unique_ptr<Status> RandomRovComms::GetCurrentStatus()
 {
 	auto latitude = NVLib::RandomUtils::GetInteger(-1e8,1e8) / 1e7;
 	auto longitude = NVLib::RandomUtils::GetInteger(-1e8,1e8) / 1e7;
-	auto heading = 90 + NVLib::RandomUtils::GetInteger(-10,10);
-	auto depth = 500 + NVLib::RandomUtils::GetInteger(-20, 20);
-	auto altitude = 8 + NVLib::RandomUtils::GetInteger(-3, 3);
-	auto temperature = 15 + NVLib::RandomUtils::GetInteger(-5,5);
-	auto mode = "DEPTH HOLD";
-	auto satCount = 10 + NVLib::RandomUtils::GetInteger(-8,8);
+	auto heading = 180.0 + NVLib::RandomUtils::GetInteger(-1800,1800) / 10;
+	auto depth = -10.0 + NVLib::RandomUtils::GetInteger(-100, 100) / 10;
+	auto temperature = 15.0 + NVLib::RandomUtils::GetInteger(-50,50) / 10;
+	auto driveMode = 1;
+	auto satellites = 10 + NVLib::RandomUtils::GetInteger(-8,8);
 	auto hdop = 0.8 + (NVLib::RandomUtils::GetInteger(-200,200) / 1000.0);
 	auto haccuracy =  0.8 + (NVLib::RandomUtils::GetInteger(-200,200) / 1000.0);
-	auto velocity = true;
+	auto distance = 10.0 + NVLib::RandomUtils::GetInteger(-100, 100) / 10;
+	auto fom = 0.8 + (NVLib::RandomUtils::GetInteger(-200,200) / 1000.0);
+	auto velocityValid = true;
 
 	auto trackName = GetTrackName();
 
-	return unique_ptr<Status>(new Status(latitude, longitude, heading, depth, altitude, temperature, mode, satCount, hdop, haccuracy, velocity, trackName));
+	return unique_ptr<Status>(new Status(latitude, longitude, heading, depth, temperature, driveMode, satellites, hdop, haccuracy, distance, fom, velocityValid, trackName));
 }

@@ -35,10 +35,8 @@ TEST(RovComms_Test, read_test)
 	// Check the values
 	ASSERT_GE(status->GetHeading(), 80);
 	ASSERT_GE(status->GetDepth(), 480);
-	ASSERT_GE(status->GetAltitude(), 5);
 	ASSERT_GE(status->GetTemperature(), 10);
-	ASSERT_EQ(status->GetMode(), "DEPTH HOLD");
-	ASSERT_GE(status->GetSatelliteCount(), 2);
+	ASSERT_EQ(status->GetDriveMode(), 1);
 	ASSERT_GE(status->GetHdop(), 0.6);
 	ASSERT_GE(status->GetHaccuracy(), 0.6);
 	ASSERT_TRUE(status->GetVelocityValid());

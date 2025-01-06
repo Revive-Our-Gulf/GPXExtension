@@ -40,12 +40,8 @@ unique_ptr<Status> HttpRovComms::GetCurrentStatus()
 
 	auto latitude = global_position_int_message["lat"].asDouble() / 1e7;
 	auto longitude = global_position_int_message["lon"].asDouble() / 1e7;
-	auto depth = global_position_int_message["relative_alt"].asDouble() / 1e3;
-	auto altitude = global_position_int_message["alt"].asDouble() / 1e3; 
-
-	// VFR_HUD for heading
-	auto vfr_hud_message = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/VFR_HUD");
-	auto heading = vfr_hud_message["heading"].asDouble();
+	auto depth = global_position_int_message["alt"].asDouble() / 1e3;
+	auto heading = global_position_int_message["hdg"].asDouble();
 
 	// SCALED_PRESSURE2 for temperature
 	auto scaled_pressure2_message = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/SCALED_PRESSURE2");
@@ -54,19 +50,24 @@ unique_ptr<Status> HttpRovComms::GetCurrentStatus()
 	// HEARTBEAT for drive mode
 	auto heartbeat_message = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/HEARTBEAT");
 	auto driveMode = heartbeat_message["custom_mode"].asDouble();
-	auto driveString = stringstream(); driveString << driveMode;
 
 	// GPS_RAW_INT
 	auto gps_raw_int_message = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/GPS_RAW_INT");
-	auto satelliteCount = gps_raw_int_message["satellites_visible"].asInt();
+	auto satellites = gps_raw_int_message["satellites_visible"].asInt();
 	auto hdop = gps_raw_int_message["eph"].asDouble();
 	auto haccuracy = gps_raw_int_message["h_acc"].asDouble();
+
+	// RANGEFINDER
+	auto rangefinder_message = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/RANGEFINDER");
+	auto distance = rangefinder_message["distance"].asDouble();
 
 	// Retrieve the track name
 	auto trackName = GetTrackName();
 
+	
+
 	// Return the result
-	return unique_ptr<Status>(new Status(latitude, longitude, heading, depth, altitude, temperature, driveString.str(), satelliteCount, hdop, haccuracy, false, trackName));
+	return unique_ptr<Status>(new Status(latitude, longitude, heading, depth, temperature, driveMode, satellites, hdop, haccuracy, distance, 0, false, trackName));
 }
 
 /**

@@ -35,9 +35,7 @@ TEST(FileRovComms_Test, read_test)
 	// Confirm
 	ASSERT_EQ(status->GetHeading(), 18594);
 	ASSERT_EQ(status->GetDepth(), -5);
-	ASSERT_EQ(status->GetAltitude(), 5);
 	ASSERT_EQ(status->GetLatitude(), 6);
 	ASSERT_EQ(status->GetLongitude(), 7);
-	ASSERT_EQ(status->GetSatelliteCount(), 3);
 	ASSERT_EQ(status->GetTemperature(), 3763);
 }

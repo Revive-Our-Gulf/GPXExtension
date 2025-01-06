@@ -9,6 +9,7 @@
 #pragma once
 
 #include <iostream>
+#include <string>
 using namespace std;
 
 namespace NVL_App
@@ -21,33 +22,91 @@ namespace NVL_App
 		double _longitude;
 		double _heading;
 		double _depth;
-		double _altitude;
 		double _temperature;
-		string _mode;
-		int _satelliteCount;
+		int _driveMode;
+		int _satellites;
 		double _hdop;
 		double _haccuracy;
-		bool _velocityValid;
+		double _dvl_distance;
+		double _dvl_fom;
+		bool _dvl_velocity_valid;
 		string _trackName;
+		
 	public:
-		Status(double latitude, double longitude, double heading, double depth, double altitude, double temperature, const string& mode, int satelliteCount, double hdop, double haccuracy, bool velocityValid, const string& trackName) :
-			_timeStamp(string()), _latitude(latitude), _longitude(longitude), _heading(heading), _depth(depth), _altitude(altitude), _temperature(temperature), _mode(mode), _satelliteCount(satelliteCount), _hdop(hdop), _haccuracy(haccuracy), _velocityValid(velocityValid), _trackName(trackName) {}
+		Status(
+			double latitude,
+			double longitude,
+			double heading,
+			double depth,
+			double temperature,
+			int driveMode,
+			int satellites,
+			double hdop,
+			double haccuracy,
+			double dvl_distance,
+			double dvl_fom,
+			bool dvl_velocity_valid,
+			const string& trackName) :
+			_timeStamp(string()), 
+			_latitude(latitude), 
+			_longitude(longitude), 
+			_heading(heading), 
+			_depth(depth), 
+			_temperature(temperature), 
+			_driveMode(driveMode), 
+			_satellites(satellites), 
+			_hdop(hdop), 
+			_haccuracy(haccuracy), 
+			_dvl_distance(dvl_distance),
+			_dvl_fom(dvl_fom),
+			_dvl_velocity_valid(dvl_velocity_valid),
+			_trackName(trackName) 
+		{}
 
-		Status(const string& timeStamp, double latitude, double longitude, double heading, double depth, double altitude, double temperature, const string& mode, int satelliteCount, double hdop, double haccuracy, bool velocityValid, const string& trackName) :
-			_timeStamp(timeStamp), _latitude(latitude), _longitude(longitude), _heading(heading), _depth(depth), _altitude(altitude), _temperature(temperature), _mode(mode), _satelliteCount(satelliteCount), _hdop(hdop), _haccuracy(haccuracy), _velocityValid(velocityValid), _trackName(trackName) {}
+		Status(
+			const string& timeStamp,
+			double latitude,
+			double longitude,
+			double heading,
+			double depth,
+			double temperature,
+			int driveMode,
+			int satellites,
+			double hdop,
+			double haccuracy,
+			double dvl_distance,
+			double dvl_fom,
+			bool dvl_velocity_valid,
+			const string& trackName) :
+			_timeStamp(timeStamp), 
+			_latitude(latitude), 
+			_longitude(longitude), 
+			_heading(heading), 
+			_depth(depth), 
+			_temperature(temperature), 
+			_driveMode(driveMode), 
+			_satellites(satellites), 
+			_hdop(hdop), 
+			_haccuracy(haccuracy), 
+			_dvl_distance(dvl_distance),
+			_dvl_fom(dvl_fom),
+			_dvl_velocity_valid(dvl_velocity_valid),
+			_trackName(trackName) 
+		{}
 
-		inline string& GetTimeStamp() { return _timeStamp; }
-		inline double& GetLatitude() { return _latitude; }
-		inline double& GetLongitude() { return _longitude; }
-		inline double& GetHeading() { return _heading; }
-		inline double& GetDepth() { return _depth; }
-		inline double& GetAltitude() { return _altitude; }
-		inline double& GetTemperature() { return _temperature; }
-		inline string& GetMode() { return _mode; }
-		inline int& GetSatelliteCount() { return _satelliteCount; }
-		inline double& GetHdop() { return _hdop; }
-		inline double& GetHaccuracy() { return _haccuracy; }
-		inline bool GetVelocityValid() { return _velocityValid; }
-		inline string& GetTrackName() { return _trackName; }
+		inline const string& GetTimeStamp() const { return _timeStamp; }
+		inline double GetLatitude() const { return _latitude; }
+		inline double GetLongitude() const { return _longitude; }
+		inline double GetHeading() const { return _heading; }
+		inline double GetDepth() const { return _depth; }
+		inline double GetTemperature() const { return _temperature; }
+		inline int GetDriveMode() const { return _driveMode; }
+		inline int GetSatellites() const { return _satellites; }
+		inline double GetHdop() const { return _hdop; }
+		inline double GetHaccuracy() const { return _haccuracy; }
+		inline double GetDistance() const { return _dvl_distance; }
+		inline double GetFom() const { return _dvl_fom; }
+		inline bool GetVelocityValid() const { return _dvl_velocity_valid; }
+		inline const string& GetTrackName() const { return _trackName; }
 	};
 }

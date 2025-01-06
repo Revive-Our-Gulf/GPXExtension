@@ -30,7 +30,6 @@ namespace NVL_App
 
 		void AddStatus(Status * status);
 		unique_ptr<Status> GetLastStatus();
-		unique_ptr<Status> GetClosestStatus(const string& time);
 		void ClearTable();
 
 		void GetStatuses(const string& trackName, vector<Status *>& output);
