@@ -180,7 +180,7 @@ void Repository::GetStatuses(const string& trackName, vector<Status *>& output)
 		  << "dvl_fom, "
 		  << "dvl_velocity_valid, "
 		  << "created_at "
-		  << "FROM status WHERE track_name=\'" << trackName << "\' ORDER BY created_at DESC";
+		  << "FROM status WHERE track_name=\'" << trackName << "\' ORDER BY created_at ASC";
 
 	auto statement = unique_ptr<sql::Statement>(_connection->createStatement());
 	auto result = statement->executeQuery(query.str());
