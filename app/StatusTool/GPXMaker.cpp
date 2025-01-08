@@ -130,8 +130,8 @@ void GPXMaker::RenderStep(ostream& writer, Status * status)
 	writer << "<extensions>";
 	writer << "<bluerov2:heading>" << status->GetHeading() << "</bluerov2:heading>";
 	writer << "<bluerov2:depth>" << status->GetDepth() << "</bluerov2:depth>";
-	writer << "<bluerov2:driveMode>" << status->GetDriveMode() << "</bluerov2:driveMode>";
 	writer << "<bluerov2:waterTemp>" << status->GetTemperature() << "</bluerov2:waterTemp>";
+	writer << "<bluerov2:driveMode>" << status->GetDriveMode() << "</bluerov2:driveMode>";
 	writer << "<bluerov2:gpsSatellites>" << status->GetSatellites() << "</bluerov2:gpsSatellites>";
 	writer << "<bluerov2:gpsHDOP>" << status->GetHdop() << "</bluerov2:gpsHDOP>";
 	writer << "<bluerov2:gpsHAccuracy>" << status->GetHaccuracy() << "</bluerov2:gpsHAccuracy>";
