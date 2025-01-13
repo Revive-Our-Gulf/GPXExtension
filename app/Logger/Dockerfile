@@ -17,6 +17,9 @@ RUN apt-get install -y libmariadb3
 RUN apt-get install -y libmariadb-dev
 RUN apt-get install -y libjsoncpp-dev
 
+ENV TZ=Pacific/Auckland
+RUN ln -snf /user/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Create the NVLib Library
 RUN mkdir Libraries
 WORKDIR /Libraries
