@@ -135,7 +135,8 @@ unique_ptr<Status> Repository::GetLastStatus()
 		auto distance = result->getDouble(10);
 		auto fom = result->getDouble(11);
 		auto velocityValid = result->getBoolean(12);
-		auto created = string(result->getString(13));
+		auto trackName = string(result->getString(13));
+		auto created = string(result->getString(14));
 
 		return unique_ptr<Status>(new Status(created, latitude, longitude, heading, depth, temperature, driveMode, satellites, hdop, haccuracy, distance, fom, velocityValid, string()));
 	}
