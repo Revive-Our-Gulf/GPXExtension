@@ -66,8 +66,15 @@ unique_ptr<Status> HttpRovComms::GetCurrentStatus()
 
 	
 
-	// Return the result
-	return unique_ptr<Status>(new Status(latitude, longitude, heading, depth, temperature, driveMode, satellites, hdop, haccuracy, distance, 0, false, trackName));
+	// Get the current time
+    auto now = std::chrono::system_clock::now();
+    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+    std::stringstream time_stream;
+    time_stream << std::put_time(std::localtime(&now_time), "%Y-%m-%d %H:%M:%S");
+    std::string timeString = time_stream.str();
+
+    // Create and return the Status object
+    return std::make_unique<Status>(timeString, latitude, longitude, heading, depth, temperature, driveMode, satellites, hdop, haccuracy, distance, 0.0, true, trackName);
 }
 
 /**
