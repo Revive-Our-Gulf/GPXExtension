@@ -83,9 +83,9 @@ void Home::RenderTracks(std::string& tracksHtml) {
             auto latestEntry = Status::convertTimeStamp(_repo->GetDateTime(track, false));
 
             std::string earliestEntryDate = earliestEntry.substr(0, 10);
-            std::string earliestEntryTime = earliestEntry.substr(11, 18);
+            std::string earliestEntryTime = earliestEntry.substr(11, 8);
             std::string latestEntryDate = latestEntry.substr(0, 10);
-            std::string latestEntryTime = latestEntry.substr(11, 18);
+            std::string latestEntryTime = latestEntry.substr(11, 8);
 
             auto userFriendlyDuration = CalculateDuration(earliestEntryTime, earliestEntryDate, latestEntryTime, latestEntryDate);
 
@@ -107,8 +107,8 @@ void Home::RenderTracks(std::string& tracksHtml) {
 
             tracksStream << "<tr>";
             tracksStream << "<td><button id=\"track_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('track_" << track << "')\">" << track << "</button></td>";
-            tracksStream << "<td><button id=\"entryDate_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('entryDate_" << track << "')\">" << earliestEntry << "</button></td>";
-            tracksStream << "<td><button id=\"earliestEntryTime_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('earliestEntryTime_" << track << "')\">" << latestEntry << "</button></td>";
+            tracksStream << "<td><button id=\"entryDate_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('entryDate_" << track << "')\">" << earliestEntryDate << "</button></td>";
+            tracksStream << "<td><button id=\"earliestEntryTime_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('earliestEntryTime_" << track << "')\">" << earliestEntryTime << "</button></td>";
             // tracksStream << "<td><button id=\"latestEntryTime_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('latestEntryTime_" << track << "')\">" << latestEntryTime << "</button></td>";
             tracksStream << "<td><button id=\"duration_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('duration_" << track << "')\">" << userFriendlyDuration << "</button></td>";
             tracksStream << "<td><button id=\"trackSize_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('trackSize_" << track << "')\">" << friendlyTrackSize << "</button></td>";
