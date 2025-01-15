@@ -62,3 +62,4 @@ VALUES (5, 6, 90, 1000, 13, 1, 5, 0.9, 1, 0.8, 0.5, true, 'unknown');
 INSERT INTO settings (field_name, field_value) VALUES ('LOGGER_STATE', 'STOPPED');
 INSERT INTO settings (field_name, field_value) VALUES ('RATE','500');
 INSERT INTO settings (field_name, field_value) VALUES ('CURRENT_TRACK', 'unknown');
+INSERT INTO settings (field_name, field_value) VALUES ('TIME_ZONE', '+0');

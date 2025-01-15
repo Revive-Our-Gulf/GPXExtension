@@ -107,32 +107,28 @@ namespace NVL_App
 		inline bool GetVelocityValid() const { return _dvl_velocity_valid; }
 		inline const string& GetTrackName() const { return _trackName; }
 
-		inline string ConvertTimeStamp(const string& timeStamp) {
+		inline string GetTimeStamp() {
+			return convertTimeStamp(_timeStamp);
+		}
+
+		static string convertTimeStamp(string timeStamp){
 			struct tm tm;
 			strptime(timeStamp.c_str(), "%Y-%m-%d %H:%M:%S", &tm);
-			time_t t = mktime(&tm);
-
-			t = timegm(&tm);
+			time_t t = timegm(&tm);
 
 			char tzBuffer[6];
-			strftime(tzBuffer, sizeof(tzBuffer), "%z", gmtime(&t));
+			strftime(tzBuffer, sizeof(tzBuffer), "%z", localtime(&t));
 
 			std::string tzString(tzBuffer);
 			std::string tzHour = tzString.substr(0, 3);
 
 			char buffer[30];
-			strftime(buffer, sizeof(buffer), "%Y-%m-%dT%H:%M:%S", gmtime(&t));
+			strftime(buffer, sizeof(buffer), "%Y-%m-%dT%H:%M:%S", localtime(&t));
 
 			std::ostringstream out;
 			out << buffer << timeStamp.substr(19) << tzHour;
 
 			return out.str();
 		}
-
-		inline string GetTimeStamp() {
-			return ConvertTimeStamp(_timeStamp);
-		}
-
-
 	};
 }

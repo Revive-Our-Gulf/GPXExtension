@@ -7,6 +7,7 @@
 //--------------------------------------------------
 
 #include "Repository.h"
+#include "Status.h"
 using namespace NVL_App;
 
 //--------------------------------------------------
@@ -327,6 +328,7 @@ string Repository::GetFieldName(Field field)
 		case Field::LOGGER_STATE: return "LOGGER_STATE";
 		case Field::RATE: return "RATE";
 		case Field::CURRENT_TRACK: return "CURRENT_TRACK";
+		case Field::TIME_ZONE: return "TIME_ZONE";
 	}
 
 	throw runtime_error("Unknown field type");
@@ -345,35 +347,16 @@ string Repository::ExecuteQuery(const string& query, const string& trackName)
     }
 }
 
-string Repository::GetEarliestEntryDate(const string& trackName, const string& field)
-{
-    auto query = stringstream();
-    query << "SELECT DATE(" << field << ") FROM status WHERE track_name = ? ORDER BY " << field << " ASC LIMIT 1";
-    return ExecuteQuery(query.str(), trackName);
+
+string Repository::GetDateTime(const string& trackName, bool earliest){
+	auto query = stringstream();
+	if (earliest){
+		query << "SELECT created_at FROM status WHERE track_name = ? ORDER BY created_at ASC LIMIT 1";
+	}else{
+		query << "SELECT created_at FROM status WHERE track_name = ? ORDER BY created_at DESC LIMIT 1";
+	}
+	return ExecuteQuery(query.str(), trackName);
 }
-
-string Repository::GetEarliestEntryTime(const string& trackName, const string& field)
-{
-    auto query = stringstream();
-    query << "SELECT TIME(" << field << ") FROM status WHERE track_name = ? ORDER BY " << field << " ASC LIMIT 1";
-    return ExecuteQuery(query.str(), trackName);
-}
-
-string Repository::GetLatestEntryDate(const string& trackName, const string& field)
-{
-    auto query = stringstream();
-    query << "SELECT DATE(" << field << ") FROM status WHERE track_name = ? ORDER BY " << field << " DESC LIMIT 1";
-    return ExecuteQuery(query.str(), trackName);
-}
-
-string Repository::GetLatestEntryTime(const string& trackName, const string& field)
-{
-    auto query = stringstream();
-    query << "SELECT TIME(" << field << ") FROM status WHERE track_name = ? ORDER BY " << field << " DESC LIMIT 1";
-    return ExecuteQuery(query.str(), trackName);
-}
-
-
 
 
 

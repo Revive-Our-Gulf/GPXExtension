@@ -23,6 +23,10 @@ std::pair<std::string, double> Home::GetFreeDiskSpace() {
     double freeSpaceGB = freeSpace / (1024.0 * 1024.0 * 1024.0);
     double totalSpaceGB = totalSpace / (1024.0 * 1024.0 * 1024.0);
 
+    if (freeSpaceGB > totalSpaceGB){
+        freeSpaceGB = -1;
+        totalSpaceGB = -1;
+    }
     std::stringstream ss;
     ss << std::fixed << std::setprecision(2) << freeSpaceGB << " GB free of " << totalSpaceGB << " GB";
     double usedPercentage = 100 - ((freeSpaceGB / totalSpaceGB) * 100.0);
@@ -75,31 +79,10 @@ void Home::RenderTracks(std::string& tracksHtml) {
         for (const auto& track : tracks) {
             auto gpxFile = std::stringstream(); gpxFile << track << ".gpx";
 
-            // Fetch earliest and latest entry dates and times
-            auto earliestEntryDate = _repo->GetEarliestEntryDate(track, "created_at");
-            auto latestEntryDate = _repo->GetLatestEntryDate(track, "created_at");
-            auto earliestEntryTime = _repo->GetEarliestEntryTime(track, "created_at");
-            auto latestEntryTime = _repo->GetLatestEntryTime(track, "created_at");
+            auto earliestEntry = Status::convertTimeStamp(_repo->GetDateTime(track, true));
+            auto latestEntry = Status::convertTimeStamp(_repo->GetDateTime(track, false));
 
-            // Remove decimal points from entry times
-            earliestEntryTime = earliestEntryTime.substr(0, earliestEntryTime.find('.'));
-            latestEntryTime = latestEntryTime.substr(0, latestEntryTime.find('.'));
-
-            auto duration = CalculateDuration(earliestEntryTime, earliestEntryDate, latestEntryTime, latestEntryDate);
-
-            // Convert duration to a more user-friendly format
-            std::istringstream durationStream(duration);
-            int hours, minutes, seconds;
-            char colon;
-            durationStream >> hours >> colon >> minutes >> colon >> seconds;
-            std::stringstream userFriendlyDuration;
-            if (hours > 0) {
-                userFriendlyDuration << hours << "h ";
-            }
-            if (minutes > 0 || hours > 0) {
-                userFriendlyDuration << minutes << "m ";
-            }
-            userFriendlyDuration << seconds << "s";
+            auto userFriendlyDuration = 0;
 
             auto trackSize = _repo->GetTrackDataSize(track);
 
@@ -119,8 +102,8 @@ void Home::RenderTracks(std::string& tracksHtml) {
 
             tracksStream << "<tr>";
             tracksStream << "<td><button id=\"track_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('track_" << track << "')\">" << track << "</button></td>";
-            tracksStream << "<td><button id=\"entryDate_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('entryDate_" << track << "')\">" << earliestEntryDate << "</button></td>";
-            tracksStream << "<td><button id=\"earliestEntryTime_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('earliestEntryTime_" << track << "')\">" << earliestEntryTime << "</button></td>";
+            tracksStream << "<td><button id=\"entryDate_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('entryDate_" << track << "')\">" << earliestEntry << "</button></td>";
+            tracksStream << "<td><button id=\"earliestEntryTime_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('earliestEntryTime_" << track << "')\">" << latestEntry << "</button></td>";
             // tracksStream << "<td><button id=\"latestEntryTime_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('latestEntryTime_" << track << "')\">" << latestEntryTime << "</button></td>";
             tracksStream << "<td><button id=\"duration_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('duration_" << track << "')\">" << userFriendlyDuration.str() << "</button></td>";
             tracksStream << "<td><button id=\"trackSize_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('trackSize_" << track << "')\">" << friendlyTrackSize << "</button></td>";

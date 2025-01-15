@@ -20,7 +20,7 @@ namespace NVL_App
 	class Repository
 	{
 	public:
-		enum Field { LOGGER_STATE, RATE, CURRENT_TRACK };
+		enum Field { LOGGER_STATE, RATE, CURRENT_TRACK, TIME_ZONE };
 	private:
 		sql::Connection * _connection;
 		string _database;
@@ -39,10 +39,7 @@ namespace NVL_App
 		void SetField(Field field, const string& value);
 		string GetField(Field field);
 
-		string GetEarliestEntryDate(const string& trackName, const string& field);
-        string GetEarliestEntryTime(const string& trackName, const string& field);
-        string GetLatestEntryDate(const string& trackName, const string& field);
-        string GetLatestEntryTime(const string& trackName, const string& field);
+		string GetDateTime(const string& trackName, bool earliest);
 
 		size_t GetTrackDataSize(const string& trackName);
 

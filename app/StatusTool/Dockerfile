@@ -16,10 +16,6 @@ RUN apt-get install -y libssl-dev
 RUN apt-get install -y libmariadb3
 RUN apt-get install -y libmariadb-dev
 
-ENV TZ=Pacific/Auckland
-RUN ln -snf /user/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-
 # Create the NVLib Library
 RUN mkdir Libraries
 WORKDIR /Libraries
@@ -87,6 +83,9 @@ RUN mkdir build
 WORKDIR /Plugin/build
 RUN cmake .. 
 RUN make
+
+ENV TZ=Pacific/Auckland
+RUN ln -snf /user/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 EXPOSE 5428/tcp
 

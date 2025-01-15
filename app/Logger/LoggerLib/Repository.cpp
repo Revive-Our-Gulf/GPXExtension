@@ -85,8 +85,6 @@ void Repository::AddStatus(Status * status)
 	statement->setBoolean(12, status->GetVelocityValid());
 	statement->setString(13, status->GetTrackName());
 
-	cout << status->GetTemperature() << endl;
-
 	statement->executeQuery();
 }
 

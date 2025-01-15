@@ -33,12 +33,17 @@ void Settings::SubmitForm()
     if (_fields.find("interval") != _fields.end()) {
         _repo->SetField(Repository::Field::RATE, _fields["interval"]);
     }
+    if (_fields.find("timezone") != _fields.end()) {
+        _repo->SetField(Repository::Field::TIME_ZONE, _fields["timezone"]);
+    }
 }
 
 void Settings::RenderSettings(string& content)
 {
     auto rate = _repo->GetField(Repository::Field::RATE);
+    auto timezone = _repo->GetField(Repository::Field::TIME_ZONE);
     ReplacePlaceholder(content, "{{rate}}", rate);
+    ReplacePlaceholder(content, "{{timezone}}", timezone);
 }
 
 void Settings::ReplacePlaceholder(string& content, const string& placeholder, const string& value)
