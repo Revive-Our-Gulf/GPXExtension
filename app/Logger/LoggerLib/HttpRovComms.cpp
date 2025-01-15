@@ -54,7 +54,7 @@ unique_ptr<Status> HttpRovComms::GetCurrentStatus()
 	// GPS_RAW_INT
 	auto gps_raw_int_message = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/GPS_RAW_INT");
 	auto satellites = gps_raw_int_message["satellites_visible"].asInt();
-	auto hdop = gps_raw_int_message["eph"].asDouble();
+	auto hdop = gps_raw_int_message["eph"].asDouble() / 1e2;
 	auto haccuracy = gps_raw_int_message["h_acc"].asDouble();
 
 	// RANGEFINDER
