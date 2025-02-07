@@ -40,7 +40,7 @@ unique_ptr<Status> HttpRovComms::GetCurrentStatus()
 
 	auto latitude = global_position_int_message["lat"].asDouble() / 1e7;
 	auto longitude = global_position_int_message["lon"].asDouble() / 1e7;
-	auto depth = global_position_int_message["alt"].asDouble() / 1e3;
+	auto depth = global_position_int_message["relative_alt"].asDouble() / 1e3;
 	auto heading = global_position_int_message["hdg"].asDouble() / 1e2;
 
 	// SCALED_PRESSURE2 for temperature
