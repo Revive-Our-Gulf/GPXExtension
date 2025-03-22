@@ -21,3 +21,5 @@ jobs:
           docker-password: ${{ secrets.DOCKER_PASSWORD }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           image-name: 'gpx-status'
+          dockerfile-path: './app/StatusTool/Dockerfile'
+          context-path: './app/StatusTool'
