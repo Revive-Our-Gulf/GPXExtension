@@ -39,6 +39,8 @@ jobs:
           # Handle version tag
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             VERSION=${GITHUB_REF#refs/tags/}
+          elif [[ $GITHUB_REF == refs/heads/* ]]; then
+            VERSION=latest
           else
             VERSION=latest
           fi
@@ -47,18 +49,6 @@ jobs:
           if [[ $VERSION =~ ^v[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
             TAGS="$TAGS --tag ${DOCKER_IMAGE}:latest"
           fi
-          
-          echo "docker_image=${DOCKER_IMAGE}" >> $GITHUB_OUTPUT
-          echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          echo "buildx_args=\
-            --build-arg IMAGE_NAME='gpx-status' \
-            --build-arg AUTHOR='${{ github.actor }}' \
-            --build-arg MAINTAINER='${{ github.repository_owner }}' \
-            --build-arg REPO='${{ github.repository }}' \
-            --cache-from 'type=local,src=/tmp/.buildx-cache' \
-            --cache-to 'type=local,dest=/tmp/.buildx-cache' \
-            ${TAGS} \
-            --file './app/StatusTool/Dockerfile' ." >> $GITHUB_OUTPUT
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
