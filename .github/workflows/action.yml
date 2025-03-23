@@ -39,6 +39,7 @@ jobs:
 
       - name: Prepare
         id: prepare
+        working-directory: app/StatusTool
         run: |
           DOCKER_IMAGE=${{ secrets.DOCKER_USERNAME }}/gpx-status
           VERSION=latest
@@ -64,7 +65,7 @@ jobs:
             --cache-from 'type=local,src=/tmp/.buildx-cache' \
             --cache-to 'type=local,dest=/tmp/.buildx-cache' \
             ${TAGS} \
-            --file './app/StatusTool/Dockerfile' ." >> $GITHUB_OUTPUT
+            --file './Dockerfile' ." >> $GITHUB_OUTPUT
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -92,6 +93,7 @@ jobs:
           docker pull --platform 'linux/arm64/v8' ${{ steps.prepare.outputs.docker_image }}:latest || true
 
       - name: Docker Buildx (build)
+        working-directory: app/StatusTool
         run: |
           docker buildx build \
             --output "type=image,push=false" \
@@ -107,6 +109,7 @@ jobs:
 
       - name: Docker Buildx (push)
         if: success()
+        working-directory: app/StatusTool
         run: |
           docker buildx build \
             --output "type=image,push=true" \
@@ -119,6 +122,7 @@ jobs:
 
       - name: Create image artifact
         if: ${{ success() && startsWith(github.ref, 'refs/tags/') }}
+        working-directory: app/StatusTool
         run: |
           GIT_HASH_SHORT=$(git rev-parse --short "$GITHUB_SHA")
           docker buildx build \
@@ -132,7 +136,7 @@ jobs:
         if: ${{ success() && startsWith(github.ref, 'refs/tags/') }}
         with:
           name: gpx-status-docker-image-arm64-v8
-          path: '*arm64-v8.tar'
+          path: 'app/StatusTool/*arm64-v8.tar'
           overwrite: true
 
       - name: Upload docker image for release
@@ -140,7 +144,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/') && success()
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: '*.tar'
+          file: 'app/StatusTool/*.tar'
           tag: ${{ github.ref }}
           overwrite: true
           prerelease: true
