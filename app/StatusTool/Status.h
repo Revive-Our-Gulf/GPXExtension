@@ -115,19 +115,13 @@ namespace NVL_App
 			struct tm tm;
 			strptime(timeStamp.c_str(), "%Y-%m-%d %H:%M:%S", &tm);
 			time_t t = timegm(&tm);
-
-			char tzBuffer[6];
-			strftime(tzBuffer, sizeof(tzBuffer), "%z", localtime(&t));
-
-			std::string tzString(tzBuffer);
-			std::string tzHour = tzString.substr(0, 3);
-
+		
 			char buffer[30];
-			strftime(buffer, sizeof(buffer), "%Y-%m-%dT%H:%M:%S", localtime(&t));
-
+			strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", localtime(&t));
+		
 			std::ostringstream out;
-			out << buffer << timeStamp.substr(19) << tzHour;
-
+			out << buffer << timeStamp.substr(19);
+		
 			return out.str();
 		}
 	};

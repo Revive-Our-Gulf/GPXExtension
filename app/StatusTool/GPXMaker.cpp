@@ -125,11 +125,11 @@ void GPXMaker::RenderJourney(ostream& writer, const string& trackName)
 void GPXMaker::RenderStep(ostream& writer, Status * status) 
 {
 	writer << "<trkpt lat=\"" << fixed << setprecision(8) << status->GetLatitude() << "\" lon=\"" << status->GetLongitude() << defaultfloat << "\">";
-	// writer << "<ele>" << status->GetAltitude() << "</ele>";
+	writer << "<ele>" << status->GetDepth() << "</ele>";
 	writer << "<time>" << status->GetTimeStamp() << "</time>";
 	writer << "<extensions>";
 	writer << "<bluerov2:heading>" << status->GetHeading() << "</bluerov2:heading>";
-	writer << "<bluerov2:depth>" << status->GetDepth() << "</bluerov2:depth>";
+	writer << "<bluerov2:relativeAlt>" << status->GetDepth() << "</bluerov2:relativeAlt>";
 	writer << "<bluerov2:waterTemp>" << status->GetTemperature() << "</bluerov2:waterTemp>";
 	writer << "<bluerov2:driveMode>" << status->GetDriveMode() << "</bluerov2:driveMode>";
 	writer << "<bluerov2:gpsSatellites>" << status->GetSatellites() << "</bluerov2:gpsSatellites>";
