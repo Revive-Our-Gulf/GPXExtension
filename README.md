@@ -41,6 +41,12 @@ The docker container for the database can be launched as follows:
 
 ```docker run -d --restart unless-stopped --name mariadb -e MARIADB_ROOT_PASSWORD=808Rkief$ -p 3306:3306 -d mariadb:latest```
 
+Mariadb client needs to be installed as well:
+```
+sudo apt-get update
+sudo apt install mariadb-client
+```
+
 Note that a user needs to be created. So launch a console into the docker container
 
 ```docker exec -it mariadb mariadb -h 127.0.0.1 -u root -p808Rkief$```
