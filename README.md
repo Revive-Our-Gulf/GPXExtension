@@ -25,6 +25,7 @@ The project is made up of two main files:
 ```
 cd ~
 mkdir Installs
+cd Installs
 git clone https://github.com/Revive-Our-Gulf/GPXExtension.git
 ```
 
@@ -52,8 +53,17 @@ GRANT ALL ON *.* TO 'trevor'@'%';
 FLUSH PRIVILEGES;
 ```
 
-After exiting from the database by typing `exit`, the IP address can be added as follows:
-
+After exiting from the database by typing `exit`, the mariadb needs to be setup to have a BlueROV database with appropriate fields.
+Copy the generate.sql file to the mariadb docker and enter the docker.
+```
+docker cp /home/pi/Installs/GPXExtension/sql/generate.sql mariadb:/var/lib/mysql/generate.sql
+docker exec -it mariadb mariadb -h 127.0.0.1 -u root -p808Rkief$
+```
+Source the generate.sql file to create the BlueROV database and fields
+```
+SOURCE /var/lib/mysql/generate.sql;
+```
+After exiting back out with `exit` the IP address can be added as follows:
 ```
 mariadb -h $(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mariadb) -u trevor -p808Rkief$ BlueROV
 ```
@@ -64,17 +74,6 @@ sudo docker network create gpx_net
 docker network connect --alias gpx_db gpx_net mariadb
 ```
 The connect command also gives the mariadb database the gpx_db alias
-
-Finally mariadb needs to be setup to have a BlueROV database with appropriate fields.
-Copy the generate.sql file to the mariadb docker and enter the docker.
-```
-docker cp /home/pi/Installs/GPXExtension/sql/generate.sql mariadb:/var/lib/mysql/generate.sql
-docker exec -it mariadb mariadb -h 127.0.0.1 -u root -p808Rkief$
-```
-Source the generate.sql file to create the BlueROV database and fields
-```
-SOURCE /var/lib/mysql/generate.sql;
-```
 
 ### Logger (Plugin) ###
 Now to start the Logger use:
