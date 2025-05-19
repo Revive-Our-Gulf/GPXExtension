@@ -64,6 +64,7 @@ add_custom_target(config_copy ALL
 
 # Copy Static files across
 add_custom_target(static_copy ALL
+    COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/static
     COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/static ${CMAKE_BINARY_DIR}/static
     DEPENDS ${MY_TARGET}
 )

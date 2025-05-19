@@ -36,36 +36,39 @@ unique_ptr<Status> HttpRovComms::GetCurrentStatus()
 	auto client = httplib::Client(_ip, 80);
 
 	// GLOBAL_POSITION_INT
-	auto global_position_int_message = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/GLOBAL_POSITION_INT");
+	auto global_position_int = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/GLOBAL_POSITION_INT");
 
+	auto position_counter = global_position_int["status"]["time"]["counter"].asInt();
+
+	auto global_position_int_message = global_position_int["message"];
 	auto latitude = global_position_int_message["lat"].asDouble() / 1e7;
 	auto longitude = global_position_int_message["lon"].asDouble() / 1e7;
 	auto depth = global_position_int_message["relative_alt"].asDouble() / 1e3;
 	auto heading = global_position_int_message["hdg"].asDouble() / 1e2;
 
 	// SCALED_PRESSURE2 for temperature
-	auto scaled_pressure2_message = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/SCALED_PRESSURE2");
+	auto scaled_pressure2_message = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/SCALED_PRESSURE2")["message"];
 	auto temperature = scaled_pressure2_message["temperature"].asDouble() / 100;
 
 	// HEARTBEAT for drive mode
-	auto heartbeat_message = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/HEARTBEAT");
+	auto heartbeat_message = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/HEARTBEAT")["message"];
 	auto driveMode = heartbeat_message["custom_mode"].asDouble();
 
 	// GPS_RAW_INT
-	auto gps_raw_int_message = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/GPS_RAW_INT");
+	auto gps_raw_int_message = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/GPS_RAW_INT")["message"];
 	auto satellites = gps_raw_int_message["satellites_visible"].asInt();
 	auto hdop = gps_raw_int_message["eph"].asDouble() / 1e2;
 	auto haccuracy = gps_raw_int_message["h_acc"].asDouble();
 
 	// RANGEFINDER
-	auto rangefinder_message = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/RANGEFINDER");
+	auto rangefinder_message = GetMessage(client, "/mavlink2rest/mavlink/vehicles/1/components/1/messages/RANGEFINDER")["message"];
 	auto distance = rangefinder_message["distance"].asDouble();
 
 	// Retrieve the track name
 	auto trackName = GetTrackName();
 
     // Create and return the Status object
-    return std::make_unique<Status>(latitude, longitude, heading, depth, temperature, driveMode, satellites, hdop, haccuracy, distance, 0.0, true, trackName);
+    return std::make_unique<Status>(latitude, longitude, position_counter, heading, depth, temperature, driveMode, satellites, hdop, haccuracy, distance, 0.0, true, trackName);
 }
 
 /**
@@ -84,7 +87,7 @@ Json::Value HttpRovComms::GetMessage(httplib::Client& client, const string& path
 	auto value = Json::Value();
 	reader.parse(body, value);
 
-	return value["message"];
+	return value;
 }
 
 /**

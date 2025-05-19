@@ -176,6 +176,7 @@ void Run()
 
         if (status != nullptr) {
             jsonResponse["created"] = status->GetTimeStamp();
+            jsonResponse["positionCounter"] = status->GetPositionCounter();
             jsonResponse["latitude"] = status->GetLatitude();
             jsonResponse["longitude"] = status->GetLongitude();
             jsonResponse["heading"] = status->GetHeading();

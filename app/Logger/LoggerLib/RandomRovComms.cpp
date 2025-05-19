@@ -34,6 +34,7 @@ unique_ptr<Status> RandomRovComms::GetCurrentStatus()
 {
 	auto latitude = NVLib::RandomUtils::GetInteger(-1e8,1e8) / 1e7;
 	auto longitude = NVLib::RandomUtils::GetInteger(-1e8,1e8) / 1e7;
+	auto positionCounter = NVLib::RandomUtils::GetInteger(0, 100000);
 	auto heading = 180.0 + NVLib::RandomUtils::GetInteger(-1800,1800) / 10;
 	auto depth = -10.0 + NVLib::RandomUtils::GetInteger(-100, 100) / 10;
 	auto temperature = 15.0 + NVLib::RandomUtils::GetInteger(-50,50) / 10;
@@ -47,5 +48,5 @@ unique_ptr<Status> RandomRovComms::GetCurrentStatus()
 
 	auto trackName = GetTrackName();
 
-	return unique_ptr<Status>(new Status(latitude, longitude, heading, depth, temperature, driveMode, satellites, hdop, haccuracy, distance, fom, velocityValid, trackName));
+	return unique_ptr<Status>(new Status(latitude, longitude, positionCounter, heading, depth, temperature, driveMode, satellites, hdop, haccuracy, distance, fom, velocityValid, trackName));
 }

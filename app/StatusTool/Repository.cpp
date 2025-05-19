@@ -56,6 +56,7 @@ void Repository::AddStatus(Status * status)
 				 "("
 				 "latitude, "
 				 "longitude, "
+				 "position_counter, "
 				 "heading, "
 				 "depth, "
 				 "temperature, "
@@ -68,23 +69,24 @@ void Repository::AddStatus(Status * status)
 				 "dvl_velocity_valid, "
 				 "track_name "
 				 ") "
-				 "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				 "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	auto statement = unique_ptr<sql::PreparedStatement>(_connection->prepareStatement(query));
 
 	statement->setDouble(1, status->GetLatitude());
 	statement->setDouble(2, status->GetLongitude());
-	statement->setDouble(3, status->GetHeading());
-	statement->setDouble(4, status->GetDepth());
-	statement->setDouble(5, status->GetTemperature());
-	statement->setInt(6, status->GetDriveMode());
-	statement->setInt(7, status->GetSatellites());
-	statement->setDouble(8, status->GetHdop());
-	statement->setDouble(9, status->GetHaccuracy());
-	statement->setDouble(10, status->GetDistance());
-	statement->setDouble(11, status->GetFom());
-	statement->setBoolean(12, status->GetVelocityValid());
-	statement->setString(13, status->GetTrackName());
+	statement->setInt(3, status->GetPositionCounter());
+	statement->setDouble(4, status->GetHeading());
+	statement->setDouble(5, status->GetDepth());
+	statement->setDouble(6, status->GetTemperature());
+	statement->setInt(7, status->GetDriveMode());
+	statement->setInt(8, status->GetSatellites());
+	statement->setDouble(9, status->GetHdop());
+	statement->setDouble(10, status->GetHaccuracy());
+	statement->setDouble(11, status->GetDistance());
+	statement->setDouble(12, status->GetFom());
+	statement->setBoolean(13, status->GetVelocityValid());
+	statement->setString(14, status->GetTrackName());
 
 	cout << status->GetTemperature() << endl;
 
@@ -105,6 +107,7 @@ unique_ptr<Status> Repository::GetLastStatus()
 	auto query = "SELECT "
 				 "latitude, "
 				 "longitude, "
+				 "position_counter, "
 				 "heading, "
 				 "depth, "
 				 "temperature, "
@@ -127,19 +130,20 @@ unique_ptr<Status> Repository::GetLastStatus()
 		auto latitude = result->getDouble(1);
 		auto longitude = result->getDouble(2);
 		auto heading = result->getDouble(3);
-		auto depth = result->getDouble(4);
-		auto temperature = result->getDouble(5);
-		auto driveMode = result->getInt(6);
-		auto satellites = result->getInt(7);
-		auto hdop = result->getDouble(8);
-		auto haccuracy = result->getDouble(9);
-		auto distance = result->getDouble(10);
-		auto fom = result->getDouble(11);
-		auto velocityValid = result->getBoolean(12);
-		auto trackName = string(result->getString(13));
-		auto created = string(result->getString(14));
+		auto positionCounter = result->getInt(4);
+		auto depth = result->getDouble(5);
+		auto temperature = result->getDouble(6);
+		auto driveMode = result->getInt(7);
+		auto satellites = result->getInt(8);
+		auto hdop = result->getDouble(9);
+		auto haccuracy = result->getDouble(10);
+		auto distance = result->getDouble(11);
+		auto fom = result->getDouble(12);
+		auto velocityValid = result->getBoolean(13);
+		auto trackName = string(result->getString(14));
+		auto created = string(result->getString(15));
 
-		return unique_ptr<Status>(new Status(created, latitude, longitude, heading, depth, temperature, driveMode, satellites, hdop, haccuracy, distance, fom, velocityValid, string()));
+		return unique_ptr<Status>(new Status(created, latitude, longitude, positionCounter, heading, depth, temperature, driveMode, satellites, hdop, haccuracy, distance, fom, velocityValid, string()));
 	}
 
 	return unique_ptr<Status>(nullptr);
@@ -171,6 +175,7 @@ void Repository::GetStatuses(const string& trackName, vector<Status *>& output)
 	query << "SELECT "
 		  << "latitude, "
 		  << "longitude, "
+		  << "position_counter, "
 		  << "heading, "
 		  << "depth, "
 		  << "temperature, "
@@ -191,19 +196,20 @@ void Repository::GetStatuses(const string& trackName, vector<Status *>& output)
 	{
 		auto latitude = result->getDouble(1);
 		auto longitude = result->getDouble(2);
-		auto heading = result->getDouble(3);
-		auto depth = result->getDouble(4);
-		auto temperature = result->getDouble(5);
-		auto driveMode = result->getInt(6);
-		auto satellites = result->getInt(7);
-		auto hdop = result->getDouble(8);
-		auto haccuracy = result->getDouble(9);
-		auto distance = result->getDouble(10);
-		auto fom = result->getDouble(11);
-		auto velocityValid = result->getBoolean(12);
-		auto created = string(result->getString(13));
+		auto positionCounter = result->getInt(3);
+		auto heading = result->getDouble(4);
+		auto depth = result->getDouble(5);
+		auto temperature = result->getDouble(6);
+		auto driveMode = result->getInt(7);
+		auto satellites = result->getInt(8);
+		auto hdop = result->getDouble(9);
+		auto haccuracy = result->getDouble(10);
+		auto distance = result->getDouble(11);
+		auto fom = result->getDouble(12);
+		auto velocityValid = result->getBoolean(13);
+		auto created = string(result->getString(14));
 
-		auto status = new Status(created, latitude, longitude, heading, depth, temperature, driveMode, satellites, hdop, haccuracy, distance, fom, velocityValid, trackName);
+		auto status = new Status(created, latitude, longitude, positionCounter, heading, depth, temperature, driveMode, satellites, hdop, haccuracy, distance, fom, velocityValid, trackName);
 		output.push_back(status);
 	}
 }
