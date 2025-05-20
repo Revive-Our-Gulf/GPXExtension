@@ -218,10 +218,42 @@ void Run()
         auto formData = extractFormData(req.body);
         auto currentStatus = repo.GetField(NVL_App::Repository::Field::LOGGER_STATE);
         auto newStatus = currentStatus == "STOPPED" ? "STARTED" : "STOPPED";
+
+        if (newStatus == "STARTED") {
+            auto currentTrackName = repo.GetField(NVL_App::Repository::Field::CURRENT_TRACK);
+            
+            if (formData.find("track") != formData.end()) {
+                currentTrackName = formData["track"];
+            }
+            
+            string baseName = currentTrackName;
+            size_t underscorePos = baseName.find_last_of('_');
+            if (underscorePos != string::npos) {
+                string suffixPart = baseName.substr(underscorePos + 1);
+                bool isNumericSuffix = !suffixPart.empty() && 
+                    std::all_of(suffixPart.begin(), suffixPart.end(), ::isdigit);
+                
+                if (isNumericSuffix) {
+                    baseName = baseName.substr(0, underscorePos);
+                }
+            }
+            
+            auto existingTracks = repo.GetTracks();
+            string uniqueTrackName = baseName;
+            int suffix = 1;
+            
+            while (std::find(existingTracks.begin(), existingTracks.end(), uniqueTrackName) != existingTracks.end()) {
+                uniqueTrackName = baseName + "_" + std::to_string(suffix);
+                suffix++;
+            }
+            
+            repo.SetField(NVL_App::Repository::Field::CURRENT_TRACK, uniqueTrackName);
+        }
+            
         repo.SetField(NVL_App::Repository::Field::LOGGER_STATE, newStatus);
         return crow::response(200);
     });
-
+    
     //set the port, set the app to run on multiple threads, and run the app
     app.port(5428).multithreaded().run();
 }
