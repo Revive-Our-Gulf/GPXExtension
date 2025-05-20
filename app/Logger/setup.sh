@@ -6,8 +6,8 @@ IMAGE_NAME="rogengineering/$CONTAINER_NAME:latest"
 if [ $# -eq 0 ]; then
     echo "Usage: $0 [build|push|pull]"
     echo "  build  - Build the Docker image locally"
-    echo "  push   - Push the Docker image to registry"
     echo "  pull   - Pull the Docker image from registry and deploy container"
+    echo "  run   - Run the Docker image"
     exit 1
 fi
 
@@ -19,13 +19,12 @@ case "$1" in
         echo "Building Docker image..."
         docker build -t "$IMAGE_NAME" .
         ;;
-    push)
-        echo "Pushing Docker image to registry..."
-        docker push "$IMAGE_NAME"
-        ;;
     pull)
         echo "Pulling Docker image from registry..."
         docker pull "$IMAGE_NAME"
+        ;;
+    run)
+        echo "Running Docker image..."
         ;;
     *)
         echo "Invalid parameter: $1"
@@ -34,8 +33,5 @@ case "$1" in
         ;;
 esac
 
-# Only start container if it's not the push-only command
-if [ "$1" != "push" ]; then
-    echo "Starting container..."
-    docker run -d --name "$CONTAINER_NAME" --restart unless-stopped --network gpx_net "$IMAGE_NAME"
-fi
+echo "Starting container..."
+docker run -d --name gpx_status --restart unless-stopped --network gpx_net -p 5428:5428 rogengineering/gpx_status:latest
