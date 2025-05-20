@@ -199,20 +199,20 @@ void Repository::GetStatuses(const string& trackName, vector<Status *>& output)
 
 	while (result->next()) 
 	{
-		auto latitude = result->getDouble(2);
-		auto longitude = result->getDouble(3);
-		auto positionCounter = result->getInt(4);
-		auto heading = result->getDouble(5);
-		auto depth = result->getDouble(6);
-		auto temperature = result->getDouble(7);
-		auto driveMode = result->getInt(8);
-		auto satellites = result->getInt(9);
-		auto hdop = result->getDouble(10);
-		auto haccuracy = result->getDouble(11);
-		auto distance = result->getDouble(12);
-		auto fom = result->getDouble(13);
-		auto velocityValid = result->getBoolean(14);
-		auto created = string(result->getString(15));
+		auto latitude = result->getDouble(1);
+		auto longitude = result->getDouble(2);
+		auto positionCounter = result->getInt(3);
+		auto heading = result->getDouble(4);
+		auto depth = result->getDouble(5);
+		auto temperature = result->getDouble(6);
+		auto driveMode = result->getInt(7);
+		auto satellites = result->getInt(8);
+		auto hdop = result->getDouble(9);
+		auto haccuracy = result->getDouble(10);
+		auto distance = result->getDouble(11);
+		auto fom = result->getDouble(12);
+		auto velocityValid = result->getBoolean(13);
+		auto created = string(result->getString(14));
 
 		auto status = new Status(created, latitude, longitude, positionCounter, heading, depth, temperature, driveMode, satellites, hdop, haccuracy, distance, fom, velocityValid, trackName);
 		output.push_back(status);

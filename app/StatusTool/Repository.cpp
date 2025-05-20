@@ -129,8 +129,8 @@ unique_ptr<Status> Repository::GetLastStatus()
 	{
 		auto latitude = result->getDouble(1);
 		auto longitude = result->getDouble(2);
-		auto heading = result->getDouble(3);
-		auto positionCounter = result->getInt(4);
+		auto positionCounter = result->getInt(3);
+		auto heading = result->getDouble(4);
 		auto depth = result->getDouble(5);
 		auto temperature = result->getDouble(6);
 		auto driveMode = result->getInt(7);
