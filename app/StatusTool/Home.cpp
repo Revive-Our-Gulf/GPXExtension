@@ -133,32 +133,6 @@ void Home::RenderSettings(string& content)
     ReplacePlaceholder(content, "{{status}}", status == "STOPPED" ? "Record" : "Stop");
 }
 
-void Home::SubmitForm()
-{
-    auto currentStatus = _repo->GetField(Repository::Field::LOGGER_STATE);
-    auto newStatus = currentStatus == "STOPPED" ? "STARTED" : "STOPPED";
-
-    if (newStatus == "STARTED") {
-        auto currentTackName = _repo->GetField(Repository::Field::CURRENT_TRACK);
-
-        if (_fields.find("track") != _fields.end()) {
-            currentTackName = _fields["track"];
-        }
-
-        auto existingTracks = _repo->GetTracks();
-        string uniqueTrackName = currentTackName;
-        int suffix = 1;
-
-        while (std::find(existingTracks.begin(), existingTracks.end(), uniqueTrackName) != existingTracks.end()) {
-            uniqueTrackName = currentTackName + "_" + std::to_string(suffix);
-            suffix++;
-        }
-
-        _repo->SetField(Repository::Field::CURRENT_TRACK, uniqueTrackName);
-    }
-    _repo->SetField(Repository::Field::LOGGER_STATE, newStatus);
-}
-
 void Home::ReplacePlaceholder(string& content, const string& placeholder, const string& value)
 {
     size_t pos = 0;
