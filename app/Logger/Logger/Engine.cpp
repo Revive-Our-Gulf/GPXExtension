@@ -64,7 +64,14 @@ void Engine::Run()
             auto timeString = NVLib::StringUtils::GetDateTimeString();
             _logger->Log(1, "Adding status entry: %s", timeString.c_str());
             auto status = communicator->GetCurrentStatus();
-            repository.AddStatus(status.get());
+            auto position_counter = status->GetPositionCounter();
+            auto trackName = repository.GetField(Repository::Field::CURRENT_TRACK);
+
+            auto lastPositionCounter = repository.GetLastPositionCounter(trackName);
+            if (position_counter > lastPositionCounter) 
+            {
+                repository.AddStatus(status.get());
+            }            
         }
 
         this_thread::sleep_for(std::chrono::milliseconds(interval));

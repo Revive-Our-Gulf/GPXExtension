@@ -23,6 +23,7 @@ create table status
   id INT auto_increment,
   latitude DOUBLE not null,
   longitude DOUBLE not null,
+  position_counter INT not null,
   heading DOUBLE not null,
   depth DOUBLE not null,
   temperature DOUBLE not null,
@@ -53,8 +54,8 @@ create table settings
 /*----------------------------
 * Update Example
 ------------------------------*/
-INSERT INTO status (latitude, longitude, heading, depth, temperature, drive_mode, gps_satellites, gps_hdop, gps_haccuracy, dvl_distance, dvl_fom, dvl_velocity_valid, track_name) 
-VALUES (5, 6, 90, 1000, 13, 1, 5, 0.9, 1, 0.8, 0.5, true, 'unknown');
+INSERT INTO status (latitude, longitude, position_counter, heading, depth, temperature, drive_mode, gps_satellites, gps_hdop, gps_haccuracy, dvl_distance, dvl_fom, dvl_velocity_valid, track_name) 
+VALUES (5, 6, 0, 90, 1000, 13, 1, 5, 0.9, 1, 0.8, 0.5, true, 'unknown');
 
 /*----------------------------
 * ADD settings

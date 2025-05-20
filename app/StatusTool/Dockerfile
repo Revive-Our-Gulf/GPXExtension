@@ -99,7 +99,7 @@ LABEL permissions='\
     "5428/tcp": {}\
   },\
   "HostConfig": {\
-    "Binds":["/usr/blueos/extensions/GPX:/app/logs"],\
+    "Binds":["/usr/blueos/extensions/GPX:/app/logs", "/:/host_root:ro"],\
     "ExtraHosts": ["host.docker.internal:host-gateway"],\
     "PortBindings": {\
       "5428/tcp": [\

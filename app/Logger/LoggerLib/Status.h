@@ -20,6 +20,7 @@ namespace NVL_App
 		string _timeStamp;
 		double _latitude;
 		double _longitude;
+		int _position_counter;
 		double _heading;
 		double _depth;
 		double _temperature;
@@ -36,6 +37,7 @@ namespace NVL_App
 		Status(
 			double latitude,
 			double longitude,
+			int position_counter,
 			double heading,
 			double depth,
 			double temperature,
@@ -50,6 +52,7 @@ namespace NVL_App
 			_timeStamp(string()), 
 			_latitude(latitude), 
 			_longitude(longitude), 
+			_position_counter(position_counter),
 			_heading(heading), 
 			_depth(depth), 
 			_temperature(temperature), 
@@ -67,6 +70,7 @@ namespace NVL_App
 			const string& timeStamp,
 			double latitude,
 			double longitude,
+			int position_counter,
 			double heading,
 			double depth,
 			double temperature,
@@ -81,6 +85,7 @@ namespace NVL_App
 			_timeStamp(timeStamp), 
 			_latitude(latitude), 
 			_longitude(longitude), 
+			_position_counter(position_counter),
 			_heading(heading), 
 			_depth(depth), 
 			_temperature(temperature), 
@@ -97,6 +102,7 @@ namespace NVL_App
 		inline const string& GetTimeStamp() const { return _timeStamp; }
 		inline double GetLatitude() const { return _latitude; }
 		inline double GetLongitude() const { return _longitude; }
+		inline int GetPositionCounter() const { return _position_counter; }
 		inline double GetHeading() const { return _heading; }
 		inline double GetDepth() const { return _depth; }
 		inline double GetTemperature() const { return _temperature; }

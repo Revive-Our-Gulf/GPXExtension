@@ -17,6 +17,7 @@ function updateStatus(responseText) {
     var status = JSON.parse(responseText);
 
     if (document.getElementById("created")) document.getElementById("created").innerText = status.created;
+    if (document.getElementById("positionCounter")) document.getElementById("positionCounter").innerText = parseInt(status.positionCounter)
     if (document.getElementById("latitude")) document.getElementById("latitude").innerText = parseFloat(status.latitude).toFixed(7);
     if (document.getElementById("longitude")) document.getElementById("longitude").innerText = parseFloat(status.longitude).toFixed(7);
     if (document.getElementById("heading")) document.getElementById("heading").innerText = parseFloat(status.heading).toFixed(2);

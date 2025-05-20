@@ -33,6 +33,7 @@ namespace NVL_App
 		void ClearTable();
 
 		void GetStatuses(const string& trackName, vector<Status *>& output);
+		int GetLastPositionCounter(const string& trackName);
 
 		void SetField(Field field, const string& value);
 		string GetField(Field field);

@@ -38,6 +38,7 @@ unique_ptr<Status> FileRovComms::GetCurrentStatus()
 	readerGPS.parse(jsonGPS, valueGPS);
 	auto latitude = valueGPS["message"]["lat"].asDouble();
 	auto longitude = valueGPS["message"]["lon"].asDouble();
+	auto positionCounter = valueGPS["status"]["counter"].asInt();
 	auto header = valueGPS["message"]["hdg"].asDouble();
 	auto depth = valueGPS["message"]["relative_alt"].asDouble();
 	auto altitude = valueGPS["message"]["alt"].asDouble(); 
@@ -58,7 +59,7 @@ unique_ptr<Status> FileRovComms::GetCurrentStatus()
 	auto trackName = GetTrackName();
 
 	// Return the result
-	return unique_ptr<Status>(new Status(latitude, longitude, header, depth, temperature, 1, satellite_count, 0, 0, 0, 0, false, trackName));
+	return unique_ptr<Status>(new Status(latitude, longitude, positionCounter, header, depth, temperature, 1, satellite_count, 0, 0, 0, 0, false, trackName));
 }
 
 //--------------------------------------------------
