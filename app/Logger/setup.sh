@@ -1,7 +1,7 @@
 #!/bin/bash
 
-IMAGE_NAME="rogengineering/gpx_status:latest"
-CONTAINER_NAME="gpx_status"
+CONTAINER_NAME="gpx_logger"
+IMAGE_NAME="rogengineering/$CONTAINER_NAME:latest"
 
 if [ $# -eq 0 ]; then
     echo "Usage: $0 [build|push|pull]"
@@ -37,5 +37,5 @@ esac
 # Only start container if it's not the push-only command
 if [ "$1" != "push" ]; then
     echo "Starting container..."
-    docker run -d --name "$CONTAINER_NAME" --restart unless-stopped --network gpx_net -p 5428:5428 "$IMAGE_NAME"
+    docker run -d --name "$CONTAINER_NAME" --restart unless-stopped --network gpx_net "$IMAGE_NAME"
 fi
