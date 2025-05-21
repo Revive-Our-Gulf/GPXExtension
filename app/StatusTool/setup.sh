@@ -1,14 +1,18 @@
 #!/bin/bash
 
 CONTAINER_NAME="gpx_status"
-IMAGE_NAME="rogengineering/$CONTAINER_NAME:latest"
+BASE_IMAGE_NAME="rogengineering/$CONTAINER_NAME"
+
+display_usage() {
+    echo "Usage:"
+    echo "  $0 build                   - Build the Docker image locally (uses 'latest' tag)"
+    echo "  $0 pull <tag>              - Pull the Docker image with specified tag from registry"
+    echo "  $0 run <tag>               - Run the Docker image with specified tag"
+    exit 1
+}
 
 if [ $# -eq 0 ]; then
-    echo "Usage: $0 [build|push|pull]"
-    echo "  build  - Build the Docker image locally"
-    echo "  pull   - Pull the Docker image from registry and deploy container"
-    echo "  run   - Run the Docker image"
-    exit 1
+    display_usage
 fi
 
 docker stop $CONTAINER_NAME 2>/dev/null || true
@@ -16,22 +20,32 @@ docker rm $CONTAINER_NAME 2>/dev/null || true
 
 case "$1" in
     build)
-        echo "Building Docker image..."
-        docker build -t "$IMAGE_NAME" .
+        IMAGE_TAG="latest"
+        echo "Building Docker image with tag: $IMAGE_TAG"
+        docker build -t "$BASE_IMAGE_NAME:$IMAGE_TAG" .
         ;;
     pull)
-        echo "Pulling Docker image from registry..."
-        docker pull "$IMAGE_NAME"
+        if [ $# -ne 2 ]; then
+            echo "Error: Tag must be specified for pull command."
+            display_usage
+        fi
+        IMAGE_TAG="$2"
+        echo "Pulling Docker image from registry with tag: $IMAGE_TAG"
+        docker pull "$BASE_IMAGE_NAME:$IMAGE_TAG"
         ;;
     run)
-        echo "Running Docker image..."
+        if [ $# -ne 2 ]; then
+            echo "Error: Tag must be specified for run command."
+            display_usage
+        fi
+        IMAGE_TAG="$2"
+        echo "Running Docker image with tag: $IMAGE_TAG"
         ;;
     *)
         echo "Invalid parameter: $1"
-        echo "Usage: $0 [build|push|pull]"
-        exit 1
+        display_usage
         ;;
 esac
 
 echo "Starting container..."
-docker run -d --name gpx_status --restart unless-stopped --network gpx_net -p 5428:5428 rogengineering/gpx_status:latest
+docker run -d --name $CONTAINER_NAME --restart unless-stopped --network gpx_net -p 5428:5428 $BASE_IMAGE_NAME:$IMAGE_TAG
