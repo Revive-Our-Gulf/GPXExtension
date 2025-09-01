@@ -85,7 +85,7 @@ The connect command also gives the mariadb database the gpx_db alias
 Now to start the Logger use:
 ```
 cd /home/pi/Installs/GPXExtension/app/Logger/
-sudo ./build.sh
+sudo ./setup.sh
 ```
 This process will take a long time (up to 30 or so minutes the first time)
 
@@ -93,7 +93,7 @@ This process will take a long time (up to 30 or so minutes the first time)
 To start the Status tool:
 ```
 cd /home/pi/Installs/GPXExtension/app/StatusTool/
-sudo ./build.sh
+sudo ./setup.sh
 ```
 
 The Status Tool can be access from [192.168.2.2:5428](http://192.168.2.2:5428)
