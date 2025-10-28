@@ -48,4 +48,4 @@ case "$1" in
 esac
 
 echo "Starting container..."
-docker run -d --name $CONTAINER_NAME --restart unless-stopped --network gpx_net -p 5428:5428 $BASE_IMAGE_NAME:$IMAGE_TAG
+docker run -d --name $CONTAINER_NAME --restart unless-stopped --network gpx_net $BASE_IMAGE_NAME:$IMAGE_TAG
