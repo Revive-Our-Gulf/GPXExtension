@@ -96,29 +96,12 @@ void Home::RenderTracks(std::string& tracksHtml) {
 
             auto userFriendlyDuration = CalculateDuration(earliestEntryTime, earliestEntryDate, latestEntryTime, latestEntryDate);
 
-            auto trackSize = _repo->GetTrackDataSize(track);
-
-            std::string friendlyTrackSize;
-            std::stringstream sizeStream;
-            sizeStream << std::fixed << std::setprecision(1);
-            if (trackSize >= 1024 * 1024 * 1024) {
-                sizeStream << (trackSize / (1024.0 * 1024.0 * 1024.0)) << " GB";
-            } else if (trackSize >= 1024 * 1024) {
-                sizeStream << (trackSize / (1024.0 * 1024.0)) << " MB";
-            } else if (trackSize >= 1024) {
-                sizeStream << (trackSize / 1024.0) << " KB";
-            } else {
-                sizeStream << trackSize << " B";
-            }
-            friendlyTrackSize = sizeStream.str();
-
             tracksStream << "<tr>";
             tracksStream << "<td><button id=\"track_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('track_" << track << "')\">" << track << "</button></td>";
             tracksStream << "<td><button id=\"entryDate_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('entryDate_" << track << "')\">" << earliestEntryDate << "</button></td>";
             tracksStream << "<td><button id=\"earliestEntryTime_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('earliestEntryTime_" << track << "')\">" << earliestEntryTime << "</button></td>";
             // tracksStream << "<td><button id=\"latestEntryTime_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('latestEntryTime_" << track << "')\">" << latestEntryTime << "</button></td>";
             tracksStream << "<td><button id=\"duration_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('duration_" << track << "')\">" << userFriendlyDuration << "</button></td>";
-            tracksStream << "<td><button id=\"trackSize_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('trackSize_" << track << "')\">" << friendlyTrackSize << "</button></td>";
             tracksStream << "<td><button class=\"btn btn-secondary btn-sm btn-transparent btn-grey\" onclick=\"window.open('\\gpx?track=" << track << "', '_blank')\"><i class=\"fa fa-eye\"></i></button></td>";
             tracksStream << "<td><a class=\"btn btn-secondary btn-sm btn-transparent btn-grey\" href=\"/gpx?track=" << track << "\" download=\"ROGGPX_" << gpxFile.str() << "\"><i class=\"fa fa-download\"></i></a></td>";
             tracksStream << "<td><button class=\"btn btn-danger btn-sm btn-transparent btn-red\" onclick=\"deleteTrack('" << track << "')\"><i class=\"fa fa-trash\"></i></button></td>";
