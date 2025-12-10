@@ -234,51 +234,6 @@ vector<string> Repository::GetTracks()
 	return tracks;
 }
 
-
-size_t Repository::GetTrackDataSize(const string& trackName)
-{
-    auto query = stringstream();
-	query << "SELECT * FROM status WHERE track_name = ?";
-	auto statement = unique_ptr<sql::PreparedStatement>(_connection->prepareStatement(query.str()));
-	statement->setString(1, trackName);
-
-	auto result = statement->executeQuery();
-	size_t totalSize = 0;
-
-	while (result->next()) {
-		auto metaData = result->getMetaData();
-		int columnCount = metaData->getColumnCount();
-
-		for (int i = 1; i <= columnCount; ++i) {
-			int columnType = metaData->getColumnType(i);
-			switch (columnType) {
-				case sql::DataType::DOUBLE:
-					totalSize += sizeof(result->getDouble(i));
-					break;
-				case sql::DataType::INTEGER:
-					totalSize += sizeof(result->getInt(i));
-					break;
-				case sql::DataType::VARCHAR:
-				case sql::DataType::CHAR:
-					totalSize += result->getString(i).length() * sizeof(char);
-					break;
-				case sql::DataType::BOOLEAN:
-					totalSize += sizeof(result->getBoolean(i));
-					break;
-				case sql::DataType::SMALLINT:
-				case 4: // Explicitly handle type ID 4 for SMALLINT
-					totalSize += sizeof(result->getInt(i)); // Assuming getInt is correct for SMALLINT
-					break;
-				case sql::DataType::TIMESTAMP:
-					totalSize += sizeof(result->getString(i));
-					break;
-				default:
-					cout << "Unhandled data type: " << metaData->getColumnTypeName(i) << " (Type ID: " << columnType << ")" << endl;
-			}
-		}
-	}
-    return totalSize;
-}
 // Settings
 //--------------------------------------------------
 

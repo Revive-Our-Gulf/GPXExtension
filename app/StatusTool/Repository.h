@@ -41,8 +41,6 @@ namespace NVL_App
 
 		string GetDateTime(const string& trackName, bool earliest);
 
-		size_t GetTrackDataSize(const string& trackName);
-
 		void DeleteTrack(const string& trackName);
 
 		inline sql::Connection * GetConnection() { return _connection; }
