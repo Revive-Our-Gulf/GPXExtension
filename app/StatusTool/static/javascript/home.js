@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", function() {
   var status = GetStatus(document);
   UpdateSubmitButton(document, status);
 
-  setInterval(checkAndUpdateTracks, 1000);
   updateTracks();
 
   document.getElementById("saveTrackButton").addEventListener("click", function(event) {

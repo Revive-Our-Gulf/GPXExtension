@@ -9,37 +9,37 @@ Home::Home(Repository* repo, unordered_map<string, string>& parameters) : _repo(
 
 
 
-std::pair<std::string, double> Home::GetFreeDiskSpace() {
-    struct statvfs stat;
+// std::pair<std::string, double> Home::GetFreeDiskSpace() {
+//     struct statvfs stat;
 
-    if (statvfs("/host_root", &stat) != 0) {
-        // If we can't access host root, try container root
-        if (statvfs("/", &stat) != 0) {
-            return {"Error", 0.0};
-        }
-    }
+//     if (statvfs("/host_root", &stat) != 0) {
+//         // If we can't access host root, try container root
+//         if (statvfs("/", &stat) != 0) {
+//             return {"Error", 0.0};
+//         }
+//     }
 
-    // Calculate free space and total space in GB
-    unsigned long long freeSpace = stat.f_bsize * stat.f_bfree;
-    unsigned long long totalSpace = stat.f_bsize * stat.f_blocks;
-    double freeSpaceGB = freeSpace / (1024.0 * 1024.0 * 1024.0);
-    double totalSpaceGB = totalSpace / (1024.0 * 1024.0 * 1024.0);
+//     // Calculate free space and total space in GB
+//     unsigned long long freeSpace = stat.f_bsize * stat.f_bfree;
+//     unsigned long long totalSpace = stat.f_bsize * stat.f_blocks;
+//     double freeSpaceGB = freeSpace / (1024.0 * 1024.0 * 1024.0);
+//     double totalSpaceGB = totalSpace / (1024.0 * 1024.0 * 1024.0);
 
-    if (freeSpaceGB > totalSpaceGB || freeSpaceGB < 0 || totalSpaceGB <= 0){
-        return {"Error accessing disk space", 0.0};
-    }
+//     if (freeSpaceGB > totalSpaceGB || freeSpaceGB < 0 || totalSpaceGB <= 0){
+//         return {"Error accessing disk space", 0.0};
+//     }
 
-    std::stringstream ss;
-    ss << std::fixed << std::setprecision(2) << freeSpaceGB << " GB free of " << totalSpaceGB << " GB";
+//     std::stringstream ss;
+//     ss << std::fixed << std::setprecision(2) << freeSpaceGB << " GB free of " << totalSpaceGB << " GB";
     
-    double usedPercentage = 100 - ((freeSpaceGB / totalSpaceGB) * 100.0);
-    if (std::isnan(usedPercentage) || std::isinf(usedPercentage)) {
-        usedPercentage = 0.0;
-    }
-    usedPercentage = std::round(usedPercentage * 10) / 10.0;
+//     double usedPercentage = 100 - ((freeSpaceGB / totalSpaceGB) * 100.0);
+//     if (std::isnan(usedPercentage) || std::isinf(usedPercentage)) {
+//         usedPercentage = 0.0;
+//     }
+//     usedPercentage = std::round(usedPercentage * 10) / 10.0;
     
-    return {ss.str(), usedPercentage};
-}
+//     return {ss.str(), usedPercentage};
+// }
 
 string Home::Render()
 {
@@ -58,22 +58,22 @@ string Home::Render()
     ReplacePlaceholder(content, "{{tracks}}", tracksHtml);
 
     RenderSettings(content);
-    RenderDiskSpace(content);
+    // RenderDiskSpace(content);
    
 
     return content;
 }
 
-void Home::RenderDiskSpace(string& content){
-    auto [freeDiskSpace, usedPercentage] = GetFreeDiskSpace();
-    ReplacePlaceholder(content, "{{freeDiskSpace}}", freeDiskSpace);
+// void Home::RenderDiskSpace(string& content){
+//     auto [freeDiskSpace, usedPercentage] = GetFreeDiskSpace();
+//     ReplacePlaceholder(content, "{{freeDiskSpace}}", freeDiskSpace);
 
-    std::stringstream progressBar;
-    progressBar << "<div class=\"progress bg-dark\">";
-    progressBar << "<div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"" << usedPercentage << "\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: " << usedPercentage << "%;\">";
-    progressBar << usedPercentage << "% (Used)</div></div>";
-    ReplacePlaceholder(content, "{{progressBar}}", progressBar.str());
-}
+//     std::stringstream progressBar;
+//     progressBar << "<div class=\"progress bg-dark\">";
+//     progressBar << "<div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"" << usedPercentage << "\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: " << usedPercentage << "%;\">";
+//     progressBar << usedPercentage << "% (Used)</div></div>";
+//     ReplacePlaceholder(content, "{{progressBar}}", progressBar.str());
+// }
 
 void Home::RenderTracks(std::string& tracksHtml) {
     // Fetch tracks from the database
@@ -96,29 +96,12 @@ void Home::RenderTracks(std::string& tracksHtml) {
 
             auto userFriendlyDuration = CalculateDuration(earliestEntryTime, earliestEntryDate, latestEntryTime, latestEntryDate);
 
-            auto trackSize = _repo->GetTrackDataSize(track);
-
-            std::string friendlyTrackSize;
-            std::stringstream sizeStream;
-            sizeStream << std::fixed << std::setprecision(1);
-            if (trackSize >= 1024 * 1024 * 1024) {
-                sizeStream << (trackSize / (1024.0 * 1024.0 * 1024.0)) << " GB";
-            } else if (trackSize >= 1024 * 1024) {
-                sizeStream << (trackSize / (1024.0 * 1024.0)) << " MB";
-            } else if (trackSize >= 1024) {
-                sizeStream << (trackSize / 1024.0) << " KB";
-            } else {
-                sizeStream << trackSize << " B";
-            }
-            friendlyTrackSize = sizeStream.str();
-
             tracksStream << "<tr>";
             tracksStream << "<td><button id=\"track_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('track_" << track << "')\">" << track << "</button></td>";
             tracksStream << "<td><button id=\"entryDate_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('entryDate_" << track << "')\">" << earliestEntryDate << "</button></td>";
             tracksStream << "<td><button id=\"earliestEntryTime_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('earliestEntryTime_" << track << "')\">" << earliestEntryTime << "</button></td>";
             // tracksStream << "<td><button id=\"latestEntryTime_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('latestEntryTime_" << track << "')\">" << latestEntryTime << "</button></td>";
             tracksStream << "<td><button id=\"duration_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('duration_" << track << "')\">" << userFriendlyDuration << "</button></td>";
-            tracksStream << "<td><button id=\"trackSize_" << track << "\" class=\"btn btn-transparent btn-secondary text-dark\" onclick=\"copyToClipboard('trackSize_" << track << "')\">" << friendlyTrackSize << "</button></td>";
             tracksStream << "<td><button class=\"btn btn-secondary btn-sm btn-transparent btn-grey\" onclick=\"window.open('\\gpx?track=" << track << "', '_blank')\"><i class=\"fa fa-eye\"></i></button></td>";
             tracksStream << "<td><a class=\"btn btn-secondary btn-sm btn-transparent btn-grey\" href=\"/gpx?track=" << track << "\" download=\"ROGGPX_" << gpxFile.str() << "\"><i class=\"fa fa-download\"></i></a></td>";
             tracksStream << "<td><button class=\"btn btn-danger btn-sm btn-transparent btn-red\" onclick=\"deleteTrack('" << track << "')\"><i class=\"fa fa-trash\"></i></button></td>";
